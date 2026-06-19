@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYC Members Navigation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { width:100%; font-family:'Source Sans 3',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:#F4F3EE; }
+
+  .nav-wrap {
+    background: #F4F3EE;
+    padding: 20px 16px;
+  }
+
+  .nav-label {
+    text-align: center;
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .1em;
+    color: #8899AA; margin-bottom: 14px;
+  }
+
+  .tile-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 10px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .tile {
+    background: #002C4F;
+    border-radius: 10px;
+    padding: 14px 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 8px;
+    transition: all .2s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+
+  .tile:hover {
+    background: #003D6B;
+    border-color: #FF6900;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,44,79,.25);
+  }
+
+  .tile-icon {
+    width: 36px; height: 36px;
+    background: rgba(255,105,0,0.15);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .tile-icon svg { width: 20px; height: 20px; }
+
+  .tile-label {
+    font-size: 11px; font-weight: 700;
+    color: #FFFFFF; line-height: 1.3;
+    text-align: center;
+  }
+
+  .tile-sub {
+    font-size: 9px; color: rgba(255,255,255,0.5);
+    text-align: center; line-height: 1.3;
+  }
+
+  .tile.active {
+    background: #FF6900;
+    border-color: #FF6900;
+  }
+  .tile.active .tile-icon { background: rgba(255,255,255,0.2); }
+
+  /* Stack Markets — full width second row */
+  .stack-markets-row {
+    max-width: 1100px;
+    margin: 10px auto 0;
+  }
+
+  .tile-stack-markets {
+    background: #002C4F;
+    border-radius: 10px;
+    padding: 14px 24px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    transition: all .2s ease;
+    border: 2px solid #AEC000;
+    cursor: not-allowed;
+    opacity: 0.85;
+  }
+
+  .tile-stack-markets:hover {
+    background: #003D6B;
+    border-color: #AEC000;
+    box-shadow: 0 4px 16px rgba(0,44,79,.25);
+  }
+
+  .tile-stack-markets .tile-icon {
+    background: rgba(174,192,0,0.15);
+    flex-shrink: 0;
+  }
+
+  .sm-text { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+
+  .sm-label {
+    font-size: 13px; font-weight: 700;
+    color: #FFFFFF; line-height: 1.2;
+  }
+
+  .sm-sub {
+    font-size: 10px; color: rgba(255,255,255,0.5);
+    line-height: 1.3;
+  }
+
+  .coming-soon-pill {
+    background: #AEC000;
+    color: #002C4F;
+    font-size: 9px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .08em;
+    border-radius: 4px; padding: 3px 8px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  @media(max-width:800px) {
+    .tile-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media(max-width:440px) {
+    .tile-grid { grid-template-columns: repeat(2, 1fr); gap:8px; }
+    .tile { padding:12px 6px 10px; }
+    .tile-label { font-size:10px; }
+    .sm-label { font-size:11px; }
+    .tile-stack-markets { padding: 12px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-wrap">
+  <div class="nav-label">Members Area — Quick Navigation</div>
+  <div class="tile-grid">
+
+
+    <div class="tile" onclick="window.open('https://www.stackyourcash.co.uk/learning-modules','_self')" title="Learning Programme">
+      <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+      <span class="tile-label">Learning Programme</span>
+      <span class="tile-sub">17 modules</span>
+    </div>
+    <div class="tile" onclick="window.open('https://www.stackyourcash.co.uk/resources','_self')" title="Blog & Explainers">
+      <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></div>
+      <span class="tile-label">Blog & Explainers</span>
+      <span class="tile-sub">Guides & insights</span>
+    </div>
+    <div class="tile" onclick="window.open('https://www.stackyourcash.co.uk/toolkit-library','_self')" title="Toolkit Library">
+      <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><path d="M12 12v4M10 14h4"/></svg></div>
+      <span class="tile-label">Toolkit Library</span>
+      <span class="tile-sub">12 Excel tools</span>
+    </div>
+    <div class="tile" onclick="window.open('https://www.stackyourcash.co.uk/ai-investment-clinic','_self')" title="AI Investment Clinic">
+      <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg></div>
+      <span class="tile-label">AI Investment Clinic</span>
+      <span class="tile-sub">Portfolio review</span>
+    </div>
+    <div class="tile" onclick="window.open('https://www.stackyourcash.co.uk/investment-readiness','_self')" title="Readiness Check">
+      <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+      <span class="tile-label">Readiness Check</span>
+      <span class="tile-sub">12 scenarios</span>
+    </div>
+    <div class="tile" onclick="window.open('https://www.stackyourcash.co.uk/stacker-s-diary','_self')" title="Stacker's Diary">
+      <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
+      <span class="tile-label">Stacker's Diary</span>
+      <span class="tile-sub">Founder's journal</span>
+    </div>
+    <div class="tile" onclick="window.open('https://www.stackyourcash.co.uk/women-investing','_self')" title="Women & Investing">
+      <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M12 12v8M9 17h6"/></svg></div>
+      <span class="tile-label">Women & Investing</span>
+      <span class="tile-sub">Women & investing</span>
+    </div>
+    <div class="tile" onclick="window.open('https://www.stackyourcash.co.uk/groups','_self')" title="Community">
+      <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+      <span class="tile-label">Community</span>
+      <span class="tile-sub">Q&A + Groups</span>
+    </div>
+
+    </div>
+
+  <!-- Stack Markets — full width row -->
+  <div class="stack-markets-row">
+    <a class="tile-stack-markets" href="#" title="Stack Markets — Coming Soon">
+      <div class="tile-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#AEC000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+          <circle cx="18" cy="18" r="4"/>
+          <path d="M18 16v2l1 1"/>
+        </svg>
+      </div>
+      <div class="sm-text">
+        <span class="sm-label">Stack Markets</span>
+        <span class="sm-sub">Virtual fantasy investment game — build a portfolio with £25,000 virtual cash and compete on the leaderboard</span>
+      </div>
+      <span class="coming-soon-pill">Coming Soon</span>
+    </a>
+  </div>
+
+</div>
+
+<script>
+function resizeParent() {
+  try { window.parent.postMessage({ type:'iwh', value: document.body.scrollHeight + 10 }, '*'); } catch(e) {}
+}
+resizeParent();
+setTimeout(resizeParent, 500);
+</script>
+</body>
+</html>
