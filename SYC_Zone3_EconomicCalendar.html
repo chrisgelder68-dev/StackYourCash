@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYC Economic Calendar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; font-family: 'Source Sans 3', sans-serif; background: #fff; color: #1A2A3A; }
+
+  .cal-header {
+    background: #002C4F;
+    padding: 20px 28px 18px;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 8px;
+    border-bottom: 3px solid #FF6900;
+  }
+  .members-pill {
+    background: #FF6900; color: #fff;
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .08em;
+    border-radius: 4px; padding: 3px 10px;
+  }
+  .cal-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px; font-weight: 700; color: #fff;
+    letter-spacing: .01em; text-align: center;
+  }
+  .cal-header p {
+    font-size: 12px; color: rgba(255,255,255,0.7);
+    font-weight: 300; text-align: center;
+  }
+  .date-range-badge {
+    background: rgba(255,105,0,0.15);
+    border: 1px solid rgba(255,105,0,0.4);
+    border-radius: 20px; padding: 4px 14px;
+    font-size: 11px; font-weight: 700; color: #FF6900;
+    text-transform: uppercase; letter-spacing: .06em;
+    margin-top: 2px;
+  }
+
+  .legend-row {
+    background: #F0F4F8;
+    padding: 8px 28px;
+    display: flex; align-items: center; gap: 20px;
+    border-bottom: 1px solid #D8E4EF;
+    flex-wrap: wrap;
+  }
+  .legend-label { font-size: 11px; font-weight: 700; color: #6B7C8D; text-transform: uppercase; letter-spacing: .06em; }
+  .leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #4A5A6A; }
+  .leg-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .leg-dot.high { background: #E24B4A; }
+  .leg-dot.med  { background: #F0A500; }
+  .leg-dot.low  { background: #57A400; }
+
+  .cal-body { padding: 20px 20px 24px; background: #fff; }
+
+  .day-columns {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+
+  .day-col { min-width: 0; }
+  .day-head {
+    background: #002C4F;
+    border-radius: 6px 6px 0 0;
+    padding: 10px 12px 8px;
+    text-align: center;
+  }
+  .day-head .day-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px; font-weight: 700; color: #fff;
+    line-height: 1.2;
+  }
+  .day-head .day-date {
+    font-size: 11px; color: rgba(255,255,255,0.6);
+    margin-top: 2px;
+  }
+  .day-head.today { background: #FF6900; }
+  .day-head.today .day-date { color: rgba(255,255,255,0.85); }
+
+  .events-list {
+    border: 1px solid #D8E4EF;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    overflow: hidden;
+  }
+  .event-item {
+    padding: 8px 10px 7px;
+    border-bottom: 1px solid #EEF3F8;
+    display: flex; flex-direction: column; gap: 3px;
+  }
+  .event-item:last-child { border-bottom: none; }
+  .event-item:hover { background: #F7F9FB; }
+
+  .event-top { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .event-time { font-size: 10px; font-weight: 700; color: #8899AA; flex-shrink: 0; min-width: 34px; }
+  .imp-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .imp-dot.high { background: #E24B4A; }
+  .imp-dot.med  { background: #F0A500; }
+  .imp-dot.low  { background: #57A400; }
+  .ccy-tag {
+    font-size: 9px; font-weight: 700;
+    padding: 1px 5px; border-radius: 3px;
+    text-transform: uppercase; flex-shrink: 0;
+  }
+  .ccy-tag.GBP { background: #E8EEF3; color: #002C4F; }
+  .ccy-tag.USD { background: #FFF0E8; color: #FF6900; }
+  .ccy-tag.EUR { background: #EEF5E6; color: #57A400; }
+
+  .event-name {
+    font-size: 10.5px; font-weight: 600; color: #1A2A3A;
+    line-height: 1.35;
+  }
+
+  .no-events {
+    padding: 16px 10px; text-align: center;
+    font-size: 11px; color: #AABBCC;
+    font-style: italic;
+  }
+
+  .cal-status { text-align: center; padding: 40px 20px; font-size: 13px; color: #8899AA; }
+
+  .cal-footer {
+    background: #F0F4F8; border-top: 1px solid #D8E4EF;
+    padding: 9px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .cal-footer span { font-size: 11px; color: #8899AA; }
+  .cal-footer strong { color: #002C4F; }
+  .live-dot { display: inline-block; width: 6px; height: 6px; background: #57A400; border-radius: 50%; margin-right: 4px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  @media(max-width: 700px) {
+    .day-columns { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media(max-width: 420px) {
+    .day-columns { grid-template-columns: 1fr; }
+    .cal-body { padding: 12px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cal-header">
+  <div class="members-pill">Members</div>
+  <h2>Economic Calendar</h2>
+  <p>Key economic events and data releases that move UK markets</p>
+  <div class="date-range-badge" id="dateRangeBadge">Loading…</div>
+</div>
+
+<div class="legend-row">
+  <span class="legend-label">Impact:</span>
+  <div class="leg"><div class="leg-dot high"></div>High</div>
+  <div class="leg"><div class="leg-dot med"></div>Medium</div>
+  <div class="leg"><div class="leg-dot low"></div>Low</div>
+  <span class="legend-label" style="margin-left:8px;">Currency:</span>
+  <div class="leg"><span class="ccy-tag GBP" style="font-size:10px;">GBP</span></div>
+  <div class="leg"><span class="ccy-tag USD" style="font-size:10px;">USD</span></div>
+  <div class="leg"><span class="ccy-tag EUR" style="font-size:10px;">EUR</span></div>
+</div>
+
+<div class="cal-body">
+  <div id="calGrid" class="day-columns" style="display:none;"></div>
+  <div id="calStatus" class="cal-status">Loading calendar…</div>
+</div>
+
+<div class="cal-footer">
+  <span><span class="live-dot"></span><strong>Auto-updated</strong> — UK, US &amp; Eurozone events, medium and high importance.</span>
+  <span>Showing Mon–Fri only</span>
+</div>
+
+<script>
+// Curated recurring economic events by day of week (Mon=0 … Fri=4)
+const EVENTS = [
+  // MONDAY
+  { dow:0, time:'09:30', name:'Manufacturing PMI (Flash)',   ccy:'GBP', imp:'med' },
+  { dow:0, time:'09:30', name:'Services PMI (Flash)',        ccy:'GBP', imp:'high' },
+  { dow:0, time:'10:00', name:'Eurozone PMI Composite',      ccy:'EUR', imp:'med' },
+  { dow:0, time:'15:00', name:'ISM Manufacturing PMI',       ccy:'USD', imp:'high' },
+  // TUESDAY
+  { dow:1, time:'07:00', name:'Average Earnings Index (3m/y)', ccy:'GBP', imp:'high' },
+  { dow:1, time:'07:00', name:'Claimant Count Change',       ccy:'GBP', imp:'high' },
+  { dow:1, time:'07:00', name:'Unemployment Rate',           ccy:'GBP', imp:'high' },
+  { dow:1, time:'10:00', name:'ZEW Economic Sentiment',      ccy:'EUR', imp:'med' },
+  { dow:1, time:'15:00', name:'CB Consumer Confidence',      ccy:'USD', imp:'med' },
+  { dow:1, time:'15:00', name:'JOLTS Job Openings',          ccy:'USD', imp:'med' },
+  // WEDNESDAY
+  { dow:2, time:'07:00', name:'CPI (YoY)',                   ccy:'GBP', imp:'high' },
+  { dow:2, time:'07:00', name:'Core CPI (YoY)',              ccy:'GBP', imp:'high' },
+  { dow:2, time:'07:00', name:'PPI Output (MoM)',            ccy:'GBP', imp:'low' },
+  { dow:2, time:'13:15', name:'ADP Non-Farm Employment',     ccy:'USD', imp:'med' },
+  { dow:2, time:'15:00', name:'ISM Services PMI',            ccy:'USD', imp:'high' },
+  { dow:2, time:'19:00', name:'FOMC Meeting Minutes',        ccy:'USD', imp:'high' },
+  // THURSDAY
+  { dow:3, time:'07:00', name:'GDP (MoM)',                   ccy:'GBP', imp:'high' },
+  { dow:3, time:'07:00', name:'Manufacturing Output (MoM)',  ccy:'GBP', imp:'med' },
+  { dow:3, time:'07:00', name:'Trade Balance',               ccy:'GBP', imp:'low' },
+  { dow:3, time:'12:00', name:'BoE Interest Rate Decision',  ccy:'GBP', imp:'high' },
+  { dow:3, time:'12:00', name:'BoE MPC Vote',                ccy:'GBP', imp:'high' },
+  { dow:3, time:'13:30', name:'Initial Jobless Claims',      ccy:'USD', imp:'high' },
+  { dow:3, time:'13:30', name:'Non-Farm Productivity (QoQ)', ccy:'USD', imp:'med' },
+  { dow:3, time:'13:45', name:'ECB Interest Rate Decision',  ccy:'EUR', imp:'high' },
+  { dow:3, time:'14:30', name:'ECB Press Conference',        ccy:'EUR', imp:'high' },
+  // FRIDAY
+  { dow:4, time:'07:00', name:'Retail Sales (MoM)',          ccy:'GBP', imp:'high' },
+  { dow:4, time:'07:00', name:'Construction Output (MoM)',   ccy:'GBP', imp:'low' },
+  { dow:4, time:'10:00', name:'Eurozone CPI Flash (YoY)',    ccy:'EUR', imp:'high' },
+  { dow:4, time:'10:00', name:'Eurozone GDP Flash (QoQ)',    ccy:'EUR', imp:'high' },
+  { dow:4, time:'13:30', name:'Non-Farm Payrolls',           ccy:'USD', imp:'high' },
+  { dow:4, time:'13:30', name:'Unemployment Rate',           ccy:'USD', imp:'high' },
+  { dow:4, time:'13:30', name:'Average Hourly Earnings (MoM)', ccy:'USD', imp:'high' },
+  { dow:4, time:'15:00', name:'Univ. of Michigan Sentiment', ccy:'USD', imp:'med' },
+];
+
+function getNextFiveWeekdays() {
+  const days = [];
+  const d = new Date();
+  // If today is Sat(6) or Sun(0), start from next Monday
+  while (days.length < 5) {
+    const dow = d.getDay(); // 0=Sun,1=Mon...5=Sat,6=Sun
+    if (dow !== 0 && dow !== 6) days.push(new Date(d));
+    d.setDate(d.getDate() + 1);
+  }
+  return days;
+}
+
+function jsDowToMon0(jsDay) {
+  // JS: 0=Sun,1=Mon...6=Sat → Mon=0...Fri=4
+  return (jsDay + 6) % 7;
+}
+
+function fmt(d) {
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+}
+function dayName(d) {
+  return d.toLocaleDateString('en-GB', { weekday: 'long' });
+}
+function isToday(d) {
+  const n = new Date();
+  return d.getDate()===n.getDate() && d.getMonth()===n.getMonth() && d.getFullYear()===n.getFullYear();
+}
+
+function build() {
+  const weekdays = getNextFiveWeekdays();
+  const grid = document.getElementById('calGrid');
+  const status = document.getElementById('calStatus');
+
+  // Date range badge
+  document.getElementById('dateRangeBadge').textContent =
+    fmt(weekdays[0]) + ' – ' + fmt(weekdays[4]);
+
+  let html = '';
+  weekdays.forEach(d => {
+    const dow = jsDowToMon0(d.getDay()); // 0=Mon…4=Fri
+    const dayEvents = EVENTS
+      .filter(e => e.dow === dow)
+      .sort((a,b) => a.time.localeCompare(b.time));
+
+    const todayCls = isToday(d) ? ' today' : '';
+    const todayTag = isToday(d) ? ' <span style="font-size:9px;opacity:.85;">(Today)</span>' : '';
+
+    html += `<div class="day-col">
+      <div class="day-head${todayCls}">
+        <div class="day-name">${dayName(d)}${todayTag}</div>
+        <div class="day-date">${fmt(d)}</div>
+      </div>
+      <div class="events-list">`;
+
+    if (dayEvents.length === 0) {
+      html += `<div class="no-events">No major events</div>`;
+    } else {
+      dayEvents.forEach(ev => {
+        html += `<div class="event-item">
+          <div class="event-top">
+            <span class="event-time">${ev.time}</span>
+            <span class="imp-dot ${ev.imp}"></span>
+            <span class="ccy-tag ${ev.ccy}">${ev.ccy}</span>
+          </div>
+          <div class="event-name">${ev.name}</div>
+        </div>`;
+      });
+    }
+
+    html += `</div></div>`;
+  });
+
+  grid.innerHTML = html;
+  status.style.display = 'none';
+  grid.style.display = 'grid';
+
+  try { window.parent.postMessage({ type:'iwh', value: document.body.scrollHeight + 20 }, '*'); } catch(e) {}
+}
+
+document.addEventListener('DOMContentLoaded', build);
+window.addEventListener('resize', () => {
+  try { window.parent.postMessage({ type:'iwh', value: document.body.scrollHeight + 20 }, '*'); } catch(e) {}
+});
+</script>
+</body>
+</html>

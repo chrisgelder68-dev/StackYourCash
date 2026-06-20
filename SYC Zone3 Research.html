@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYC Quick Research</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { height:100%; overflow-x:hidden; }
+body { width:100%; min-height:100%; max-width:100%; overflow-x:hidden; font-family:'Source Sans 3',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:#fff; color:#1A2A3A; display:flex; flex-direction:column; }
+
+  /* ── HEADER ── */
+  .syc-accent-bar { height:4px; background:linear-gradient(to right,#002C4F,#FF6900,#57A400); }
+  .section-header {
+    background:#002C4F; padding:16px 24px 14px;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    border-bottom:3px solid #FF6900;
+  }
+  .header-titles { text-align:center; }
+  .header-titles h2 {
+    font-family:'Playfair Display',Georgia,serif;
+    font-size:36px; font-weight:700; color:#fff;
+    margin-bottom:3px; letter-spacing:.01em;
+  }
+  .header-titles p { font-size:12px; color:#AABCCC; font-weight:300; }
+  .members-pill {
+    background:#FF6900; color:#fff;
+    font-size:10px; font-weight:700; text-transform:uppercase;
+    letter-spacing:.08em; border-radius:4px; padding:3px 10px;
+  }
+
+  /* ── SEARCH BAR ── */
+  .search-section {
+    background:#F4F3EE; border-bottom:1px solid #E0E8F0;
+    padding:14px 24px;
+  }
+  .search-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; width:100%; }
+  .search-input {
+    flex:1 1 200px; min-width:0; border:1.5px solid #D0DCE8; border-radius:8px;
+    padding:11px 16px; font-size:15px; font-weight:600;
+    font-family:inherit; color:#002C4F;
+    text-transform:uppercase; outline:none;
+    transition:border-color .15s; background:#fff;
+    box-sizing:border-box;
+  }
+  .search-input::placeholder { text-transform:none; font-weight:400; color:#AABCCC; font-size:13px; }
+  .search-input:focus { border-color:#FF6900; }
+  .search-btn {
+    background:#FF6900; color:#fff; border:none;
+    border-radius:8px; padding:11px 24px;
+    font-size:14px; font-weight:700; font-family:inherit;
+    cursor:pointer; transition:background .15s; white-space:nowrap;
+    flex-shrink:0;
+  }
+  .search-btn:hover { background:#E55A00; }
+  .search-btn:disabled { background:#AABCCC; cursor:not-allowed; }
+  .search-hint { font-size:11px; color:#8899AA; margin-top:8px; }
+  .search-hint strong { color:#002C4F; }
+
+  /* ── STATES ── */
+  .loading-state {
+    display:none; text-align:center; padding:32px 24px;
+  }
+  .loading-state.visible { display:block; }
+  .spinner {
+    width:28px; height:28px; border:3px solid #E0E8F0;
+    border-top-color:#FF6900; border-radius:50%;
+    animation:spin .7s linear infinite; margin:0 auto 12px;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-text { font-size:14px; color:#8899AA; }
+
+  .error-state {
+    display:none; margin:16px 24px;
+    background:#FCEBEB; border:1px solid #F5CCCC;
+    border-radius:8px; padding:12px 16px;
+    font-size:13px; color:#A32D2D; line-height:1.5;
+  }
+  .error-state.visible { display:block; }
+
+  .empty-state {
+    padding:20px 24px; text-align:center;
+  }
+  .empty-icon {
+    width:52px; height:52px; background:#F0F4F8;
+    border-radius:14px; display:flex; align-items:center;
+    justify-content:center; margin:0 auto 14px; font-size:24px;
+  }
+  .empty-title {
+    font-family:'Playfair Display',Georgia,serif;
+    font-size:16px; font-weight:700; color:#002C4F; margin-bottom:6px;
+  }
+  .empty-text { font-size:13px; color:#8899AA; line-height:1.6; max-width:360px; margin:0 auto 16px; }
+  .example-chips { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; }
+  .chip {
+    background:#F4F3EE; border:1px solid #E0E8F0;
+    border-radius:20px; padding:5px 12px;
+    font-size:12px; color:#002C4F; font-weight:600;
+    cursor:pointer; transition:all .15s;
+  }
+  .chip:hover { background:#FF6900; color:#fff; border-color:#FF6900; }
+
+  /* ── RESULT CARD ── */
+  .result-card {
+    display:none; animation:fadeIn .3s ease;
+  }
+  .result-card.visible { display:block; }
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  .result-hero {
+    background:#002C4F; padding:16px 24px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
+  .result-hero-left { min-width:0; }
+  .result-company {
+    font-family:'Playfair Display',Georgia,serif;
+    font-size:17px; font-weight:700; color:#fff;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    margin-bottom:3px;
+  }
+  .result-meta { font-size:11px; color:#AABCCC; }
+  .result-ticker-pill {
+    background:#FF6900; color:#fff;
+    font-size:13px; font-weight:700;
+    border-radius:6px; padding:4px 10px; flex-shrink:0;
+  }
+
+  .result-price-band {
+    padding:16px 24px; border-bottom:1px solid #F0F4F8;
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+    background:#fff;
+  }
+  .result-price-main {
+    font-family:'Playfair Display',Georgia,serif;
+    font-size:32px; font-weight:700; color:#002C4F;
+  }
+  .result-currency { font-size:14px; color:#8899AA; margin-left:4px; }
+  .change-pill {
+    font-size:14px; font-weight:700;
+    padding:5px 12px; border-radius:8px;
+  }
+  .change-pill.up { background:#EEF5E6; color:#3B6D11; }
+  .change-pill.down { background:#FCEBEB; color:#A32D2D; }
+  .change-pill.flat { background:#F0F4F8; color:#6B7C8D; }
+
+  /* ── STATS GRID ── */
+  .stats-grid {
+    display:grid; grid-template-columns:repeat(4,1fr);
+    border-top:1px solid #F0F4F8;
+  }
+  @media(max-width:600px){ .stats-grid { grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:480px){
+    .search-row { flex-direction:column; align-items:stretch; }
+    .search-input { flex:1 1 auto; width:100%; }
+    .search-btn { width:100%; }
+  }
+  .stat-cell {
+    padding:12px 16px; border-bottom:1px solid #F0F4F8;
+    border-right:1px solid #F0F4F8;
+  }
+  .stat-cell:nth-child(4n) { border-right:none; }
+  @media(max-width:600px){ .stat-cell:nth-child(2n) { border-right:none; } }
+  .stat-cell:nth-last-child(-n+4) { border-bottom:none; }
+  @media(max-width:600px){ .stat-cell:nth-last-child(-n+2) { border-bottom:none; } }
+  .stat-label { font-size:10px; color:#8899AA; text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+  .stat-value { font-size:14px; font-weight:700; color:#1A2A3A; }
+  .stat-value.up { color:#3B6D11; }
+  .stat-value.down { color:#A32D2D; }
+
+  /* ── RANGE BARS ── */
+  .ranges-section { padding:14px 24px 6px; background:#fff; border-top:1px solid #F0F4F8; }
+  .range-block { margin-bottom:14px; }
+  .range-block:last-child { margin-bottom:0; }
+  .range-top {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:6px;
+  }
+  .range-title { font-size:11px; font-weight:700; color:#002C4F; text-transform:uppercase; letter-spacing:.06em; }
+  .range-span { font-size:11px; color:#8899AA; }
+  .range-track {
+    height:8px; background:#E8EEF3; border-radius:4px;
+    position:relative; margin-bottom:4px;
+  }
+  .range-fill {
+    height:100%; border-radius:4px;
+    background:linear-gradient(to right,#57A400,#FFC800,#FF6900);
+    transition:width .5s ease;
+  }
+  .range-marker {
+    position:absolute; top:50%; transform:translate(-50%,-50%);
+    width:14px; height:14px; background:#002C4F;
+    border:2px solid #fff; border-radius:50%;
+    box-shadow:0 1px 4px rgba(0,44,79,.25);
+    transition:left .5s ease;
+  }
+  .range-ends {
+    display:flex; justify-content:space-between;
+    font-size:10px; color:#AABCCC;
+  }
+  .range-current { font-size:10px; text-align:center; color:#002C4F; font-weight:600; margin-top:2px; }
+
+  /* ── ACTIONS ── */
+  .result-actions {
+    padding:12px 24px; background:#F8FAFB;
+    border-top:1px solid #F0F4F8;
+    display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+  }
+  .action-btn {
+    font-size:12px; font-weight:700; border:none;
+    border-radius:6px; padding:7px 14px; cursor:pointer;
+    font-family:inherit; transition:all .15s;
+  }
+  .btn-add { background:#FF6900; color:#fff; }
+  .btn-add:hover { background:#E55A00; }
+  .btn-new { background:#E8EEF3; color:#002C4F; }
+  .btn-new:hover { background:#D0DCE8; }
+  .action-note { font-size:11px; color:#AABCCC; margin-left:auto; }
+
+  /* ── FOOTER ── */
+  .section-footer {
+    background:#F4F3EE; border-top:1px solid #E0E8F0;
+    padding:10px 24px; font-size:11px; color:#8899AA;
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top:auto;
+  }
+  .section-footer strong { color:#002C4F; }
+</style>
+</head>
+<body>
+
+<div class="syc-accent-bar"></div>
+
+<div class="section-header">
+  <div class="members-pill">Members</div>
+  <div class="header-titles">
+    <h2>Quick Research</h2>
+    <p>Instant price snapshot for any stock, ETF, or investment trust</p>
+  </div>
+</div>
+
+<div class="search-section">
+  <div class="search-row">
+    <input type="text" class="search-input" id="searchInput"
+      placeholder="Enter a ticker — e.g. LLOY, AAPL, VWRL, CTY…"
+      maxlength="15" autocomplete="off" autocorrect="off" spellcheck="false"/>
+    <button class="search-btn" id="searchBtn" onclick="doSearch()">Look up</button>
+  </div>
+  <div class="search-hint">
+    UK stocks &amp; ETFs are detected automatically. US stocks: <strong>AAPL, MSFT, SPY</strong>.
+    Not found? Try adding <strong>.L</strong> for London (e.g. VOD.L).
+  </div>
+</div>
+
+<div class="loading-state" id="loadingState">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loadingText">Fetching data…</div>
+</div>
+
+<div class="error-state" id="errorState"></div>
+
+<div id="mainContent" style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+  <div class="empty-state">
+    <div class="empty-icon">🔍</div>
+    <div class="empty-title">Research any ticker</div>
+    <div class="empty-text">Enter a ticker symbol above to get a full price snapshot including day range, 52-week range, volume, and market cap.</div>
+    <div class="example-chips">
+      <span class="chip" onclick="quickSearch('LLOY')">LLOY</span>
+      <span class="chip" onclick="quickSearch('VWRL')">VWRL</span>
+      <span class="chip" onclick="quickSearch('AZN')">AZN</span>
+      <span class="chip" onclick="quickSearch('CTY')">CTY</span>
+      <span class="chip" onclick="quickSearch('AAPL')">AAPL</span>
+      <span class="chip" onclick="quickSearch('MSFT')">MSFT</span>
+      <span class="chip" onclick="quickSearch('SPY')">SPY</span>
+      <span class="chip" onclick="quickSearch('NVDA')">NVDA</span>
+    </div>
+  </div>
+</div>
+
+<div class="result-card" id="resultCard">
+  <div class="result-hero">
+    <div class="result-hero-left">
+      <div class="result-company" id="rCompany">—</div>
+      <div class="result-meta" id="rMeta">—</div>
+    </div>
+    <div class="result-ticker-pill" id="rTickerPill">—</div>
+  </div>
+
+  <div class="result-price-band">
+    <div>
+      <span class="result-price-main" id="rPrice">—</span>
+      <span class="result-currency" id="rCurrency"></span>
+    </div>
+    <span class="change-pill flat" id="rChangePill">—</span>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-cell"><div class="stat-label">Open</div><div class="stat-value" id="rOpen">—</div></div>
+    <div class="stat-cell"><div class="stat-label">Previous Close</div><div class="stat-value" id="rPrev">—</div></div>
+    <div class="stat-cell"><div class="stat-label">Day High</div><div class="stat-value up" id="rDayHigh">—</div></div>
+    <div class="stat-cell"><div class="stat-label">Day Low</div><div class="stat-value down" id="rDayLow">—</div></div>
+    <div class="stat-cell"><div class="stat-label">52-Week High</div><div class="stat-value up" id="r52High">—</div></div>
+    <div class="stat-cell"><div class="stat-label">52-Week Low</div><div class="stat-value down" id="r52Low">—</div></div>
+    <div class="stat-cell"><div class="stat-label">Volume</div><div class="stat-value" id="rVolume">—</div></div>
+    <div class="stat-cell"><div class="stat-label">Market Cap</div><div class="stat-value" id="rMarketCap">—</div></div>
+  </div>
+
+  <div class="ranges-section">
+    <div class="range-block">
+      <div class="range-top">
+        <span class="range-title">Day Range</span>
+        <span class="range-span" id="rDaySpan">—</span>
+      </div>
+      <div class="range-track">
+        <div class="range-fill" id="rDayFill" style="width:50%"></div>
+        <div class="range-marker" id="rDayMarker" style="left:50%"></div>
+      </div>
+      <div class="range-ends"><span id="rDayLo">—</span><span id="rDayHi">—</span></div>
+      <div class="range-current">Current: <span id="rDayCurrent">—</span></div>
+    </div>
+    <div class="range-block">
+      <div class="range-top">
+        <span class="range-title">52-Week Range</span>
+        <span class="range-span" id="r52Span">—</span>
+      </div>
+      <div class="range-track">
+        <div class="range-fill" id="r52Fill" style="width:50%"></div>
+        <div class="range-marker" id="r52Marker" style="left:50%"></div>
+      </div>
+      <div class="range-ends"><span id="r52Lo">—</span><span id="r52Hi">—</span></div>
+      <div class="range-current">Current: <span id="r52Current">—</span></div>
+    </div>
+  </div>
+
+  <div class="result-actions">
+    <button class="action-btn btn-add" onclick="addToWatchlist()">+ Add to My Watchlist</button>
+    <button class="action-btn btn-new" onclick="newSearch()">Search another</button>
+    <span class="action-note" id="rUpdated"></span>
+  </div>
+</div>
+
+<div class="section-footer">
+  <span>Data via <strong>Yahoo Finance</strong>. Prices may be delayed up to 15 mins. For educational purposes only.</span>
+</div>
+
+<script>
+const KNOWN_US = ['AAPL','MSFT','GOOGL','GOOG','AMZN','META','NVDA','TSLA','SPY','QQQ',
+  'VOO','VTI','IVV','GLD','SLV','TLT','BND','VEA','VWO','ARKK','JPM','JNJ','UNH',
+  'XOM','CVX','PG','MA','V','HD','BAC','WFC','DIS','NFLX','INTC','AMD','CRM','PYPL',
+  'ADBE','CSCO','PFE','MRK','ABBV','LLY','TMO','ABT','BRK.B'];
+
+let currentTicker = null;
+let currentDisplayTicker = null;
+
+function resizeParent() {
+  try { window.parent.postMessage({ type:'iwh', value: document.body.scrollHeight + 20 }, '*'); } catch(e) {}
+}
+
+function applyExchange(ticker) {
+  if (ticker.includes('.')) return ticker;
+  if (KNOWN_US.includes(ticker)) return ticker;
+  return ticker; // let fetch handle .L retry
+}
+
+async function yahooFetch(symbol) {
+  const encoded = encodeURIComponent(symbol);
+  const urls = [
+    `https://query1.finance.yahoo.com/v8/finance/chart/${encoded}?interval=1d&range=1d`,
+    `https://query2.finance.yahoo.com/v8/finance/chart/${encoded}?interval=1d&range=1d`,
+  ];
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, { headers:{'Accept':'application/json'} });
+      if (!res.ok) continue;
+      const d = await res.json();
+      const meta = d?.chart?.result?.[0]?.meta;
+      if (meta?.regularMarketPrice) return meta;
+    } catch(e) { continue; }
+  }
+  try {
+    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/'+encoded+'?interval=1d&range=1d')}`;
+    const res = await fetch(proxy);
+    const outer = await res.json();
+    const d = JSON.parse(outer.contents);
+    const meta = d?.chart?.result?.[0]?.meta;
+    if (meta?.regularMarketPrice) return meta;
+  } catch(e) {}
+  return null;
+}
+
+function fmt(n, currency) {
+  if (!n && n !== 0) return '—';
+  if (n >= 1e12) return (n/1e12).toFixed(2) + 'T';
+  if (n >= 1e9)  return (n/1e9).toFixed(2) + 'B';
+  if (n >= 1e6)  return (n/1e6).toFixed(2) + 'M';
+  if (n >= 10000) return n.toLocaleString('en-GB', {maximumFractionDigits:0});
+  if (n >= 100)   return n.toLocaleString('en-GB', {minimumFractionDigits:1, maximumFractionDigits:1});
+  return n.toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function fmtVol(n) {
+  if (!n) return '—';
+  if (n >= 1e9) return (n/1e9).toFixed(1) + 'B';
+  if (n >= 1e6) return (n/1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return (n/1e3).toFixed(0) + 'K';
+  return n.toLocaleString('en-GB');
+}
+
+function pct(val, lo, hi) {
+  if (!lo || !hi || hi === lo) return 50;
+  return Math.min(100, Math.max(0, ((val - lo) / (hi - lo)) * 100));
+}
+
+async function doSearch() {
+  const input = document.getElementById('searchInput');
+  const btn = document.getElementById('searchBtn');
+  let raw = input.value.trim().toUpperCase().replace(/[^A-Z0-9.^]/g,'');
+  if (!raw) return;
+
+  document.getElementById('mainContent').style.display = 'none';
+  document.getElementById('resultCard').classList.remove('visible');
+  document.getElementById('errorState').classList.remove('visible');
+  document.getElementById('loadingState').classList.add('visible');
+  document.getElementById('loadingText').textContent = 'Looking up ' + raw + '…';
+  btn.disabled = true;
+
+  let meta = await yahooFetch(raw);
+  let usedSymbol = raw;
+
+  if (!meta && !raw.includes('.') && !KNOWN_US.includes(raw)) {
+    meta = await yahooFetch(raw + '.L');
+    if (meta) usedSymbol = raw + '.L';
+  }
+
+  document.getElementById('loadingState').classList.remove('visible');
+  btn.disabled = false;
+
+  if (!meta) {
+    document.getElementById('mainContent').style.display = 'block';
+    const err = document.getElementById('errorState');
+    err.textContent = 'Could not find "' + raw + '". Check the ticker and try again. For UK stocks try adding .L (e.g. ' + raw + '.L).';
+    err.classList.add('visible');
+    resizeParent();
+    return;
+  }
+
+  currentTicker = usedSymbol;
+  currentDisplayTicker = raw;
+  populateResult(meta, raw);
+}
+
+function populateResult(meta, displayTicker) {
+  const price   = meta.regularMarketPrice || 0;
+  const prev    = meta.chartPreviousClose || meta.previousClose || price;
+  const open    = meta.regularMarketOpen || 0;
+  const dayHi   = meta.regularMarketDayHigh || 0;
+  const dayLo   = meta.regularMarketDayLow || 0;
+  const wkHi    = meta.fiftyTwoWeekHigh || 0;
+  const wkLo    = meta.fiftyTwoWeekLow || 0;
+  const vol     = meta.regularMarketVolume || 0;
+  const mktCap  = meta.marketCap || 0;
+  const cur     = meta.currency || '';
+  const name    = meta.longName || meta.shortName || displayTicker;
+  const exch    = meta.fullExchangeName || meta.exchangeName || '';
+
+  const chg     = price - prev;
+  const chgPct  = prev ? (chg/prev)*100 : 0;
+  const cls     = chg > 0 ? 'up' : chg < 0 ? 'down' : 'flat';
+  const arrow   = chg > 0 ? '▲' : chg < 0 ? '▼' : '—';
+
+  document.getElementById('rCompany').textContent    = name;
+  document.getElementById('rMeta').textContent       = exch + (cur ? ' · ' + cur : '');
+  document.getElementById('rTickerPill').textContent = displayTicker;
+  document.getElementById('rPrice').textContent      = fmt(price);
+  document.getElementById('rCurrency').textContent   = cur;
+  document.getElementById('rOpen').textContent       = fmt(open);
+  document.getElementById('rPrev').textContent       = fmt(prev);
+  document.getElementById('rDayHigh').textContent    = fmt(dayHi);
+  document.getElementById('rDayLow').textContent     = fmt(dayLo);
+  document.getElementById('r52High').textContent     = fmt(wkHi);
+  document.getElementById('r52Low').textContent      = fmt(wkLo);
+  document.getElementById('rVolume').textContent     = fmtVol(vol);
+  document.getElementById('rMarketCap').textContent  = mktCap ? fmt(mktCap) + ' ' + cur : '—';
+
+  const pill = document.getElementById('rChangePill');
+  pill.textContent = arrow + ' ' + Math.abs(chgPct).toFixed(2) + '% (' + (chg >= 0 ? '+' : '') + fmt(Math.abs(chg)) + ' ' + cur + ')';
+  pill.className = 'change-pill ' + cls;
+
+  // Day range bar
+  const dp = pct(price, dayLo, dayHi);
+  document.getElementById('rDayFill').style.width   = dp + '%';
+  document.getElementById('rDayMarker').style.left  = dp + '%';
+  document.getElementById('rDayLo').textContent     = fmt(dayLo);
+  document.getElementById('rDayHi').textContent     = fmt(dayHi);
+  document.getElementById('rDayCurrent').textContent = fmt(price) + ' ' + cur;
+  document.getElementById('rDaySpan').textContent   = fmt(dayLo) + ' – ' + fmt(dayHi);
+
+  // 52-week range bar
+  const wp = pct(price, wkLo, wkHi);
+  document.getElementById('r52Fill').style.width    = wp + '%';
+  document.getElementById('r52Marker').style.left   = wp + '%';
+  document.getElementById('r52Lo').textContent      = fmt(wkLo);
+  document.getElementById('r52Hi').textContent      = fmt(wkHi);
+  document.getElementById('r52Current').textContent = fmt(price) + ' ' + cur;
+  document.getElementById('r52Span').textContent    = fmt(wkLo) + ' – ' + fmt(wkHi);
+
+  const now = new Date();
+  document.getElementById('rUpdated').textContent = 'Updated ' + now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+
+  document.getElementById('mainContent').style.display = 'none';
+  document.getElementById('resultCard').classList.add('visible');
+  resizeParent();
+}
+
+function newSearch() {
+  document.getElementById('resultCard').classList.remove('visible');
+  document.getElementById('errorState').classList.remove('visible');
+  document.getElementById('mainContent').style.display = 'block';
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchInput').focus();
+  currentTicker = null;
+  resizeParent();
+}
+
+function addToWatchlist() {
+  if (!currentDisplayTicker) return;
+  // Try to communicate with watchlist embed via localStorage
+  try {
+    const key = 'syc_watchlist_v3';
+    const stored = localStorage.getItem(key);
+    const watchlist = stored ? JSON.parse(stored) : [];
+    const ticker = currentDisplayTicker;
+    if (!watchlist.some(t => t === ticker || t.replace(/\.(L|AS)$/,'') === ticker)) {
+      watchlist.push(ticker);
+      localStorage.setItem(key, JSON.stringify(watchlist));
+      const btn = document.querySelector('.btn-add');
+      btn.textContent = '✓ Added to watchlist';
+      btn.style.background = '#57A400';
+      setTimeout(() => { btn.textContent = '+ Add to My Watchlist'; btn.style.background = ''; }, 2000);
+    } else {
+      const btn = document.querySelector('.btn-add');
+      btn.textContent = 'Already in watchlist';
+      setTimeout(() => { btn.textContent = '+ Add to My Watchlist'; }, 2000);
+    }
+  } catch(e) {}
+}
+
+function quickSearch(ticker) {
+  document.getElementById('searchInput').value = ticker;
+  doSearch();
+}
+
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doSearch();
+});
+
+resizeParent();
+setTimeout(resizeParent, 800);
+</script>
+</body>
+</html>

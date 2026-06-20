@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYC Interest Rates</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+* { box-sizing:border-box; margin:0; padding:0; }
+html,body { width:100%; font-family:'Source Sans 3',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:#fff; color:#1A2A3A; }
+.section-wrap { border:6px solid #002C4F; overflow:hidden; }
+.section-header { background:#FF6900; padding:14px 20px 12px; display:flex; flex-direction:column; align-items:center; gap:6px; }
+.region-tag { background:#002C4F; color:#FFFFFF; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; border-radius:4px; padding:3px 10px; }
+.header-titles { text-align:center; }
+.header-titles h2 { font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:700; color:#FFFFFF; margin-bottom:2px; letter-spacing:.01em; }
+.live-badge { display:flex; align-items:center; gap:5px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); border-radius:20px; padding:3px 10px; font-size:10px; font-weight:700; color:#FFFFFF; text-transform:uppercase; letter-spacing:.06em; }
+.indices-list { background:#fff; min-height:240px; }
+.index-row { display:flex; align-items:center; padding:0 16px; border-bottom:1px solid #F0F4F8; gap:8px; height:48px; min-height:48px; }
+.index-row:last-child { border-bottom:none; }
+.index-left { flex:1; min-width:0; }
+.index-name { font-size:13px; font-weight:700; color:#002C4F; display:block; }
+.index-label { font-size:10px; color:#8899AA; margin-top:1px; display:block; }
+.index-right { text-align:right; flex-shrink:0; min-width:80px; }
+.index-price { font-size:14px; font-weight:700; color:#1A2A3A; }
+.section-footer { background:#F4F3EE; border-top:1px solid #E0E8F0; padding:7px 14px; font-size:10px; color:#8899AA; display:flex; align-items:center; justify-content:space-between; }
+.section-footer strong { color:#002C4F; }
+.update-badge { font-size:10px; color:#8899AA; }
+</style>
+</head>
+<body>
+<div class="section-wrap">
+  <div class="section-header">
+    <div class="region-tag">Key Benchmark Rates</div>
+    <div class="header-titles"><h2>Interest Rates</h2></div>
+    <div class="live-badge">Updated Manually</div>
+  </div>
+  <div class="indices-list">
+<div class="index-row"><div class="index-left"><span class="index-name">BoE Base Rate</span><span class="index-label">Bank of England</span></div><div class="index-right"><span class="index-price">4.25%</span></div></div>
+<div class="index-row"><div class="index-left"><span class="index-name">US Fed Funds Rate</span><span class="index-label">Federal Reserve</span></div><div class="index-right"><span class="index-price">4.25–4.50%</span></div></div>
+<div class="index-row"><div class="index-left"><span class="index-name">ECB Deposit Rate</span><span class="index-label">European Central Bank</span></div><div class="index-right"><span class="index-price">2.25%</span></div></div>
+<div class="index-row"><div class="index-left"><span class="index-name">UK 10-Year Gilt</span><span class="index-label">Benchmark UK yield</span></div><div class="index-right"><span class="index-price">4.5%</span></div></div>
+<div class="index-row"><div class="index-left"><span class="index-name">US 10-Year Treasury</span><span class="index-label">Benchmark US yield</span></div><div class="index-right"><span class="index-price">4.4%</span></div></div>
+  </div>
+  <div class="section-footer">
+    <span>Rates updated periodically by the SYC team.</span>
+    <span class="update-badge"><!-- UPDATE_DATE -->Last updated: June 2026</span>
+  </div>
+</div>
+
+<script>
+function resizeParent() {
+  try { window.parent.postMessage({ type:"iwh", value: document.body.scrollHeight + 10 }, "*"); } catch(e) {}
+}
+resizeParent();
+setTimeout(resizeParent, 500);
+</script>
+</body>
+</html>

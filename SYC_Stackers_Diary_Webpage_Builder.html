@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYC Stacker's Diary - Webpage Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Source Sans 3",sans-serif;background:#e0e0e0;min-height:100vh;padding:24px;}
+h1{font-family:"Playfair Display",serif;color:#002C4F;margin-bottom:4px;font-size:24px;}
+.subtitle{color:#666;font-size:13px;margin-bottom:20px;}
+.layout{display:grid;grid-template-columns:460px 1fr;gap:24px;align-items:start;}
+.controls{display:flex;flex-direction:column;gap:14px;}
+.panel{background:#fff;border-radius:10px;padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+.panel h2{font-size:12px;font-weight:700;color:#002C4F;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid #f0f0f0;padding-bottom:8px;}
+.panel-note{font-size:11px;color:#999;margin-bottom:10px;line-height:1.5;}
+label{display:block;font-size:11px;font-weight:700;color:#555;margin-bottom:3px;margin-top:10px;text-transform:uppercase;letter-spacing:0.3px;}
+label:first-of-type{margin-top:0;}
+input[type="text"],textarea,select{width:100%;padding:7px 10px;border:1.5px solid #ddd;border-radius:6px;font-family:"Source Sans 3",sans-serif;font-size:12px;color:#222;}
+input:focus,textarea:focus,select:focus{outline:none;border-color:#FF6900;}
+textarea{resize:vertical;line-height:1.5;}
+.btn{display:block;width:100%;padding:12px;background:#FF6900;color:#fff;border:none;border-radius:7px;font-family:"Source Sans 3",sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+.btn:hover{background:#e05a00;}
+.btn-navy{background:#002C4F;margin-top:10px;}
+.btn-navy:hover{background:#001f38;}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.preview-label{font-size:12px;color:#888;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+.preview-frame-wrap{border-radius:10px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,0.15);}
+iframe{display:block;width:820px;height:1000px;border:none;}
+.hint{font-size:11px;color:#aaa;margin-top:8px;}
+.holding-row{display:grid;grid-template-columns:2fr 90px 110px 70px 28px;gap:6px;align-items:end;margin-bottom:6px;}
+.holding-row-head{display:grid;grid-template-columns:2fr 90px 110px 70px 28px;gap:6px;margin-bottom:2px;}
+.holding-row-head span{font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.3px;}
+.remove-btn{background:#FFE8E8;color:#CC3333;border:1.5px solid #FFCCCC;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;padding:0;height:32px;line-height:32px;text-align:center;width:28px;}
+.remove-btn:hover{background:#FFCCCC;}
+.add-btn{display:block;width:100%;padding:7px;margin-top:6px;background:#E8EEF3;color:#002C4F;border:1.5px solid #D8E4EF;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;text-align:center;}
+.add-btn:hover{background:#D8E4EF;}
+.archive-row{display:grid;grid-template-columns:90px 1fr 1fr 28px;gap:6px;align-items:end;margin-bottom:6px;}
+.archive-row-head{display:grid;grid-template-columns:90px 1fr 1fr 28px;gap:6px;margin-bottom:2px;}
+.archive-row-head span{font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.3px;}
+</style>
+</head>
+<body>
+<h1>Stacker's Diary &mdash; Webpage Builder</h1>
+<p class="subtitle">Fill in this month's content, preview live, then download the HTML to paste into Wix.</p>
+<div class="layout">
+<div class="controls">
+
+  <div class="panel">
+    <h2>Month Header</h2>
+    <label>Month &amp; Year</label>
+    <input type="text" id="month" value="June 2026">
+  </div>
+
+  <div class="panel">
+    <h2>This Month at a Glance</h2>
+    <p class="panel-note">The navy highlight card — brief portfolio &amp; market summary plus 3 indicator pills.</p>
+    <label>Card Title</label>
+    <input type="text" id="glance-title" value="The Portfolio, the Market and What I'm Thinking">
+    <label>Portfolio Summary</label>
+    <textarea id="glance-para1" rows="3">A mixed picture across the portfolio in June. The investment trust holdings delivered varied results - technology and global equity positions held up well, while infrastructure and Asia-Pacific exposure was more subdued.</textarea>
+    <label>Market Summary</label>
+    <textarea id="glance-para2" rows="3">The significant cash position (23%) remains a deliberate choice while I assess valuations. The full commentary below covers each area in detail.</textarea>
+    <label>Pill 1</label>
+    <input type="text" id="pill1" value="4 positions sold - derisking underway">
+    <label>Pill 2</label>
+    <input type="text" id="pill2" value="Cash: 23% - retirement transition">
+    <label>Pill 3</label>
+    <input type="text" id="pill3" value="BRLA buyback: 26% profit taken">
+  </div>
+
+  <div class="panel">
+    <h2>Allocation Bar</h2>
+    <p class="panel-note">Must add to 100.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;">
+      <div><label>Global Eq %</label><input type="text" id="bar-global" value="52"></div>
+      <div><label>UK Eq %</label><input type="text" id="bar-uk" value="7"></div>
+      <div><label>Bonds %</label><input type="text" id="bar-bonds" value="14"></div>
+      <div><label>Cash %</label><input type="text" id="bar-cash" value="27"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Portfolio Holdings</h2>
+    <p class="panel-note">Full holdings table - add/remove/update rows each month.</p>
+    <div class="holding-row-head"><span>Holding Name</span><span>Ticker</span><span>Type</span><span>Weight</span><span></span></div>
+    <div id="holdings-container">
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="Polar Capital Technology Trust Plc"></div>
+        <div><input type="text" class="h-ticker" value="PCT"></div>
+        <div><select class="h-type"><option  selected>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="5.68%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="BlackRock World Mining Trust Plc"></div>
+        <div><input type="text" class="h-ticker" value="BRWM"></div>
+        <div><select class="h-type"><option  selected>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="4.22%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="F&amp;C Investment Trust Plc"></div>
+        <div><input type="text" class="h-ticker" value="FCIT"></div>
+        <div><select class="h-type"><option  selected>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="8.29%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="Fidelity Global Dividend Fund ACC"></div>
+        <div><input type="text" class="h-ticker" value="GB00B7GJPN73"></div>
+        <div><select class="h-type"><option>Inv Trust</option><option  selected>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="7.77%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="Murray International Trust Plc"></div>
+        <div><input type="text" class="h-ticker" value="MYI"></div>
+        <div><select class="h-type"><option  selected>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="5.23%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="L&amp;G Asia Pacific Equity Income Fund"></div>
+        <div><input type="text" class="h-ticker" value="GB00B7XH5V20"></div>
+        <div><select class="h-type"><option>Inv Trust</option><option  selected>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="5.17%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="City of London Investment Trust Plc"></div>
+        <div><input type="text" class="h-ticker" value="CTY"></div>
+        <div><select class="h-type"><option  selected>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="7.39%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="Cordiant Digital Infrastructure Ord"></div>
+        <div><input type="text" class="h-ticker" value="CORD"></div>
+        <div><select class="h-type"><option  selected>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="2.10%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="Personal Assets Trust Plc"></div>
+        <div><input type="text" class="h-ticker" value="PNL"></div>
+        <div><select class="h-type"><option  selected>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="3.99%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="International Public Partnerships Ord"></div>
+        <div><input type="text" class="h-ticker" value="INPP"></div>
+        <div><select class="h-type"><option  selected>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="5.95%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="Invesco Bond Income Plus Ltd"></div>
+        <div><input type="text" class="h-ticker" value="BIPS"></div>
+        <div><select class="h-type"><option  selected>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="4.86%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="L&amp;G Cash Trust I Class ACC"></div>
+        <div><input type="text" class="h-ticker" value="GB00B0CNHB64"></div>
+        <div><select class="h-type"><option>Inv Trust</option><option>Active Fund</option><option  selected>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="3.77%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="UK 4.375% Gilt 07/03/30"></div>
+        <div><input type="text" class="h-ticker" value="T30"></div>
+        <div><select class="h-type"><option>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option  selected>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="3.60%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="UK 4.5% Gilt 07/03/35"></div>
+        <div><input type="text" class="h-ticker" value="T35"></div>
+        <div><select class="h-type"><option>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option  selected>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="3.51%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="UK 4.125% Gilt 07/03/33"></div>
+        <div><input type="text" class="h-ticker" value="T33H"></div>
+        <div><select class="h-type"><option>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option  selected>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="1.75%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="BlackRock Frontiers Investment Trust Plc"></div>
+        <div><input type="text" class="h-ticker" value="BRFI"></div>
+        <div><select class="h-type"><option  selected>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="1.65%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="Fidelity China Special Situations PLC"></div>
+        <div><input type="text" class="h-ticker" value="FCSS"></div>
+        <div><select class="h-type"><option  selected>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="1.60%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+      <div class="holding-row">
+        <div><input type="text" class="h-name" value="Cash"></div>
+        <div><input type="text" class="h-ticker" value="CASH"></div>
+        <div><select class="h-type"><option>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option  selected>Cash</option><option>Other</option></select></div>
+        <div><input type="text" class="h-weight" value="23.47%"></div>
+        <button class="remove-btn" onclick="removeRow(this)">x</button>
+      </div>
+
+    </div>
+    <button class="add-btn" onclick="addHoldingRow()">+ Add holding</button>
+  </div>
+
+  <div class="panel">
+    <h2>Commentary</h2>
+    <label>What the Portfolio Did This Month</label>
+    <textarea id="c-performance" rows="4">June was the first full month of tracking Stacker's Diary. The portfolio is heavily positioned in investment trusts across a range of sectors.</textarea>
+    <label>Second paragraph (optional)</label>
+    <textarea id="c-performance2" rows="2">The active fund holdings and gilt allocation complement the trust exposure with more liquid positions.</textarea>
+    <label>Decisions Made</label>
+    <textarea id="c-decisions" rows="4">The derisking process is already underway. Last month I sold three positions as part of a deliberate effort to reduce exposure and simplify the portfolio as I approach retirement.</textarea>
+    <label>Second paragraph (optional)</label>
+    <textarea id="c-decisions2" rows="2">The elevated cash position reflects both recent exits and a deliberate decision not to redeploy immediately.</textarea>
+    <label>What I'm Watching (use "1. Item" on new lines)</label>
+    <textarea id="c-watching" rows="5">Three things on my radar heading into July:
+
+1. Infrastructure trust discounts - INPP and CORD are both trading at discounts to NAV.
+2. UK gilt yields - any BoE rate cut would benefit existing holdings.
+3. China exposure - FCSS has been a drag. Hold, reduce or exit decision in July.</textarea>
+    <label>Pullquote</label>
+    <textarea id="pullquote" rows="2">I've been investing long enough to know that doing nothing is sometimes the most active decision you can make. The cash isn't idle - it's waiting for the right moment.</textarea>
+    <label>Pullquote month</label>
+    <input type="text" id="pullquote-attr" value="June 2026">
+  </div>
+
+  <div class="panel">
+    <h2>Archive Entries</h2>
+    <p class="panel-note">Add past entries newest first. Leave empty for first month.</p>
+    <div class="archive-row-head"><span>Date</span><span>Title</span><span>Teaser</span><span></span></div>
+    <div id="archive-container"></div>
+    <button class="add-btn" onclick="addArchiveRow()">+ Add past entry</button>
+  </div>
+
+  <div class="panel">
+    <h2>Export</h2>
+    <p class="panel-note">Update preview then download to paste into Wix HTML embed editor.</p>
+    <div class="btn-row">
+      <button class="btn" onclick="updatePreview()">Update Preview</button>
+      <button class="btn btn-navy" onclick="downloadPage()">Download HTML</button>
+    </div>
+  </div>
+
+</div>
+<div>
+  <div class="preview-label">Live Preview</div>
+  <div class="preview-frame-wrap"><iframe id="preview-frame"></iframe></div>
+  <p class="hint">Click Update Preview after making changes. Download exports the Wix-ready HTML.</p>
+</div>
+</div>
+
+<script>
+var LOGO = "data:image/png;base64,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";
+
+function g(id){ return document.getElementById(id).value.trim(); }
+
+function esc(s){
+  return String(s)
+    .replace(/&(?!(amp|lt|gt|quot|apos|#);)/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;");
+}
+
+function escAttr(s){ return esc(s); }
+
+function removeRow(btn){ btn.parentNode.parentNode.removeChild(btn.parentNode); }
+
+function addHoldingRow(){
+  var c = document.getElementById("holdings-container");
+  var d = document.createElement("div");
+  d.className = "holding-row";
+  d.innerHTML = "<div><input type=\"text\" class=\"h-name\" value=\"\"></div><div><input type=\"text\" class=\"h-ticker\" value=\"\"></div><div><select class=\"h-type\"><option>Inv Trust</option><option>Active Fund</option><option>Unit Trust</option><option>Treasury Gilt</option><option>ETF</option><option>Cash</option><option>Other</option></select></div><div><input type=\"text\" class=\"h-weight\" value=\"\"></div><button class=\"remove-btn\" onclick=\"removeRow(this)\">x</button>";
+  c.appendChild(d);
+}
+
+function addArchiveRow(){
+  var c = document.getElementById("archive-container");
+  var d = document.createElement("div");
+  d.className = "archive-row";
+  d.innerHTML = "<div><input type=\"text\" class=\"a-date\" placeholder=\"May 2026\"></div><div><input type=\"text\" class=\"a-title\" placeholder=\"Entry title\"></div><div><input type=\"text\" class=\"a-teaser\" placeholder=\"One line teaser\"></div><button class=\"remove-btn\" onclick=\"removeRow(this)\">x</button>";
+  c.appendChild(d);
+}
+
+function getHoldings(){
+  var rows = document.querySelectorAll("#holdings-container .holding-row");
+  var html = "";
+  var odd = true;
+  rows.forEach(function(r){
+    var name = r.querySelector(".h-name").value.trim();
+    var ticker = r.querySelector(".h-ticker").value.trim();
+    var type = r.querySelector(".h-type").value;
+    var weight = r.querySelector(".h-weight").value.trim();
+    if(!name) return;
+    var pct = parseFloat(weight) || 0;
+    var barW = Math.min(Math.round((pct/10)*100),100);
+    var bg = odd ? "#FFFFFF" : "#F7F9FB";
+    html += "<tr style=\"background:" + bg + ";border-bottom:1px solid #E2E8F0;\">";
+    html += "<td style=\"padding:10px 14px;\"><div style=\"font-weight:600;color:#002C4F;font-size:0.9rem;\">" + esc(name) + "</div></td>";
+    html += "<td data-label=\"Ticker\" style=\"padding:10px 14px;\"><span style=\"display:inline-block;background:#F7F9FB;border:1px solid #E2E8F0;border-radius:4px;padding:2px 7px;font-size:0.75rem;font-weight:700;color:#002C4F;font-family:monospace;\">" + esc(ticker) + "</span></td>";
+    html += "<td data-label=\"Type\" style=\"padding:10px 14px;\"><span style=\"display:inline-block;font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.04em;background:#F7F9FB;color:#5A6070;border:1px solid #E2E8F0;\">" + esc(type) + "</span></td>";
+    html += "<td data-label=\"Weight\" style=\"padding:10px 14px;\"><div style=\"display:flex;align-items:center;gap:10px;justify-content:flex-end;\"><span style=\"font-weight:700;color:#002C4F;font-size:0.92rem;min-width:44px;text-align:right;\">" + esc(weight) + "</span><div style=\"width:80px;height:6px;background:#E2E8F0;border-radius:3px;overflow:hidden;\"><div style=\"height:100%;background:#FF6900;border-radius:3px;width:" + barW + "%;\"></div></div></div></td>";
+    html += "</tr>";
+    odd = !odd;
+  });
+  return html;
+}
+
+function getArchive(){
+  var rows = document.querySelectorAll("#archive-container .archive-row");
+  if(rows.length === 0){
+    return "<div style=\"text-align:center;padding:40px 24px;background:#F7F9FB;border-radius:8px;border:2px dashed #E2E8F0;\"><p style=\"color:#5A6070;font-size:0.95rem;\"><strong style=\"color:#002C4F;\">First entry coming soon.</strong> The archive will build up here as new monthly entries are published.</p></div>";
+  }
+  var html = "<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0;\">";
+  rows.forEach(function(r){
+    var date = r.querySelector(".a-date").value.trim();
+    var title = r.querySelector(".a-title").value.trim();
+    var teaser = r.querySelector(".a-teaser").value.trim();
+    if(!title) return;
+    html += "<div style=\"background:#F7F9FB;border-radius:8px;padding:20px 22px;border-top:3px solid #FF6900;\">";
+    html += "<div style=\"font-size:0.75rem;color:#5A6070;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;\">" + esc(date) + "</div>";
+    html += "<h4 style=\"font-family:Playfair Display,Georgia,serif;font-size:1rem;font-weight:700;color:#002C4F;margin-bottom:8px;line-height:1.3;\">" + esc(title) + "</h4>";
+    html += "<p style=\"font-size:0.88rem;color:#5A6070;line-height:1.55;margin:0;\">" + esc(teaser) + "</p></div>";
+  });
+  html += "</div>";
+  return html;
+}
+
+function formatWatching(text){
+  var lines = text.split("\n");
+  var html = "";
+  lines.forEach(function(line){
+    var m = line.match(/^(\d+\.\s*)(.*)/);
+    if(m){
+      html += "<p style=\"font-size:0.98rem;color:#1A1A2E;line-height:1.75;margin:0 0 0.8em;\"><strong style=\"color:#002C4F;\">" + esc(m[1]) + "</strong>" + esc(m[2]) + "</p>";
+    } else if(line.trim()){
+      html += "<p style=\"font-size:0.98rem;color:#1A1A2E;line-height:1.75;margin:0 0 0.8em;\">" + esc(line) + "</p>";
+    }
+  });
+  return html;
+}
+
+function buildPage(){
+  var gp = parseInt(g("bar-global")) || 52;
+  var up = parseInt(g("bar-uk")) || 7;
+  var bp = parseInt(g("bar-bonds")) || 14;
+  var cp = parseInt(g("bar-cash")) || 27;
+  var month = g("month");
+  var c2p = g("c-performance2") ? "<p style=\"font-size:0.98rem;color:#1A1A2E;line-height:1.75;margin:0 0 0.8em;\">" + esc(g("c-performance2")) + "</p>" : "";
+  var c2d = g("c-decisions2") ? "<p style=\"font-size:0.98rem;color:#1A1A2E;line-height:1.75;margin:0;\">" + esc(g("c-decisions2")) + "</p>" : "";
+
+  var css = [
+    ":root{--orange:#FF6900;--navy:#002C4F;--green:#57A400;--yellow:#FFC800;--olive:#AEC000;--white:#FFFFFF;--light-bg:#F7F9FB;--text:#1A1A2E;--text-muted:#5A6070;--border:#E2E8F0;}",
+    "*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}",
+    "html,body{height:auto!important;}",
+    "body{font-family:'Source Sans 3',system-ui,sans-serif;color:var(--text);background:#FFFFFF;line-height:1.7;font-size:17px;}",
+    ".hero{background:var(--navy);color:#FFFFFF;padding:64px 24px 56px;text-align:center;position:relative;overflow:hidden;}",
+    ".hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,105,0,0.12) 0%,transparent 60%);pointer-events:none;}",
+    ".hero .pill{display:inline-block;background:var(--orange);color:#FFFFFF;font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 16px;border-radius:100px;margin-bottom:20px;}",
+    ".hero h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.9rem,5vw,3rem);font-weight:700;line-height:1.2;max-width:780px;margin:0 auto 16px;}",
+    ".hero .subtitle{font-size:1.1rem;color:rgba(255,255,255,0.75);max-width:600px;margin:0 auto;font-weight:300;font-style:italic;}",
+    ".container{max-width:780px;margin:0 auto;padding:0 24px 0 32px;}",
+    ".content-wrap{padding:56px 0 80px;}",
+    ".body-text{font-size:1.05rem;color:var(--text-muted);padding:0 8px;}",
+    ".body-text p{margin-bottom:1.4em;}",
+    ".body-text p:last-child{margin-bottom:0;}",
+    ".body-text strong{color:var(--navy);font-weight:600;}",
+    ".section-heading{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.25rem,3vw,1.65rem);font-weight:700;color:var(--navy);margin:44px 0 18px;padding:0 8px 12px;border-bottom:2px solid var(--border);line-height:1.25;}",
+    ".section-heading.first{margin-top:0;}",
+    ".section-divider{height:2px;background:linear-gradient(to right,var(--orange),var(--border));border:none;margin:48px 0;opacity:0.4;}",
+    ".featured-entry{background:var(--navy);border-radius:10px;padding:36px;margin:32px 0;position:relative;overflow:hidden;}",
+    ".featured-entry::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,105,0,0.12) 0%,transparent 60%);pointer-events:none;}",
+    ".featured-entry .entry-label{font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px;display:block;}",
+    ".featured-entry h3{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.2rem,3vw,1.6rem);font-weight:700;color:#FFFFFF;line-height:1.25;margin-bottom:14px;}",
+    ".featured-entry h3 span{color:var(--orange);}",
+    ".featured-entry p{color:rgba(255,255,255,0.8);font-size:0.98rem;line-height:1.7;margin-bottom:16px;}",
+    ".portfolio-bar{display:flex;height:36px;border-radius:6px;overflow:hidden;width:100%;margin:28px 0 14px;}",
+    ".bar-seg{display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#FFFFFF;letter-spacing:0.5px;}",
+    ".bar-global{background:var(--navy);border:2px solid #1a4a6e;border-right:2px solid #fff;flex:" + gp + ";}",
+    ".bar-uk{background:var(--orange);border-right:2px solid #fff;flex:" + up + ";}",
+    ".bar-bonds{background:var(--olive);border-right:2px solid #fff;flex:" + bp + ";color:var(--navy);}",
+    ".bar-cash{background:var(--yellow);flex:" + cp + ";color:var(--navy);}",
+    ".bar-legend{display:flex;flex-wrap:wrap;gap:12px 24px;margin-bottom:8px;}",
+    ".legend-item{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--text-muted);}",
+    ".legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}",
+    ".holdings-table{width:100%;border-collapse:collapse;font-size:0.92rem;margin-top:16px;}",
+    ".holdings-table thead tr{background:var(--navy);}",
+    ".holdings-table thead th{color:#FFFFFF;font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;padding:10px 14px;text-align:left;}",
+    ".holdings-table thead th:last-child{text-align:right;}",
+    ".holdings-table tbody tr{border-bottom:1px solid var(--border);}",
+    ".holdings-table tbody tr:last-child{border-bottom:none;}",
+    ".holdings-disclaimer{font-size:0.78rem;color:var(--text-muted);margin-top:14px;padding:10px 14px;background:var(--light-bg);border-radius:6px;line-height:1.55;}",
+    ".holdings-disclaimer strong{color:var(--navy);}",
+    ".commentary-block{margin-bottom:24px;padding:24px 28px;background:var(--light-bg);border-radius:8px;border-left:4px solid var(--orange);}",
+    ".commentary-block.navy-left{border-left-color:var(--navy);}",
+    ".commentary-block.green-left{border-left-color:var(--green);}",
+    ".commentary-block .block-label{font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:10px;display:block;}",
+    ".commentary-block.navy-left .block-label{color:var(--navy);}",
+    ".commentary-block.green-left .block-label{color:var(--green);}",
+    ".commentary-block p{font-size:0.98rem;color:var(--text);line-height:1.75;margin:0 0 0.8em;}",
+    ".commentary-block p:last-child{margin:0;}",
+    ".commentary-block strong{color:var(--navy);font-weight:600;}",
+    ".pullquote{background:var(--navy);border-radius:8px;padding:28px 32px;margin:32px 4px;position:relative;}",
+    ".pullquote p{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1rem,2.5vw,1.2rem);color:#FFFFFF;line-height:1.65;font-style:italic;margin:0 0 12px;}",
+    ".pullquote cite{font-size:0.78rem;color:rgba(255,255,255,0.4);font-style:normal;}",
+    ".callout-navy{background:var(--navy);border-radius:8px;padding:24px 28px 24px 32px;margin:32px 4px;}",
+    ".callout-navy .callout-label{font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:10px;display:block;}",
+    ".callout-navy p{color:rgba(255,255,255,0.88);font-size:0.98rem;line-height:1.7;margin:0 0 0.8em;}",
+    ".callout-navy p:last-child{margin:0;}",
+    ".callout-navy strong{color:#FFFFFF;}",
+    ".join-cta{background:var(--navy);border-radius:10px;padding:44px 40px;text-align:center;margin:52px 0 0;position:relative;overflow:hidden;}",
+    ".join-cta h3{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.3rem,3vw,1.75rem);color:#FFFFFF;margin-bottom:14px;line-height:1.25;}",
+    ".join-cta h3 span{color:var(--orange);}",
+    ".join-cta p{color:rgba(255,255,255,0.75);font-size:0.98rem;max-width:520px;margin:0 auto 28px;line-height:1.65;}",
+    ".join-cta a{display:inline-block;background:var(--orange);color:#FFFFFF;font-weight:700;font-size:1rem;padding:15px 36px;border-radius:5px;text-decoration:none;}",
+    ".join-cta .cta-sub{margin-top:14px;font-size:0.8rem;color:rgba(255,255,255,0.4);}",
+    ".site-footer{background:var(--navy);color:rgba(255,255,255,0.5);text-align:center;padding:32px 24px;font-size:0.82rem;}",
+    ".site-footer strong{color:var(--orange);}",
+    "@media(max-width:520px){",
+    ".container{padding:0 14px;}",
+    ".content-wrap{padding:36px 0 60px;}",
+    ".hero{padding:44px 16px 40px;}",
+    ".featured-entry{padding:22px 18px 20px;}",
+    ".featured-entry h3{font-size:1.15rem;}",
+    ".commentary-block{padding:18px 16px;}",
+    ".pullquote{padding:22px 20px;}",
+    ".join-cta{padding:32px 20px;}",
+    ".callout-navy{padding:20px 18px 20px 20px;}",
+    ".holdings-table thead{display:none;}",
+    ".holdings-table tbody tr{display:block;background:#F7F9FB!important;border:1px solid #E2E8F0;border-radius:8px;margin-bottom:10px;padding:12px 14px;}",
+    ".holdings-table tbody td{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.85rem;border:none;}",
+    ".holdings-table tbody td:first-child{font-weight:700;color:#002C4F;font-size:0.9rem;margin-bottom:4px;display:block;}",
+    ".holdings-table tbody td:before{content:attr(data-label);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5A6070;flex-shrink:0;margin-right:8px;}",
+    ".holdings-table tbody td:first-child:before{display:none;}",
+    "}"
+  ].join("\n");
+
+  var rsScript = "<scr" + "ipt>function reportHeight(){var h=Math.max(document.body.scrollHeight,document.body.offsetHeight,document.documentElement.scrollHeight,document.documentElement.offsetHeight);try{window.parent.postMessage({type:\"iwh\",value:h+20},\"*\");}catch(e){}}document.addEventListener(\"DOMContentLoaded\",reportHeight);window.addEventListener(\"load\",reportHeight);window.addEventListener(\"resize\",reportHeight);setTimeout(reportHeight,200);setTimeout(reportHeight,500);setTimeout(reportHeight,1000);setTimeout(reportHeight,2000);<\/scr" + "ipt>";
+
+  var html = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\"/>\n";
+  html += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n";
+  html += "<title>Stacker\'s Diary &mdash; " + esc(month) + " | Stack Your Cash</title>\n";
+  html += "<link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\"/>\n";
+  html += "<style>\n" + css + "\n</style>\n</head>\n<body>\n";
+
+  // HERO
+  html += "<div class=\"hero\">\n";
+  html += "<span class=\"pill\">Members Only</span>\n";
+  html += "<h1>Stacker&rsquo;s Diary</h1>\n";
+  html += "<p class=\"subtitle\">The founder&rsquo;s honest investment journal &mdash; decisions, thinking, and lessons learned in plain English.</p>\n";
+  html += "</div>\n";
+
+  // MAIN
+  html += "<main><div class=\"container\"><div class=\"content-wrap\">\n";
+
+  // ABOUT
+  html += "<h2 class=\"section-heading first\">About This Column</h2>\n";
+  html += "<div class=\"body-text\">";
+  html += "<p style=\"font-size:1.2rem;color:#1A1A2E;font-weight:400;line-height:1.75;margin-bottom:1.6em;\">This is my real portfolio. Real decisions. Real mistakes. And &mdash; where they happen &mdash; real wins.</p>";
+  html += "<p>Stacker&rsquo;s Diary is where I write honestly about the investment decisions I&rsquo;m actually making, the thinking behind them, and what I&rsquo;m learning along the way. Not a model portfolio or a set of recommendations &mdash; it&rsquo;s a journal. My journal, shared with members so that the process of investing is demystified a little more with each entry.</p>";
+  html += "<p><strong>Entries are published roughly monthly</strong>, typically at the end of each month or when something significant happens worth writing about.</p>";
+  html += "</div>\n";
+  html += "<hr class=\"section-divider\"/>\n";
+
+  // GLANCE
+  html += "<h2 class=\"section-heading\">This Month at a Glance</h2>\n";
+  html += "<div class=\"featured-entry\">";
+  html += "<span class=\"entry-label\">" + esc(month) + "</span>";
+  html += "<h3>" + esc(g("glance-title")) + "</h3>";
+  html += "<p>" + esc(g("glance-para1")) + "</p>";
+  html += "<p>" + esc(g("glance-para2")) + "</p>";
+  html += "<div style=\"display:flex;gap:24px;flex-wrap:wrap;margin-top:8px;\">";
+  html += "<div style=\"display:flex;align-items:center;gap:8px;font-size:0.85rem;color:rgba(255,255,255,0.65);\"><span style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#57A400;flex-shrink:0;\"></span>" + esc(g("pill1")) + "</div>";
+  html += "<div style=\"display:flex;align-items:center;gap:8px;font-size:0.85rem;color:rgba(255,255,255,0.65);\"><span style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#FF6900;flex-shrink:0;\"></span>" + esc(g("pill2")) + "</div>";
+  html += "<div style=\"display:flex;align-items:center;gap:8px;font-size:0.85rem;color:rgba(255,255,255,0.65);\"><span style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#FFC800;flex-shrink:0;\"></span>" + esc(g("pill3")) + "</div>";
+  html += "</div></div>\n";
+  html += "<hr class=\"section-divider\"/>\n";
+
+  // PORTFOLIO SNAPSHOT
+  html += "<h2 class=\"section-heading\">Portfolio Snapshot</h2>\n";
+  html += "<div class=\"body-text\"><p>A high-level view of how my portfolio is currently allocated and what it holds &mdash; updated each month. Holdings shown as percentage weightings only.</p></div>\n";
+  html += "<div class=\"portfolio-bar\">";
+  html += "<div class=\"bar-seg bar-global\">" + gp + "%</div>";
+  html += "<div class=\"bar-seg bar-uk\">" + up + "%</div>";
+  html += "<div class=\"bar-seg bar-bonds\">" + bp + "%</div>";
+  html += "<div class=\"bar-seg bar-cash\">" + cp + "%</div>";
+  html += "</div>\n";
+  html += "<div class=\"bar-legend\">";
+  html += "<div class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#002C4F;border:1px solid #1a4a6e;\"></span><strong>Global Equities</strong> &mdash; " + gp + "%</div>";
+  html += "<div class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#FF6900;\"></span><strong>UK Equities</strong> &mdash; " + up + "%</div>";
+  html += "<div class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#AEC000;\"></span><strong>Bonds &amp; Fixed Income</strong> &mdash; " + bp + "%</div>";
+  html += "<div class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#FFC800;\"></span><strong>Cash</strong> &mdash; " + cp + "%</div>";
+  html += "</div>\n";
+  html += "<div style=\"margin-top:8px;font-size:0.8rem;color:#5A6070;font-style:italic;padding-left:4px;\">Last updated: <strong style=\"color:#002C4F;font-style:normal;\">" + esc(month) + "</strong></div>\n";
+  html += "<table class=\"holdings-table\"><thead><tr>";
+  html += "<th>Holding</th><th>Ticker</th><th>Type</th><th style=\"text-align:right;\">Weight</th>";
+  html += "</tr></thead><tbody>" + getHoldings() + "</tbody></table>\n";
+  html += "<div class=\"holdings-disclaimer\"><strong>For educational purposes only.</strong> These are the holdings in my personal portfolio shown as percentage weightings &mdash; not financial advice. I am not an FCA-authorised financial adviser. Never invest based solely on what someone else holds.</div>\n";
+  html += "<hr class=\"section-divider\"/>\n";
+
+  // COMMENTARY
+  html += "<h2 class=\"section-heading\">This Month&rsquo;s Commentary</h2>\n";
+  html += "<div style=\"margin-top:32px;\">";
+  html += "<div class=\"commentary-block\">";
+  html += "<span class=\"block-label\">What the Portfolio Did This Month</span>";
+  html += "<p>" + esc(g("c-performance")) + "</p>" + c2p;
+  html += "</div>";
+  html += "<div class=\"commentary-block navy-left\">";
+  html += "<span class=\"block-label\">Decisions Made</span>";
+  html += "<p>" + esc(g("c-decisions")) + "</p>" + c2d;
+  html += "</div>";
+  html += "<div class=\"commentary-block green-left\">";
+  html += "<span class=\"block-label\">What I&rsquo;m Watching</span>";
+  html += formatWatching(g("c-watching"));
+  html += "</div></div>\n";
+  html += "<div class=\"pullquote\">";
+  html += "<p>" + esc(g("pullquote")) + "</p>";
+  html += "<cite>&mdash; Chris, Stacker&rsquo;s Diary &middot; " + esc(g("pullquote-attr")) + "</cite>";
+  html += "</div>\n";
+  html += "<hr class=\"section-divider\"/>\n";
+
+  // ARCHIVE
+  html += "<h2 class=\"section-heading\">Archive</h2>\n";
+  html += "<div class=\"body-text\"><p>All past entries, newest first. New entries added each month.</p></div>\n";
+  html += getArchive() + "\n";
+  html += "<hr class=\"section-divider\"/>\n";
+
+  // WHAT TO EXPECT
+  html += "<div class=\"callout-navy\">";
+  html += "<span class=\"callout-label\">What to Expect</span>";
+  html += "<p><strong>Cadence:</strong> Roughly monthly &mdash; usually at the end of each month, or sooner if something significant happens worth writing about.</p>";
+  html += "<p><strong>Scope:</strong> Portfolio decisions, allocation thinking, market observations, mistakes and what I learned from them. Not stock tips. Not performance boasting. Just honest, plain-English investing.</p>";
+  html += "<p><strong>Disclaimer:</strong> Nothing in this column constitutes financial advice. This is a personal journal shared for educational purposes.</p>";
+  html += "</div>\n";
+  html += "<hr class=\"section-divider\"/>\n";
+
+  // JOIN CTA
+  html += "<div class=\"join-cta\">";
+  html += "<h3>Read Every Entry as a <span>Stack Your Cash Member</span></h3>";
+  html += "<p>Stacker&rsquo;s Diary is exclusive to members. Join for &pound;15/year and get full access to every entry, plus the full members toolkit &mdash; explainers, planning tools, AI Investment Clinic, and the complete learning programme.</p>";
+  html += "<a href=\"https://bit.ly/4eVf9Qa\" target=\"_top\">Join Stack Your Cash &mdash; &pound;15/year &rarr;</a>";
+  html += "<p class=\"cta-sub\">Cancel any time. Members get everything, including the full archive of this column.</p>";
+  html += "</div>\n";
+
+  html += "</div></div></main>\n";
+  html += "<footer class=\"site-footer\">";
+  html += "<p><strong>Stack Your Cash</strong> &nbsp;&middot;&nbsp; stackyourcash.co.uk &nbsp;&middot;&nbsp; Learn &middot; Save &middot; Invest</p>";
+  html += "<p style=\"margin-top:8px;\">This column is for educational purposes and does not constitute financial advice.</p>";
+  html += "</footer>\n";
+  html += rsScript + "\n";
+  html += "</body></html>";
+
+  return html;
+}
+
+function updatePreview(){
+  var html = buildPage();
+  var blob = new Blob([html], {type: "text/html"});
+  var url = URL.createObjectURL(blob);
+  document.getElementById("preview-frame").src = url;
+}
+
+function downloadPage(){
+  var html = buildPage();
+  var blob = new Blob([html], {type: "text/html"});
+  var link = document.createElement("a");
+  link.download = "SYC_Stackers_Diary_" + g("month").replace(/\s+/g,"_") + ".html";
+  link.href = URL.createObjectURL(blob);
+  link.click();
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  updatePreview();
+  var inputs = document.querySelectorAll("input, textarea, select");
+  inputs.forEach(function(el){ el.addEventListener("input", updatePreview); });
+  new MutationObserver(updatePreview).observe(document.getElementById("holdings-container"),{childList:true,subtree:true});
+  new MutationObserver(updatePreview).observe(document.getElementById("archive-container"),{childList:true,subtree:true});
+});
+</script>
+</body>
+</html>

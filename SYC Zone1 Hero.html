@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYC Members Hub Hero</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { width:100%; font-family:'Source Sans 3',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; }
+
+  .hero {
+    background: #002C4F;
+    padding: 40px 24px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle background pattern */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(255,105,0,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 50%, rgba(87,164,0,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-inner { position: relative; z-index: 1; }
+
+  .welcome-pill {
+    display: inline-block;
+    background: rgba(255,105,0,0.15);
+    border: 1px solid rgba(255,105,0,0.4);
+    color: #FF6900;
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .1em;
+    border-radius: 20px; padding: 5px 16px;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 42px; font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    letter-spacing: .01em;
+  }
+
+  h1 span { color: #FF6900; }
+
+  .subtitle {
+    font-size: 15px; color: rgba(255,255,255,0.7);
+    font-weight: 300; line-height: 1.6;
+    max-width: 520px; margin: 0 auto 24px;
+  }
+
+  .hero-stats {
+    display: flex; align-items: center;
+    justify-content: center; gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 2px;
+  }
+
+  .stat-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; font-weight: 700; color: #FF6900;
+  }
+
+  .stat-label {
+    font-size: 11px; color: rgba(255,255,255,0.55);
+    text-transform: uppercase; letter-spacing: .07em;
+  }
+
+  .stat-divider {
+    width: 1px; height: 32px;
+    background: rgba(255,255,255,0.15);
+  }
+
+  .orange-bar {
+    height: 3px;
+    background: linear-gradient(to right, transparent, #FF6900, transparent);
+    margin-top: 32px;
+  }
+
+  @media(max-width:560px) {
+    h1 { font-size: 30px; }
+    .subtitle { font-size: 13px; }
+    .hero-stats { gap: 20px; }
+    .stat-value { font-size: 18px; }
+    .stat-divider { height: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="welcome-pill">Members Only</div>
+    <h1>Welcome to the<br><span>Members Hub</span></h1>
+    <p class="subtitle">Your home for live market data, investment tools, AI-powered portfolio review, and a structured education programme — all built for the UK investor.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-value">22+</span>
+        <span class="stat-label">Learning Modules</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-value">12</span>
+        <span class="stat-label">Planning Tools</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-value">AI</span>
+        <span class="stat-label">Portfolio Review</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-value">Live</span>
+        <span class="stat-label">Market Data</span>
+      </div>
+    </div>
+  </div>
+  <div class="orange-bar"></div>
+</div>
+
+<script>
+function resizeParent() {
+  try { window.parent.postMessage({ type:'iwh', value: document.body.scrollHeight + 10 }, '*'); } catch(e) {}
+}
+resizeParent();
+setTimeout(resizeParent, 500);
+</script>
+</body>
+</html>

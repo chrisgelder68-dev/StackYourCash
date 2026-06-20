@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYC Investment Readiness Clinic</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #002C4F;
+    --orange: #FF6900;
+    --green: #57A400;
+    --yellow: #FFC800;
+    --olive: #AEC000;
+    --light-navy: #E8EEF3;
+    --light-orange: #FFF3EA;
+    --light-green: #EEF5E6;
+    --white: #FFFFFF;
+    --grey: #F5F7FA;
+    --text: #1A2A3A;
+    --text-muted: #6B7C8D;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--grey);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  #screen-question, #screen-loading, #screen-result {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 20px;
+    color: var(--white);
+    margin-top: 4px;
+  }
+
+  /* ── MAIN WRAPPER ── */
+  .wrapper {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeIn 0.35s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── PROGRESS ── */
+  .progress-wrap { margin-bottom: 28px; }
+  .progress-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .progress-label { font-size: 12px; color: #AABBCC; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+  .progress-count { font-size: 12px; color: var(--orange); font-weight: 700; }
+  .progress-bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--orange); border-radius: 2px; transition: width 0.4s ease; }
+
+  /* ── SCENARIO MENU ── */
+  .menu-intro {
+    text-align: center;
+    padding: 20px 0 32px;
+  }
+  .menu-intro h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 46px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 12px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .menu-intro h2 span { color: var(--orange); }
+  .menu-intro p {
+    font-size: 16px; color: var(--text-muted);
+    line-height: 1.6; max-width: 480px; margin: 0 auto;
+  }
+
+  .scenario-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  @media (max-width: 480px) {
+    .scenario-grid { grid-template-columns: 1fr; }
+    .menu-intro h2 { font-size: 32px; }
+  }
+
+  .scenario-card {
+    background: var(--white);
+    border: 1.5px solid #D8E4EF;
+    border-radius: 12px;
+    padding: 20px 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    display: flex; flex-direction: column; gap: 8px;
+    box-shadow: 0 2px 8px rgba(0,44,79,0.06);
+  }
+  .scenario-card:hover {
+    background: var(--light-orange);
+    border-color: var(--orange);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(255,105,0,0.12);
+  }
+  .scenario-icon { width: 36px; height: 36px; background: var(--light-orange); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 4px; }
+  .scenario-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: var(--navy); line-height: 1.3; }
+  .scenario-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .scenario-arrow { font-size: 18px; color: var(--orange); margin-top: auto; align-self: flex-end; }
+  .tier-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--orange);
+    padding: 6px 2px 8px;
+    border-bottom: 1px solid rgba(0,44,79,0.12);
+    margin-bottom: 12px;
+  }
+
+  /* ── QUESTION SCREEN ── */
+  .question-scenario-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,105,0,0.12);
+    border: 1px solid rgba(255,105,0,0.3);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px; font-weight: 700;
+    color: var(--orange); text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: 20px;
+  }
+
+  .question-card {
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 28px 24px;
+    margin-bottom: 20px;
+  }
+  .question-number { font-size: 11px; color: var(--orange); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .question-text { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: var(--white); line-height: 1.4; margin-bottom: 6px; }
+  .question-hint { font-size: 13px; color: #8899AA; line-height: 1.5; margin-bottom: 24px; }
+
+  .answers { display: flex; flex-direction: column; gap: 10px; }
+  .answer-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    display: flex; align-items: center; gap: 12px;
+    text-align: left; color: var(--white);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px; font-weight: 400;
+  }
+  .answer-btn:hover { background: rgba(255,105,0,0.1); border-color: var(--orange); }
+  .answer-btn.selected { background: rgba(255,105,0,0.15); border-color: var(--orange); color: var(--white); }
+  .answer-dot {
+    width: 20px; height: 20px; flex-shrink: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.2);
+    transition: all 0.18s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .answer-btn.selected .answer-dot { background: var(--orange); border-color: var(--orange); }
+  .answer-btn.selected .answer-dot::after { content: ''; width: 8px; height: 8px; background: white; border-radius: 50%; }
+
+  /* ── NAV BUTTONS ── */
+  .nav-row { display: flex; gap: 10px; margin-top: 8px; }
+  .btn-back {
+    flex: 0 0 auto;
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    color: #AABBCC; border-radius: 10px;
+    padding: 13px 20px; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.18s ease;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .btn-back:hover { border-color: rgba(255,255,255,0.35); color: var(--white); }
+
+  .btn-next {
+    flex: 1;
+    background: var(--orange); color: var(--white);
+    border: none; border-radius: 10px;
+    padding: 14px 24px; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all 0.18s ease;
+    font-family: 'Source Sans 3', sans-serif;
+    opacity: 0.4; pointer-events: none;
+  }
+  .btn-next.enabled { opacity: 1; pointer-events: all; }
+  .btn-next.enabled:hover { background: #E55A00; transform: translateY(-1px); }
+
+  /* ── RESULTS SCREEN ── */
+  .result-header { border-radius: 16px; padding: 28px 24px; margin-bottom: 20px; position: relative; overflow: hidden; }
+  .result-header.ready { background: linear-gradient(135deg, #1A3A1A, #2A5200); border: 1.5px solid var(--green); }
+  .result-header.almost { background: linear-gradient(135deg, #3A2A00, #5A4000); border: 1.5px solid var(--yellow); }
+  .result-header.notready { background: linear-gradient(135deg, #3A1A00, #5A2A00); border: 1.5px solid var(--orange); }
+
+  .result-badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; }
+  .result-badge.ready { background: rgba(87,164,0,0.2); color: var(--green); border: 1px solid rgba(87,164,0,0.4); }
+  .result-badge.almost { background: rgba(255,200,0,0.2); color: var(--yellow); border: 1px solid rgba(255,200,0,0.4); }
+  .result-badge.notready { background: rgba(255,105,0,0.2); color: var(--orange); border: 1px solid rgba(255,105,0,0.4); }
+
+  .result-headline { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--white); line-height: 1.3; margin-bottom: 10px; }
+  .result-summary { font-size: 15px; color: #CCDDEE; line-height: 1.6; }
+
+  .result-sections { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+  .result-section { background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px 20px; }
+  .result-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--orange); margin-bottom: 8px; }
+  .result-section-body { font-size: 14px; color: #CCDDEE; line-height: 1.65; }
+  .result-section-body ul { padding-left: 18px; margin-top: 6px; }
+  .result-section-body li { margin-bottom: 5px; }
+  .result-section-body strong { color: var(--white); }
+
+  .result-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+  .btn-primary {
+    background: var(--orange); color: var(--white);
+    border: none; border-radius: 10px;
+    padding: 15px 24px; font-size: 15px; font-weight: 700;
+    cursor: pointer; text-align: center;
+    font-family: 'Source Sans 3', sans-serif;
+    transition: all 0.18s ease; text-decoration: none;
+    display: block;
+  }
+  .btn-primary:hover { background: #E55A00; }
+  .btn-secondary {
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    color: #AABBCC; border-radius: 10px;
+    padding: 14px 24px; font-size: 14px; font-weight: 600;
+    cursor: pointer; text-align: center;
+    font-family: 'Source Sans 3', sans-serif;
+    transition: all 0.18s ease;
+  }
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.35); color: var(--white); }
+
+  /* ── COMPANION GUIDES GRID ── */
+  .guides-section { margin-top: 28px; padding-top: 24px; border-top: 1.5px solid var(--light-navy); }
+  .guides-heading { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .guides-subheading { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px; }
+  .guides-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  @media(max-width:520px) { .guides-grid { grid-template-columns: 1fr; } }
+  .guide-card { display: flex; align-items: center; gap: 10px; background: var(--white); border: 1.5px solid var(--light-navy); border-radius: 8px; padding: 10px 12px; text-decoration: none; transition: all .15s; }
+  .guide-card:hover { border-color: var(--orange); background: var(--light-orange); }
+  .guide-number { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700; color: var(--orange); background: var(--light-orange); border-radius: 6px; width: 28px; height: 28px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .guide-title { font-size: 12px; font-weight: 600; color: var(--navy); line-height: 1.35; flex: 1; min-width: 0; }
+  .guide-download { font-size: 11px; font-weight: 700; color: var(--text-muted); flex-shrink: 0; white-space: nowrap; }
+
+  .disclaimer { background: var(--light-navy); border: 1px solid #C8D8E8; border-radius: 10px; padding: 14px 16px; font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-top: 24px; }
+  .disclaimer strong { color: var(--navy); }
+  #screen-result .disclaimer { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #778899; }
+  #screen-result .disclaimer strong { color: #AABBCC; }
+
+  /* ── LOADING ── */
+  .loading-wrap { text-align: center; padding: 60px 20px; }
+  .loading-spinner { width: 44px; height: 44px; margin: 0 auto 20px; border: 3px solid rgba(255,105,0,0.2); border-top-color: var(--orange); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--white); margin-bottom: 8px; }
+  .loading-sub { font-size: 13px; color: #8899AA; }
+
+  /* ── AI RESULT ── */
+  .ai-result-wrap { background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+  .ai-result-content { font-size: 15px; color: #CCDDEE; line-height: 1.7; }
+  .ai-result-content h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--white); margin: 18px 0 8px; font-weight: 600; }
+  .ai-result-content h3:first-child { margin-top: 0; }
+  .ai-result-content p { margin-bottom: 10px; }
+  .ai-result-content ul { padding-left: 20px; margin-bottom: 10px; }
+  .ai-result-content li { margin-bottom: 5px; }
+  .ai-result-content strong { color: var(--white); }
+  .ai-result-content .verdict-ready { color: #7ED321; font-weight: 700; }
+  .ai-result-content .verdict-almost { color: var(--yellow); font-weight: 700; }
+  .ai-result-content .verdict-notready { color: var(--orange); font-weight: 700; }
+
+  @media (max-width: 480px) {
+    .wrapper { padding: 20px 14px 50px; }
+    .question-card { padding: 20px 16px; }
+    .question-text { font-size: 17px; }
+    .result-headline { font-size: 20px; }
+    .answer-btn { font-size: 14px; padding: 13px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- SCREEN: SCENARIO MENU -->
+  <div class="screen active" id="screen-menu">
+    <div class="menu-intro">
+      <h2>Your personal<br><span>investment clinic</span></h2>
+      <p>Answer 6–8 questions and get a personalised assessment of your situation. Choose a topic below to get started.</p>
+    </div>
+
+    <div class="tier-label">Foundation — Getting Started</div>
+    <div class="scenario-grid">
+      <div class="scenario-card" onclick="startScenario(0)">
+        <div class="scenario-icon">🚀</div>
+        <div class="scenario-title">Am I ready to start investing?</div>
+        <div class="scenario-desc">Find out if your finances are in the right shape before you invest a penny.</div>
+        <div class="scenario-arrow">→</div>
+      </div>
+      <div class="scenario-card" onclick="startScenario(1)">
+        <div class="scenario-icon">💼</div>
+        <div class="scenario-title">Should I open a Stocks & Shares ISA?</div>
+        <div class="scenario-desc">Understand whether an ISA is the right move for your situation right now.</div>
+        <div class="scenario-arrow">→</div>
+      </div>
+      <div class="scenario-card" onclick="startScenario(2)">
+        <div class="scenario-icon">📈</div>
+        <div class="scenario-title">Am I ready to buy my first stock or ETF?</div>
+        <div class="scenario-desc">Check you have done the groundwork before placing your first trade.</div>
+        <div class="scenario-arrow">→</div>
+      </div>
+      <div class="scenario-card" onclick="startScenario(3)">
+        <div class="scenario-icon">🏦</div>
+        <div class="scenario-title">Which platform is right for me?</div>
+        <div class="scenario-desc">Work out which type of UK investing platform suits your needs and portfolio size.</div>
+        <div class="scenario-arrow">→</div>
+      </div>
+      <div class="scenario-card" onclick="startScenario(4)">
+        <div class="scenario-icon">🎯</div>
+        <div class="scenario-title">Should I increase my pension contributions?</div>
+        <div class="scenario-desc">Assess whether now is the right time to put more into your pension.</div>
+        <div class="scenario-arrow">→</div>
+      </div>
+      <div class="scenario-card" onclick="startScenario(5)">
+        <div class="scenario-icon">🔍</div>
+        <div class="scenario-title">Is my portfolio due a review?</div>
+        <div class="scenario-desc">Find out whether your current portfolio still reflects your goals and risk tolerance.</div>
+        <div class="scenario-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="tier-label" style="margin-top:28px;">Next Steps — Building Confidence</div>
+    <div class="scenario-grid">
+      <div class="scenario-card" onclick="startScenario(6)">
+        <div class="scenario-icon">⚖️</div>
+        <div class="scenario-title">Am I taking too much or too little risk?</div>
+        <div class="scenario-desc">Check whether your actual portfolio matches your real risk tolerance and time horizon.</div>
+        <div class="scenario-arrow">→</div>
+      </div>
+      <div class="scenario-card" onclick="startScenario(7)">
+        <div class="scenario-icon">🚪</div>
+        <div class="scenario-title">Should I sell this investment?</div>
+        <div class="scenario-desc">Work through a structured decision framework before hitting the sell button.</div>
+        <div class="scenario-arrow">→</div>
+      </div>
+      <div class="scenario-card" onclick="startScenario(8)">
+        <div class="scenario-icon">💧</div>
+        <div class="scenario-title">Lump sum or drip-feed — which is right for me?</div>
+        <div class="scenario-desc">Understand which approach suits your situation, risk tolerance, and the evidence.</div>
+        <div class="scenario-arrow">→</div>
+      </div>
+      <div class="scenario-card" onclick="startScenario(9)">
+        <div class="scenario-icon">🌍</div>
+        <div class="scenario-title">Am I diversified enough?</div>
+        <div class="scenario-desc">Find out whether your portfolio is spread across geographies, sectors, and asset classes.</div>
+        <div class="scenario-arrow">→</div>
+      </div>
+      <div class="scenario-card" onclick="startScenario(10)">
+        <div class="scenario-icon">🔬</div>
+        <div class="scenario-title">Am I ready to pick individual stocks?</div>
+        <div class="scenario-desc">Assess honestly whether you have what it takes to go beyond index funds.</div>
+        <div class="scenario-arrow">→</div>
+      </div>
+      <div class="scenario-card" onclick="startScenario(11)">
+        <div class="scenario-icon">🏖️</div>
+        <div class="scenario-title">Am I on track for retirement?</div>
+        <div class="scenario-desc">Get a plain-English sense of where you stand against your retirement goals.</div>
+        <div class="scenario-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="guides-section">
+      <div class="guides-heading">Companion Guides</div>
+      <div class="guides-subheading">Download a printable PDF reference for any scenario — 12 guides covering everything above.</div>
+      <div class="guides-grid" id="guidesGrid">
+        <a class="guide-card" href="https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_31297438c49f42f99adaed393927b8fc.pdf" target="_blank" rel="noopener"><span class="guide-number">01</span><span class="guide-title">Am I Ready to Start Investing?</span><span class="guide-download">↓ PDF</span></a>
+        <a class="guide-card" href="https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_19b7444cfaba42229a9a6ccc283a81c4.pdf" target="_blank" rel="noopener"><span class="guide-number">02</span><span class="guide-title">Should I Open a Stocks & Shares ISA?</span><span class="guide-download">↓ PDF</span></a>
+        <a class="guide-card" href="https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_c644fa6fa69340d692bc3b2488eb7ee6.pdf" target="_blank" rel="noopener"><span class="guide-number">03</span><span class="guide-title">Am I Ready to Buy My First Stock or ETF?</span><span class="guide-download">↓ PDF</span></a>
+        <a class="guide-card" href="https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_876c8b8ada254fe199fb7e289ac46dee.pdf" target="_blank" rel="noopener"><span class="guide-number">04</span><span class="guide-title">Which Platform Is Right for Me?</span><span class="guide-download">↓ PDF</span></a>
+        <a class="guide-card" href="https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_9f6968969e24409db4cb71891087b90a.pdf" target="_blank" rel="noopener"><span class="guide-number">05</span><span class="guide-title">Should I Increase My Pension Contributions?</span><span class="guide-download">↓ PDF</span></a>
+        <a class="guide-card" href="https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_faeca4bdcfef4610bfacd9571ef8562a.pdf" target="_blank" rel="noopener"><span class="guide-number">06</span><span class="guide-title">Is My Portfolio Due a Review?</span><span class="guide-download">↓ PDF</span></a>
+        <a class="guide-card" href="https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_6876898081244d15b947a74ff480873a.pdf" target="_blank" rel="noopener"><span class="guide-number">07</span><span class="guide-title">Am I Taking Too Much or Too Little Risk?</span><span class="guide-download">↓ PDF</span></a>
+        <a class="guide-card" href="https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_dfcf0e25fdf34167bf94d70b9c7d09da.pdf" target="_blank" rel="noopener"><span class="guide-number">08</span><span class="guide-title">Should I Sell This Investment?</span><span class="guide-download">↓ PDF</span></a>
+        <a class="guide-card" href="https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_9a3e877cd72440818a190d4b95c56401.pdf" target="_blank" rel="noopener"><span class="guide-number">09</span><span class="guide-title">Lump Sum or Drip-Feed?</span><span class="guide-download">↓ PDF</span></a>
+        <a class="guide-card" href="https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_1d6760b7b684450a9d2960d5ab38ab07.pdf" target="_blank" rel="noopener"><span class="guide-number">10</span><span class="guide-title">Am I Diversified Enough?</span><span class="guide-download">↓ PDF</span></a>
+        <a class="guide-card" href="https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_7e0cb628f360495287fe16c12d558e52.pdf" target="_blank" rel="noopener"><span class="guide-number">11</span><span class="guide-title">Am I Ready to Pick Individual Stocks?</span><span class="guide-download">↓ PDF</span></a>
+        <a class="guide-card" href="https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_e78220c366894b6f99fe9f8ad37baa00.pdf" target="_blank" rel="noopener"><span class="guide-number">12</span><span class="guide-title">Am I On Track for Retirement?</span><span class="guide-download">↓ PDF</span></a>
+      </div>
+    </div>
+
+    <div class="disclaimer" style="margin-top:28px;">
+      <strong>Educational tool only.</strong> This clinic provides educational guidance based on your answers. It does not constitute regulated financial advice. If you need personalised advice, please consult an FCA-authorised financial adviser.
+    </div>
+  </div>
+
+  <!-- SCREEN: QUESTION -->
+  <div class="screen" id="screen-question">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span class="progress-label" id="q-scenario-label">Scenario</span>
+        <span class="progress-count" id="q-progress-count">Question 1 of 7</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="q-progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="question-card">
+      <div class="question-number" id="q-number">Question 1</div>
+      <div class="question-text" id="q-text">Loading question...</div>
+      <div class="question-hint" id="q-hint"></div>
+      <div class="answers" id="q-answers"></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" id="btn-back" onclick="goBack()">← Back</button>
+      <button class="btn-next" id="btn-next" onclick="goNext()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: LOADING -->
+  <div class="screen" id="screen-loading">
+    <div class="loading-wrap">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Analysing your answers…</div>
+      <div class="loading-sub">Preparing your personalised assessment</div>
+    </div>
+  </div>
+
+  <!-- SCREEN: RESULT -->
+  <div class="screen" id="screen-result">
+    <div id="result-content"></div>
+    <div class="result-actions">
+      <a class="btn-primary" id="downloadGuideBtn" href="#" target="_blank" rel="noopener">↓ Download companion guide (PDF)</a>
+      <button class="btn-secondary" onclick="showScreen('screen-menu'); resetAll();">← Try another scenario</button>
+    </div>
+    <div class="disclaimer">
+      <strong>Remember:</strong> This assessment is for educational purposes only and does not constitute regulated financial advice. All investing involves risk and the value of investments can fall as well as rise. Past performance is not a reliable indicator of future results.
+    </div>
+  </div>
+
+</div><!-- /wrapper -->
+
+<script>
+const PDF_URLS = [
+  "https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_31297438c49f42f99adaed393927b8fc.pdf",
+  "https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_19b7444cfaba42229a9a6ccc283a81c4.pdf",
+  "https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_c644fa6fa69340d692bc3b2488eb7ee6.pdf",
+  "https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_876c8b8ada254fe199fb7e289ac46dee.pdf",
+  "https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_9f6968969e24409db4cb71891087b90a.pdf",
+  "https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_faeca4bdcfef4610bfacd9571ef8562a.pdf",
+  "https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_6876898081244d15b947a74ff480873a.pdf",
+  "https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_dfcf0e25fdf34167bf94d70b9c7d09da.pdf",
+  "https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_9a3e877cd72440818a190d4b95c56401.pdf",
+  "https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_1d6760b7b684450a9d2960d5ab38ab07.pdf",
+  "https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_7e0cb628f360495287fe16c12d558e52.pdf",
+  "https://4c9ac87a-4adb-4a78-bd3c-ac304f26c118.usrfiles.com/ugd/4c9ac8_e78220c366894b6f99fe9f8ad37baa00.pdf"
+];
+
+const scenarios = [
+  { title: "Am I ready to start investing?", questions: [
+    { text: "Do you have an emergency fund covering at least 3 months of essential expenses?", hint: "This should be in an easy-access savings account — not invested.", answers: ["Yes, I have 3+ months covered", "I have some savings but less than 3 months", "No emergency fund yet"] },
+    { text: "Do you have any high-interest debt such as credit cards or personal loans?", hint: "High-interest debt typically costs more than investment returns can reliably earn.", answers: ["No high-interest debt", "Yes, some — but I'm paying it down", "Yes, a significant amount"] },
+    { text: "How stable is your income right now?", hint: "Investing money you may need in the short term can force you to sell at a bad time.", answers: ["Very stable — permanent employment or reliable self-employment", "Reasonably stable but some uncertainty", "Uncertain — contract, variable, or at risk"] },
+    { text: "Do you understand that investing involves real risk and your money could fall in value?", hint: "Markets go down as well as up. Being emotionally prepared matters.", answers: ["Yes, fully understand and comfortable with this", "I understand in theory but it makes me nervous", "I hadn't fully considered this"] },
+    { text: "Are you able to leave your money invested for at least 5 years without needing it?", hint: "Longer time horizons give investments time to recover from short-term falls.", answers: ["Yes — I won't need this money for 5+ years", "Possibly — might need some within 3–5 years", "No — I may need the money within 3 years"] },
+    { text: "Have you read any introductory material about investing?", hint: "Going in with even basic knowledge dramatically reduces common beginner mistakes.", answers: ["Yes — I've done my research", "A little — I know the basics", "Not yet — this is all quite new to me"] },
+    { text: "Do you have a rough idea of what you want to invest in?", hint: "You don't need a detailed plan yet, but having a direction helps.", answers: ["Yes — I'm thinking about index funds or ETFs", "Broadly yes, but I'd like guidance", "Not really — I'm not sure where to start"] }
+  ]},
+  { title: "Should I open a Stocks & Shares ISA?", questions: [
+    { text: "Do you currently pay UK income tax at the basic rate (20%) or above?", hint: "ISA benefits are most valuable for taxpayers — gains and income are sheltered from tax.", answers: ["Yes, I pay income tax", "No, my income is below the tax threshold", "Not sure"] },
+    { text: "Do you already have a Cash ISA or Stocks & Shares ISA open?", hint: "You can only open one of each type per tax year, but you can hold multiple from previous years.", answers: ["No ISA at all", "I have a Cash ISA", "I have a Stocks & Shares ISA already", "I have both types"] },
+    { text: "How long are you planning to invest for?", hint: "Stocks & Shares ISAs suit long-term goals — the tax shelter compounds in value over time.", answers: ["10 years or more", "5–10 years", "1–5 years", "Less than a year"] },
+    { text: "Are you comfortable with your invested capital fluctuating in value?", hint: "Unlike a Cash ISA, a Stocks & Shares ISA can fall in value in the short term.", answers: ["Yes, I understand and accept this", "I can tolerate some volatility", "I prefer to protect my capital"] },
+    { text: "Have you used your ISA allowance (\u00a320,000) this tax year?", hint: "The annual ISA allowance resets on 6 April each year — unused allowance cannot be carried forward.", answers: ["No — I haven't used any allowance", "Partially — I've used some", "Yes — fully used already"] },
+    { text: "Do you have existing savings or investments outside an ISA wrapper?", hint: "If you have investments in a General Investment Account, sheltering them in an ISA can reduce future tax.", answers: ["Yes — in a General Investment Account", "Some cash savings only", "No other savings or investments"] }
+  ]},
+  { title: "Am I ready to buy my first stock or ETF?", questions: [
+    { text: "Do you understand the difference between buying a single stock and buying an ETF?", hint: "A stock is one company. An ETF holds hundreds of companies — built-in diversification.", answers: ["Yes, clearly", "Broadly yes, but could use a refresher", "Not really — I'd like to understand better"] },
+    { text: "What is your main reason for wanting to buy this investment?", hint: "Chasing recent performance is one of the most common and costly beginner mistakes.", answers: ["It fits my long-term strategy", "It's been recommended or I've researched it", "I've seen it go up and don't want to miss out"] },
+    { text: "Do you know the total annual cost — platform fee plus the fund's ongoing charges (OCF)?", hint: "Even small differences in annual charges compound significantly over decades.", answers: ["Yes, I've checked both", "I know one but not the other", "No — I haven't looked at charges yet"] },
+    { text: "Is this money you genuinely won't need for at least 5 years?", hint: "Needing to sell at the wrong time is the biggest risk for short-term investors.", answers: ["Yes, definitely", "Probably, but I'm not certain", "I might need it sooner than that"] },
+    { text: "How does this holding fit into the rest of your portfolio?", hint: "Diversification across geographies and sectors reduces the impact of any single investment going wrong.", answers: ["It adds diversification to an existing portfolio", "It will be my first holding — I'm starting out", "It's a significant concentration in one area"] },
+    { text: "If this investment fell 30% in value next month, what would you do?", hint: "Panic selling when markets fall is the single biggest destroyer of long-term returns.", answers: ["Hold — I invest for the long term and expect volatility", "Probably hold, though it would concern me", "I'd likely sell to limit losses"] }
+  ]},
+  { title: "Which platform is right for me?", questions: [
+    { text: "What type of account do you primarily need?", hint: "Different platforms specialise in different account types.", answers: ["Stocks & Shares ISA", "SIPP (pension)", "General Investment Account", "Not sure yet"] },
+    { text: "Roughly how much are you planning to invest in total?", hint: "This determines whether a flat-fee or percentage-fee platform is more cost-effective for you.", answers: ["Under \u00a35,000", "\u00a35,000–\u00a325,000", "\u00a325,000–\u00a3100,000", "Over \u00a3100,000"] },
+    { text: "Do you want to choose your own investments, or have them managed for you?", hint: "DIY platforms give you control but require more knowledge. Robo-advisers manage everything automatically.", answers: ["Choose my own — I want full control", "Managed service — I'd rather it was handled for me", "Something in between"] },
+    { text: "What do you mainly want to invest in?", hint: "Some platforms only offer funds and ETFs. Others give access to individual shares too.", answers: ["Index funds and ETFs only", "Individual shares as well as funds", "I want access to everything"] },
+    { text: "How important are low trading fees for frequent buying and selling?", hint: "If you plan to invest regularly in small amounts, per-trade fees add up quickly.", answers: ["Very — I plan to invest regularly in small amounts", "Somewhat — I'll invest occasionally", "Not important — I plan to buy and hold"] },
+    { text: "How confident are you navigating an investing platform independently?", hint: "Some platforms are designed for beginners; others suit more experienced investors.", answers: ["Very confident", "Reasonably confident", "I'd prefer something simple and guided"] }
+  ]},
+  { title: "Should I increase my pension contributions?", questions: [
+    { text: "Are you currently receiving your employer's full matched pension contribution?", hint: "Employer matching is effectively free money — always maximise this first before anything else.", answers: ["Yes, I'm getting the full match", "No, I'm contributing below the match threshold", "I'm self-employed — no employer match applies"] },
+    { text: "Do you understand how pension tax relief works at your income level?", hint: "Basic rate taxpayers get 25% added on top of their contribution. Higher rate taxpayers can claim additional relief.", answers: ["Yes, fully", "Broadly — I know I get tax relief but not the detail", "No — I don't fully understand this"] },
+    { text: "Do you have high-interest debt or a gap in your emergency fund?", hint: "Increasing pension contributions at the cost of financial resilience is rarely the right order of priorities.", answers: ["No — my finances are in good shape", "Minor debt but manageable", "Yes — significant debt or no emergency fund"] },
+    { text: "What is your primary financial goal in the next 5 years?", hint: "Pension contributions are locked away until age 57 — accessibility matters for medium-term goals.", answers: ["Long-term retirement savings — accessibility not important", "Buying a home or major purchase — I need flexibility", "Mixture of both"] },
+    { text: "How many years until you expect to retire?", hint: "The further from retirement you are, the more time compound growth has to work.", answers: ["30+ years", "15–30 years", "5–15 years", "Under 5 years"] },
+    { text: "Are your pension funds invested in a strategy appropriate for your age?", hint: "Many default pension funds are too cautious for younger workers, significantly reducing long-term returns.", answers: ["Yes — I've checked and it's appropriate", "I'm not sure — I've never reviewed it", "No — it's in the default fund and I'm under 50"] }
+  ]},
+  { title: "Is my portfolio due a review?", questions: [
+    { text: "When did you last review your portfolio in detail?", hint: "Annual reviews are generally sufficient for long-term investors. More frequent is rarely better.", answers: ["Within the last 6 months", "6–18 months ago", "Over 18 months ago", "I've never formally reviewed it"] },
+    { text: "Have your financial goals or time horizon changed significantly since you last reviewed?", hint: "Life events like buying a home, having children, or changing jobs can all affect the right investment strategy.", answers: ["No major changes", "Some changes but nothing dramatic", "Significant changes to my situation"] },
+    { text: "Has your portfolio's asset allocation drifted from your original target?", hint: "If equities have risen, your portfolio may now be riskier than you intended.", answers: ["No, it's roughly where I want it", "Possibly — I haven't checked recently", "Yes, it's drifted noticeably"] },
+    { text: "Have you checked the ongoing charges (OCF) of your funds recently?", hint: "Fund charges change. A fund you bought at 0.2% OCF may now charge differently, or cheaper alternatives may exist.", answers: ["Yes, recently", "Not for a while", "Never — I don't monitor charges"] },
+    { text: "Have you used your full ISA allowance this tax year?", hint: "The \u00a320,000 annual ISA allowance resets on 6 April and unused amounts cannot be carried forward.", answers: ["Yes — fully used", "Partially used", "No — haven't contributed this year"] },
+    { text: "Are you satisfied that your portfolio is diversified across geographies and asset classes?", hint: "UK home bias is extremely common — many UK investors are significantly overweight UK equities relative to global market cap.", answers: ["Yes, well diversified globally", "Mostly UK focused — some concern about this", "Heavily concentrated in one area"] },
+    { text: "Have you reviewed whether your current platform is still the most cost-effective option as your portfolio has grown?", hint: "As portfolios grow, flat-fee platforms like Interactive Investor often become cheaper than percentage-fee platforms.", answers: ["Yes, recently compared fees", "Not for a while", "Never — I've always stayed with my original platform"] }
+  ]},
+  { title: "Am I taking too much or too little risk?", questions: [
+    { text: "How would you describe your original intention when you started investing?", hint: "Many investors drift from their original strategy as markets move without rebalancing.", answers: ["Long-term growth — I'm comfortable with short-term falls", "Balanced — some growth but not too much volatility", "Capital preservation — protecting what I have is the priority"] },
+    { text: "If your portfolio fell 25% in value over three months, what would you most likely do?", hint: "Your honest gut reaction is a better guide to your true risk tolerance than any questionnaire answer.", answers: ["Stay calm and hold — I understand this is normal", "Feel uncomfortable but probably hold", "Seriously consider selling to protect what's left"] },
+    { text: "What percentage of your portfolio is currently in equities (stocks and equity funds)?", hint: "A rough figure is fine. Higher equity allocation = more risk and more potential return.", answers: ["Over 80%", "60–80%", "40–60%", "Under 40%"] },
+    { text: "How many years until you expect to need a significant portion of this money?", hint: "Time horizon is the single biggest driver of appropriate risk level.", answers: ["10 years or more", "5–10 years", "3–5 years", "Under 3 years"] },
+    { text: "Have you reviewed your asset allocation against your original target in the last 12 months?", hint: "Strong markets can silently shift your allocation significantly riskier without you noticing.", answers: ["Yes — it's still on target", "Not recently — I should check", "No — I've never formally set a target allocation"] },
+    { text: "Do you hold any single investment that represents more than 20% of your total portfolio?", hint: "Concentration in a single holding significantly increases risk regardless of overall allocation.", answers: ["No — no single holding is more than 20%", "Yes — one holding is 20–35%", "Yes — one holding is over 35%"] },
+    { text: "Does your portfolio include any leveraged products, single-country funds, or sector-specific ETFs?", hint: "These products amplify both gains and losses and may add more risk than many investors realise.", answers: ["No — broadly diversified funds and ETFs only", "Some sector ETFs but nothing leveraged", "Yes — leveraged or highly concentrated products"] }
+  ]},
+  { title: "Should I sell this investment?", questions: [
+    { text: "Why are you thinking about selling?", hint: "The reason for selling matters enormously — some reasons are rational, others are driven by emotion.", answers: ["It has fallen in value and I want to cut my losses", "My investment goals or time horizon have changed", "I need the money for something specific", "I no longer believe in the long-term case for this investment"] },
+    { text: "When did you buy this investment and how long did you intend to hold it?", hint: "Selling before your intended time horizon often destroys returns that would have recovered.", answers: ["I'm within my planned holding period", "My original holding period has passed", "I never set a specific holding period"] },
+    { text: "Has anything fundamentally changed about this investment since you bought it?", hint: "A price fall alone is not a fundamental change. Management, business model, or market position changes are.", answers: ["No — the fundamentals are the same, the price has just moved", "Yes — there have been meaningful changes to the business or fund", "It's a fund or ETF, not an individual company"] },
+    { text: "If you sell, what will you do with the proceeds?", hint: "Moving to cash during volatility is one of the most damaging long-term investing decisions.", answers: ["Reinvest into a better-positioned alternative I've already identified", "Hold as cash temporarily while I decide", "Spend the money on something specific", "Move to cash indefinitely"] },
+    { text: "Are you selling inside an ISA or SIPP, or in a General Investment Account?", hint: "Selling within an ISA or SIPP has no immediate tax consequences. Selling in a GIA may trigger Capital Gains Tax.", answers: ["Inside an ISA or SIPP — no CGT implications", "In a General Investment Account — I've considered the CGT position", "In a GIA — I haven't thought about CGT yet"] },
+    { text: "Have you considered whether you could partially reduce your position rather than selling everything?", hint: "Partial sales can reduce risk or fund a specific need while keeping long-term exposure intact.", answers: ["Yes — I've considered this and a full sale is still the right call", "No — I hadn't thought about a partial sale", "I need all the money so a full sale is necessary"] }
+  ]},
+  { title: "Lump sum or drip-feed — which is right for me?", questions: [
+    { text: "How much money are you looking to invest?", hint: "The relative size of the sum compared to your existing portfolio affects which approach makes most sense.", answers: ["A small amount relative to my existing portfolio or savings", "A medium sum — meaningful but not life-changing", "A large sum — a significant proportion of my savings or a windfall"] },
+    { text: "Where has this money come from?", hint: "Money you have already been sitting on in cash has arguably been uninvested during any market rises.", answers: ["Regular savings I've been building up for a while", "A recent windfall — inheritance, bonus, or property sale", "I'm starting from scratch with new monthly savings"] },
+    { text: "How would you feel if you invested a lump sum and the market fell 15% the following month?", hint: "This is the core emotional test for lump sum investing. Time in the market beats timing the market — but only if you can hold your nerve.", answers: ["Fine — I'm investing for the long term and this is to be expected", "Uncomfortable but I could manage it", "I'd seriously regret the timing and might panic sell"] },
+    { text: "Are you trying to invest a one-off sum, or build a regular investing habit?", hint: "Drip-feeding suits ongoing savings habits naturally. Lump sums require a deliberate deployment decision.", answers: ["A one-off sum I want to invest now", "I want to build a regular monthly investing habit", "A one-off sum but I want to phase it in gradually"] },
+    { text: "What does the evidence say, as far as you know, about lump sum vs drip-feeding?", hint: "Statistically, lump sum investing outperforms pound-cost averaging around two thirds of the time in rising markets.", answers: ["I know lump sum tends to outperform on average but there are exceptions", "I think drip-feeding reduces risk and is generally better", "I'm genuinely not sure what the evidence says"] },
+    { text: "How long is your investment horizon for this money?", hint: "Longer horizons reduce the timing risk of lump sum investing significantly.", answers: ["10 years or more", "5–10 years", "3–5 years", "Under 3 years"] }
+  ]},
+  { title: "Am I diversified enough?", questions: [
+    { text: "How many different countries or regions does your portfolio cover?", hint: "UK home bias is extremely common. The UK represents only around 4% of global market capitalisation.", answers: ["Global — I hold a world tracker or multiple regional funds", "Mostly UK with some international exposure", "Almost entirely UK stocks or UK-focused funds"] },
+    { text: "Do you hold bonds or other non-equity assets alongside your equity holdings?", hint: "Bonds and equities historically have low correlation — mixing them reduces portfolio volatility.", answers: ["Yes — I hold bonds or other defensive assets", "A small allocation but mainly equities", "No — I'm 100% equities"] },
+    { text: "Are your equity holdings spread across multiple sectors?", hint: "A portfolio heavy in technology, financials, or any single sector is more vulnerable to sector-specific downturns.", answers: ["Yes — spread across sectors via diversified funds", "Broadly yes but I have higher exposure to one or two sectors", "No — heavily concentrated in one sector"] },
+    { text: "Do you hold any single company stock representing more than 10% of your portfolio?", hint: "Individual company risk is very different to fund risk. One company can go to zero; a diversified fund cannot.", answers: ["No individual stocks, or none over 10%", "Yes — one or two positions between 10–20%", "Yes — a single stock is over 20% of my portfolio"] },
+    { text: "Does your portfolio include any exposure to asset classes beyond equities and bonds?", hint: "Property (REITs), commodities, or infrastructure can further reduce correlation with equity markets.", answers: ["Yes — I have some exposure to property, commodities, or alternatives", "No — purely equities and/or bonds", "No and I haven't considered adding them"] },
+    { text: "If the FTSE 100 fell 30% tomorrow, roughly what percentage of your portfolio would be directly affected?", hint: "This is a quick gut-check for how exposed you are to UK equity market movements specifically.", answers: ["Less than 20% — I'm well diversified internationally", "20–50% — meaningful but not dominant", "Over 50% — most of my portfolio tracks the UK market"] }
+  ]},
+  { title: "Am I ready to pick individual stocks?", questions: [
+    { text: "How long have you been investing in index funds or ETFs?", hint: "Most experienced investors recommend building a diversified passive foundation before attempting stock picking.", answers: ["3 years or more — I have a solid foundation", "1–3 years — I have some experience", "Under a year or I haven't started yet"] },
+    { text: "Do you understand how to read a company's financial statements — revenue, profit, cash flow, and debt?", hint: "Stock picking without understanding financials is speculation, not investing.", answers: ["Yes — I can read and interpret basic financial statements", "I understand the basics but would struggle with detail", "No — I find financial statements confusing"] },
+    { text: "How much time are you genuinely able to dedicate to researching individual companies each month?", hint: "Thorough research on a single company typically takes 5–10 hours minimum. Stock pickers hold 10–20 positions.", answers: ["Several hours per week — I find this genuinely interesting", "A few hours per month at most", "Very little — I'm investing alongside a busy life"] },
+    { text: "Do you understand what a price-to-earnings (P/E) ratio, return on equity, and free cash flow yield mean?", hint: "These are among the most basic valuation metrics. If these are unfamiliar, more groundwork is needed first.", answers: ["Yes — I use these and other metrics in my research", "I know what they are but don't use them confidently", "No — these are new terms to me"] },
+    { text: "Are you prepared to underperform a simple FTSE All-World ETF for several years while you learn?", hint: "The majority of professional fund managers underperform the index over 10 years. Most individual stock pickers do worse.", answers: ["Yes — I understand the odds and accept them", "I'm hoping to outperform but understand it's difficult", "I expect to beat the market — that's why I want to do this"] },
+    { text: "What proportion of your total invested portfolio would you allocate to individual stock picks?", hint: "Most experienced investors who stock pick keep the majority of their portfolio in passive funds and use a satellite allocation for individual stocks.", answers: ["A small satellite allocation — under 20% of my total portfolio", "Around 20–40% alongside a passive core", "The majority or all of my portfolio"] }
+  ]},
+  { title: "Am I on track for retirement?", questions: [
+    { text: "Roughly how many years until you plan to retire?", hint: "Time to retirement is the single biggest factor in how much you need to be saving now.", answers: ["30 years or more", "20–30 years", "10–20 years", "Under 10 years"] },
+    { text: "Do you have a rough target income in mind for retirement (in today's money)?", hint: "Without a target, it is impossible to know whether you are on track.", answers: ["Yes — I have a clear target figure in mind", "Broadly yes — a rough sense of what I need", "No — I haven't thought about a specific income target"] },
+    { text: "Have you combined the value of all your pension pots, including old workplace pensions?", hint: "The average UK worker has around 11 jobs in their lifetime. Old pension pots are frequently forgotten.", answers: ["Yes — I know my total pension position", "I have a rough idea but haven't tracked down all pots", "No — I have old workplace pensions I haven't reviewed"] },
+    { text: "Are you on track to receive the full State Pension, and do you know what you are entitled to?", hint: "The full new State Pension is around \u00a311,500 per year (2024/25). Check your forecast at gov.uk/check-state-pension.", answers: ["Yes — I have checked and I'm on track for the full amount", "I think so but haven't checked recently", "No — I have gaps in my National Insurance record"] },
+    { text: "Are you currently contributing to a pension, and is your employer contributing too?", hint: "Employer contributions are the single most valuable pension benefit available. Not maximising the match is leaving money on the table.", answers: ["Yes — both me and my employer contribute and I get the full match", "Yes, but I'm not maximising the employer match", "Only me — no employer pension available", "I am not currently contributing to any pension"] },
+    { text: "Have you modelled what your pension pot might be worth at retirement based on current contributions?", hint: "A basic projection (contributions + growth + state pension) is essential for knowing whether you need to increase savings.", answers: ["Yes — I have run the numbers or used a pension calculator", "Roughly — I have a loose sense but haven't done the maths", "No — I have no idea whether my current savings are enough"] },
+    { text: "Do you have any investment savings outside of pensions that could contribute to retirement income?", hint: "ISAs, property, and other assets can supplement pension income significantly.", answers: ["Yes — meaningful ISA or investment portfolio alongside my pension", "Some cash savings but limited investment assets", "No — my pension is my only retirement saving vehicle"] }
+  ]}
+];
+
+let currentScenario = null;
+let currentQuestion = 0;
+let answers = [];
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  try { window.parent.postMessage({ type: 'iwh', value: document.body.scrollHeight + 40 }, '*'); } catch(e) {}
+}
+
+function startScenario(idx) {
+  currentScenario = idx;
+  currentQuestion = 0;
+  answers = new Array(scenarios[idx].questions.length).fill(null);
+  renderQuestion();
+  showScreen('screen-question');
+}
+
+function renderQuestion() {
+  const sc = scenarios[currentScenario];
+  const q = sc.questions[currentQuestion];
+  const total = sc.questions.length;
+  document.getElementById('q-scenario-label').textContent = sc.title;
+  document.getElementById('q-number').textContent = 'Question ' + (currentQuestion + 1);
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('q-hint').textContent = q.hint;
+  document.getElementById('q-progress-count').textContent = 'Question ' + (currentQuestion + 1) + ' of ' + total;
+  document.getElementById('q-progress-fill').style.width = ((currentQuestion / total) * 100) + '%';
+  const container = document.getElementById('q-answers');
+  container.innerHTML = '';
+  q.answers.forEach((a, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn' + (answers[currentQuestion] === i ? ' selected' : '');
+    btn.innerHTML = '<span class="answer-dot"></span>' + a;
+    btn.onclick = () => selectAnswer(i);
+    container.appendChild(btn);
+  });
+  document.getElementById('btn-back').style.display = currentQuestion === 0 ? 'none' : 'flex';
+  updateNextBtn();
+}
+
+function selectAnswer(idx) {
+  answers[currentQuestion] = idx;
+  document.querySelectorAll('.answer-btn').forEach((b, i) => { b.classList.toggle('selected', i === idx); });
+  updateNextBtn();
+}
+
+function updateNextBtn() {
+  const btn = document.getElementById('btn-next');
+  const hasAnswer = answers[currentQuestion] !== null;
+  btn.classList.toggle('enabled', hasAnswer);
+  const isLast = currentQuestion === scenarios[currentScenario].questions.length - 1;
+  btn.textContent = isLast ? 'Get My Assessment →' : 'Continue →';
+}
+
+function goNext() {
+  if (answers[currentQuestion] === null) return;
+  const total = scenarios[currentScenario].questions.length;
+  if (currentQuestion < total - 1) { currentQuestion++; renderQuestion(); }
+  else { showScreen('screen-loading'); getAIAssessment(); }
+}
+
+function goBack() {
+  if (currentQuestion > 0) { currentQuestion--; renderQuestion(); }
+  else { showScreen('screen-menu'); }
+}
+
+function resetAll() { currentScenario = null; currentQuestion = 0; answers = []; }
+
+async function getAIAssessment() {
+  const sc = scenarios[currentScenario];
+  const qaText = sc.questions.map((q, i) => {
+    const answerText = answers[i] !== null ? q.answers[answers[i]] : 'No answer';
+    return `Q${i+1}: ${q.text}\nAnswer: ${answerText}`;
+  }).join('\n\n');
+
+  const prompt = `You are an educational investment readiness assessor for Stack Your Cash (SYC), a UK personal finance education platform. You help UK retail investors understand their situation through plain English — you are not a financial adviser and never give regulated financial advice.
+
+A member has completed the "${sc.title}" questionnaire. Here are their answers:
+
+${qaText}
+
+Please provide a personalised educational assessment structured as follows:
+
+1. Start with a clear VERDICT line: either "READY", "ALMOST READY", or "NOT QUITE READY YET" followed by a one-sentence summary of why.
+
+2. A section called "Your Situation" — 2-3 sentences personalising what their answers tell you about their specific position.
+
+3. A section called "What's Working Well" — bullet points of the positive aspects of their situation based on their answers (only include if genuinely applicable).
+
+4. A section called "What to Address First" — specific, prioritised action points based on their answers. Be concrete and specific to what they actually answered, not generic. If they are ready, frame this as "things to keep in mind going forward" instead.
+
+5. A section called "Your Next Step" — one clear, specific recommended action to take this week.
+
+Keep the tone warm, constructive, and encouraging — never alarming. Write in plain English. UK spelling and terminology throughout (ISA not IRA, pension not 401k, etc). Maximum 350 words total. Do not use markdown headers with # symbols — just use the section names as plain text headers followed by a colon.`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, messages: [{ role: "user", content: prompt }] })
+    });
+    const data = await response.json();
+    const text = data.content?.[0]?.text || "Unable to generate assessment. Please try again.";
+    renderResult(text);
+  } catch (err) {
+    renderResult("We couldn't connect to generate your assessment right now. Please check your connection and try again.", true);
+  }
+}
+
+function renderResult(text, isError = false) {
+  let verdictClass = 'almost';
+  if (text.includes('NOT QUITE READY') || text.includes('NOT READY')) verdictClass = 'notready';
+  else if (text.match(/\bREADY\b/) && !text.includes('NOT')) verdictClass = 'ready';
+
+  const formatted = text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^(READY|ALMOST READY|NOT QUITE READY YET)(.*)/m, (_, v, rest) => {
+      const cls = v.includes('NOT') ? 'verdict-notready' : v.includes('ALMOST') ? 'verdict-almost' : 'verdict-ready';
+      return `<p><span class="${cls}">${v}</span>${rest}</p>`;
+    })
+    .replace(/^(Your Situation|What's Working Well|What to Address First|Your Next Step):/gm, '<h3>$1</h3>')
+    .replace(/^[-•]\s(.+)/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/gs, m => `<ul>${m}</ul>`)
+    .replace(/\n{2,}/g, '</p><p>')
+    .replace(/\n/g, '<br>');
+
+  document.getElementById('result-content').innerHTML = `
+    <div class="ai-result-wrap">
+      <div class="question-number" style="margin-bottom:12px;">${scenarios[currentScenario].title}</div>
+      <div class="ai-result-content">${isError ? text : '<p>' + formatted + '</p>'}</div>
+    </div>`;
+
+  document.getElementById('downloadGuideBtn').href = PDF_URLS[currentScenario];
+  showScreen('screen-result');
+}
+</script>
+</body>
+</html>

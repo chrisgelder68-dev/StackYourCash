@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Women & Investing — Practical Knowledge, Closing the Gap | Stack Your Cash</title>
+  <meta name="description" content="Practical investing knowledge for women — cutting through the noise, closing the gender investment gap." />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --orange:  #FF6900;
+      --navy:    #002C4F;
+      --green:   #57A400;
+      --yellow:  #FFC800;
+      --olive:   #AEC000;
+      --white:   #FFFFFF;
+      --light-bg: #F7F9FB;
+      --cream:   #F4F3EE;
+      --text:    #1A1A2E;
+      --text-muted: #5A6070;
+      --border:  #E2E8F0;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Source Sans 3', system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    html, body { height: auto !important; }
+
+    /* HERO */
+    .hero { background: var(--navy); color: var(--white); padding: 64px 24px 56px; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(174,192,0,0.14) 0%, transparent 60%); pointer-events: none; }
+    .hero .pill { display: inline-block; background: var(--olive); color: var(--navy); font-size: 0.72rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 5px 16px; border-radius: 100px; margin-bottom: 20px; }
+    .hero h1 { font-family: var(--font-display); font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 700; line-height: 1.2; max-width: 780px; margin: 0 auto 16px; }
+    .hero h1 span { color: var(--olive); }
+    .hero .subtitle { font-size: 1.1rem; color: rgba(255,255,255,0.75); max-width: 600px; margin: 0 auto 0; font-weight: 300; font-style: italic; }
+
+    /* LAYOUT */
+    .container { max-width: 780px; margin: 0 auto; padding: 0 24px 0 32px; }
+    .content-wrap { padding: 56px 0 80px; }
+
+    /* BODY TEXT */
+    .body-text { font-size: 1.05rem; color: var(--text-muted); padding-left: 8px; padding-right: 8px; }
+    .body-text p { margin-bottom: 1.4em; }
+    .body-text p:last-child { margin-bottom: 0; }
+    .body-text p.intro-lead { font-size: 1.2rem; color: var(--text); font-weight: 400; line-height: 1.75; margin-bottom: 1.6em; }
+    .body-text strong { color: var(--navy); font-weight: 600; }
+
+    /* HEADINGS */
+    .section-heading { font-family: var(--font-display); font-size: clamp(1.25rem, 3vw, 1.65rem); font-weight: 700; color: var(--navy); margin: 44px 0 18px; padding-bottom: 12px; padding-left: 8px; padding-right: 8px; border-bottom: 2px solid var(--border); line-height: 1.25; }
+    .section-heading.first { margin-top: 0; }
+
+    /* STAT CALLOUTS */
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 28px 0; }
+    @media(max-width: 560px) { .stat-row { grid-template-columns: 1fr; } }
+    .stat-card { background: var(--light-bg); border-radius: 8px; padding: 22px 20px; text-align: center; border-top: 3px solid var(--orange); }
+    .stat-number { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--orange); line-height: 1; margin-bottom: 8px; }
+    .stat-label { font-size: 0.88rem; color: var(--navy); font-weight: 600; line-height: 1.4; }
+    .stat-source { font-size: 0.72rem; color: var(--text-muted); margin-top: 6px; }
+
+    /* CALLOUTS */
+    .callout-navy { background: var(--navy); border-radius: 8px; padding: 24px 28px 24px 32px; margin: 32px 4px; }
+    .callout-navy .callout-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--yellow); margin-bottom: 10px; display: block; }
+    .callout-navy p { color: rgba(255,255,255,0.88); font-size: 0.98rem; line-height: 1.7; margin: 0 0 0.8em; }
+    .callout-navy p:last-child { margin: 0; }
+    .callout-navy strong { color: var(--white); }
+    .callout-orange { background: #FFF3EB; border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 24px 28px 24px 32px; margin: 32px 4px; }
+    .callout-orange .callout-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; display: block; }
+    .callout-orange p { color: var(--text); font-size: 0.98rem; line-height: 1.7; margin: 0 0 0.8em; }
+    .callout-orange p:last-child { margin: 0; }
+    .callout-orange strong { color: var(--navy); }
+    .callout-green { background: #F0F7E8; border-left: 4px solid var(--green); border-radius: 0 8px 8px 0; padding: 24px 28px 24px 32px; margin: 32px 4px; }
+    .callout-green .callout-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--green); margin-bottom: 10px; display: block; }
+    .callout-green p { color: var(--text); font-size: 0.98rem; line-height: 1.7; margin: 0 0 0.8em; }
+    .callout-green p:last-child { margin: 0; }
+    .callout-green strong { color: var(--navy); }
+
+    /* SECTION DIVIDER */
+    .section-divider { height: 2px; background: linear-gradient(to right, var(--olive), var(--border)); border: none; margin: 48px 0; opacity: 0.5; }
+
+    /* CAMPAIGN BLOCK */
+    .campaign-block {
+      background: var(--navy); border: 2px solid var(--olive); border-radius: 10px;
+      padding: 36px 36px 32px; margin: 28px 0; position: relative; overflow: hidden;
+    }
+    .campaign-block::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(174,192,0,0.1) 0%, transparent 60%); pointer-events: none; }
+    .campaign-block .camp-pill { display: inline-block; background: var(--olive); color: var(--navy); font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 4px 14px; border-radius: 100px; margin-bottom: 14px; }
+    .campaign-block h3 { font-family: var(--font-display); font-size: clamp(1.2rem, 3vw, 1.55rem); font-weight: 700; color: var(--white); margin-bottom: 10px; line-height: 1.25; }
+    .campaign-block h3 span { color: var(--olive); }
+    .campaign-block .camp-intro { color: rgba(255,255,255,0.8); font-size: 0.98rem; line-height: 1.7; margin-bottom: 22px; }
+    .blog-list { list-style: none; padding: 0; margin: 0 0 8px; }
+    .blog-list li { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: flex-start; gap: 12px; }
+    .blog-list li:last-child { border-bottom: none; }
+    .blog-num { font-size: 0.72rem; font-weight: 700; color: var(--olive); background: rgba(174,192,0,0.15); border-radius: 4px; padding: 2px 8px; flex-shrink: 0; margin-top: 2px; }
+    .blog-list a { color: rgba(255,255,255,0.85); font-size: 0.95rem; text-decoration: none; line-height: 1.45; }
+    .blog-list a:hover { color: var(--olive); }
+    .camp-note { font-size: 0.82rem; color: rgba(255,255,255,0.45); margin-top: 16px; font-style: italic; }
+
+    /* ARTICLE GRID */
+    .article-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 24px 0; }
+    @media(max-width: 560px) { .article-grid { grid-template-columns: 1fr; } }
+    .article-card { background: var(--light-bg); border-radius: 8px; padding: 22px; border-top: 3px solid var(--olive); }
+    .article-card .tag { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--olive); margin-bottom: 10px; display: block; }
+    .article-card h4 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; line-height: 1.3; }
+    .article-card p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.55; margin: 0 0 14px; }
+    .article-card a { font-size: 0.85rem; font-weight: 700; color: var(--orange); text-decoration: none; }
+
+    /* MEMBERS DEEP DIVES */
+    .deep-dive-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 24px 0; }
+    @media(max-width: 560px) { .deep-dive-grid { grid-template-columns: 1fr; } }
+    .deep-dive-card { background: var(--navy); border-radius: 8px; padding: 22px; border-top: 3px solid var(--olive); position: relative; }
+    .deep-dive-card .members-pill { display: inline-block; background: var(--olive); color: var(--navy); font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; margin-bottom: 12px; }
+    .deep-dive-card h4 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 8px; line-height: 1.3; }
+    .deep-dive-card p { font-size: 0.88rem; color: rgba(255,255,255,0.65); line-height: 1.55; margin: 0 0 14px; }
+    .deep-dive-card a { font-size: 0.85rem; font-weight: 700; color: var(--olive); text-decoration: none; }
+    .join-nudge { background: #F0F7E8; border: 1.5px solid var(--green); border-radius: 8px; padding: 20px 24px; margin-top: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .join-nudge p { font-size: 0.9rem; color: var(--text); margin: 0; line-height: 1.5; }
+    .join-nudge p strong { color: var(--navy); }
+    .join-nudge a { display: inline-block; background: var(--navy); color: var(--white); font-weight: 700; font-size: 0.85rem; padding: 9px 20px; border-radius: 4px; text-decoration: none; white-space: nowrap; flex-shrink: 0; }
+
+    /* JARGON BUSTER */
+    .jargon-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 20px 0; }
+    @media(max-width: 520px) { .jargon-grid { grid-template-columns: 1fr; } }
+    .jargon-item { background: #F0F7E8; border-left: 3px solid var(--green); border-radius: 0 6px 6px 0; padding: 14px 16px; }
+    .jargon-term { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .jargon-def { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* COMMUNITY BLOCK */
+    .community-block { background: var(--light-bg); border-radius: 10px; padding: 32px 36px; margin: 32px 0; text-align: center; border: 2px solid var(--border); }
+    .community-block h3 { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+    .community-block h3 span { color: var(--olive); }
+    .community-block p { color: var(--text-muted); font-size: 0.95rem; max-width: 520px; margin: 0 auto 22px; line-height: 1.65; }
+    .community-block a { display: inline-block; background: var(--navy); color: var(--white); font-weight: 700; font-size: 0.9rem; padding: 12px 28px; border-radius: 5px; text-decoration: none; }
+
+    /* EBOOK CTA */
+    .ebook-cta { background: #FFF3EB; border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 24px 28px; margin: 36px 0; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .ebook-cta p { font-size: 0.95rem; color: var(--text); margin: 0; line-height: 1.5; }
+    .ebook-cta p strong { color: var(--navy); }
+    .ebook-cta a { display: inline-block; background: var(--orange); color: var(--white); font-weight: 700; font-size: 0.88rem; padding: 10px 22px; border-radius: 4px; text-decoration: none; white-space: nowrap; flex-shrink: 0; }
+
+    /* JOIN CTA */
+    .join-cta { background: var(--navy); border-radius: 10px; padding: 44px 40px; text-align: center; margin: 52px 0 0; position: relative; overflow: hidden; }
+    .join-cta::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(174,192,0,0.12) 0%, transparent 60%); pointer-events: none; }
+    .join-cta h3 { font-family: var(--font-display); font-size: clamp(1.3rem, 3vw, 1.75rem); color: var(--white); margin-bottom: 14px; line-height: 1.25; }
+    .join-cta h3 span { color: var(--olive); }
+    .join-cta p { color: rgba(255,255,255,0.75); font-size: 0.98rem; max-width: 520px; margin: 0 auto 28px; line-height: 1.65; }
+    .join-cta .btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .join-cta .btn-primary { display: inline-block; background: var(--orange); color: var(--white); font-weight: 700; font-size: 1rem; padding: 15px 36px; border-radius: 5px; text-decoration: none; }
+    .join-cta .btn-secondary { display: inline-block; background: transparent; border: 2px solid rgba(255,255,255,0.3); color: var(--white); font-weight: 700; font-size: 0.95rem; padding: 13px 28px; border-radius: 5px; text-decoration: none; }
+    .join-cta .cta-sub { margin-top: 14px; font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+
+    /* FOOTER */
+    .site-footer { background: var(--navy); color: rgba(255,255,255,0.5); text-align: center; padding: 32px 24px; font-size: 0.82rem; }
+    .site-footer strong { color: var(--orange); }
+
+    @media (max-width: 520px) {
+      .container { padding: 0 14px; }
+      .content-wrap { padding: 36px 0 60px; }
+      .hero { padding: 44px 16px 40px; }
+      .body-text { padding-left: 4px; padding-right: 4px; }
+      .section-heading { padding-left: 4px; padding-right: 4px; }
+      .campaign-block { padding: 22px 18px 20px; }
+      .campaign-block h3 { font-size: 1.15rem; }
+      .join-cta { padding: 32px 20px; }
+      .community-block { padding: 24px 18px; }
+      .callout-green { padding: 20px 18px 20px 20px; }
+      .stat-row { grid-template-columns: 1fr; }
+      .article-grid { grid-template-columns: 1fr; }
+      .deep-dive-grid { grid-template-columns: 1fr; }
+      .jargon-grid { grid-template-columns: 1fr; }
+      .join-nudge { flex-direction: column; gap: 12px; }
+      .join-nudge a { width: 100%; text-align: center; }
+      .btn-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+
+<div class="hero">
+  <span class="pill">Women & Investing</span>
+  <h1>Women <span>&</span> Investing</h1>
+  <p class="subtitle">Practical investing knowledge for women — cutting through the noise, closing the gap.</p>
+</div>
+
+<main>
+  <div class="container">
+    <div class="content-wrap">
+
+      <!-- WHY THIS SECTION EXISTS -->
+      <h2 class="section-heading first">Why This Section Exists</h2>
+      <div class="body-text">
+        <p class="intro-lead">Women are statistically less likely to invest than men — and that gap has a significant long-term cost. Not because of ability or interest, but because of a financial services industry that has historically failed to speak to women in a relevant, accessible way.</p>
+        <p>Stack Your Cash exists to change that. This section brings together all of our content specifically relevant to women investors — from first steps to advanced strategy — in one place. No condescension, no pink-washing. Just plain-English investing knowledge that works.</p>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-number">35%</div>
+          <div class="stat-label">of UK women invest, versus 52% of men</div>
+          <div class="stat-source">Boring Money, 2024</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">£100k+</div>
+          <div class="stat-label">typical lifetime wealth gap from not investing</div>
+          <div class="stat-source">Fidelity, 2023</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">0.4%</div>
+          <div class="stat-label">higher average returns when women do invest</div>
+          <div class="stat-source">Warwick Business School</div>
+        </div>
+      </div>
+
+      <div class="callout-green">
+        <span class="callout-label">The Opportunity</span>
+        <p>When women invest, they tend to invest well — with longer time horizons, lower turnover, and better risk-adjusted returns on average. The problem isn't capability. It's access, confidence, and relevance of information. That's exactly what this section aims to address.</p>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- FEATURED CAMPAIGN -->
+      <h2 class="section-heading">Women's Month — July 2026</h2>
+      <div class="campaign-block">
+        <span class="camp-pill">Featured Campaign</span>
+        <h3>Women & Investing: <span>July 2026</span></h3>
+        <p class="camp-intro">Throughout July 2026 we published a full series of articles and in-depth explainers dedicated to women and investing — six blogs and four deep dives, all available to members. All written to be genuinely useful, wherever you're starting from. We suggest reading in this order:</p>
+        <ul class="blog-list">
+          <li><span class="blog-num">01</span><a href="https://www.stackyourcash.co.uk/womens-investing-uk-month-july-2026" target="_blank">Why Women Invest Less — and Why That Needs to Change</a></li>
+          <li><span class="blog-num">02</span><a href="https://www.stackyourcash.co.uk/gender-pension-gap-uk-women" target="_blank">The Gender Pay Gap's Silent Partner: The Investing Gap</a></li>
+          <li><span class="blog-num">03</span><a href="https://www.stackyourcash.co.uk/maternity-leave-isa-investing-uk" target="_blank">Getting Started: Your First Investment in Plain English</a></li>
+          <li><span class="blog-num">04</span><a href="https://www.stackyourcash.co.uk/investing-on-a-part-time-salary-uk-women" target="_blank">ISAs, Pensions and the Accounts Every Woman Should Know About</a></li>
+          <li><span class="blog-num">05</span><a href="https://www.stackyourcash.co.uk/investing-after-career-break-uk-women" target="_blank">Investing Through Life's Milestones — Career Breaks, Maternity, and More</a></li>
+          <li><span class="blog-num">06</span><a href="https://www.stackyourcash.co.uk/financial-independence-women-uk-investments" target="_blank">Building Long-Term Wealth: The Simple Strategy That Works</a></li>
+        </ul>
+        
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- ARTICLES -->
+      <h2 class="section-heading">Women & Investing Articles</h2>
+      <div class="body-text">
+        <p>Six articles covering the full range of women and investing topics — from the gender gap to building long-term wealth. All available to Stack Your Cash members.</p>
+      </div>
+      <div class="article-grid">
+        <div class="article-card">
+          <span class="tag">Women &amp; Investing</span>
+          <h4>Why Women Invest Less — and Why That Needs to Change</h4>
+          <p>The statistics are stark. But understanding why the gap exists is the first step to closing it.</p>
+          <a href="https://www.stackyourcash.co.uk/womens-investing-uk-month-july-2026" target="_blank">Read as a member →</a>
+        </div>
+        <div class="article-card">
+          <span class="tag">Women &amp; Investing</span>
+          <h4>The Gender Pay Gap's Silent Partner: The Investing Gap</h4>
+          <p>The pay gap gets the headlines. The investing gap is where the real long-term wealth difference compounds.</p>
+          <a href="https://www.stackyourcash.co.uk/gender-pension-gap-uk-women" target="_blank">Read as a member →</a>
+        </div>
+        <div class="article-card">
+          <span class="tag">Getting Started</span>
+          <h4>Getting Started: Your First Investment in Plain English</h4>
+          <p>No jargon. No assumptions. A plain-English guide to placing your first investment.</p>
+          <a href="https://www.stackyourcash.co.uk/maternity-leave-isa-investing-uk" target="_blank">Read as a member →</a>
+        </div>
+        <div class="article-card">
+          <span class="tag">Accounts &amp; Tax</span>
+          <h4>ISAs, Pensions and the Accounts Every Woman Should Know</h4>
+          <p>The tax-efficient accounts that matter most — explained clearly, with the details that are often left out.</p>
+          <a href="https://www.stackyourcash.co.uk/investing-on-a-part-time-salary-uk-women" target="_blank">Read as a member →</a>
+        </div>
+        <div class="article-card">
+          <span class="tag">Life Events</span>
+          <h4>Investing Through Life's Milestones</h4>
+          <p>Career breaks, maternity leave, part-time work — how to keep investing moving through the moments that matter.</p>
+          <a href="https://www.stackyourcash.co.uk/investing-after-career-break-uk-women" target="_blank">Read as a member →</a>
+        </div>
+        <div class="article-card">
+          <span class="tag">Long-Term Wealth</span>
+          <h4>Building Long-Term Wealth: The Simple Strategy That Works</h4>
+          <p>The approach that most successful long-term investors use — and why it's more accessible than you might think.</p>
+          <a href="https://www.stackyourcash.co.uk/financial-independence-women-uk-investments" target="_blank">Read as a member →</a>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- MEMBERS DEEP DIVES -->
+      <h2 class="section-heading">Members-Only Deep Dives</h2>
+      <div class="body-text">
+        <p>Four in-depth explainers going further than the articles — covering the topics that matter most for women investors at every stage.</p>
+      </div>
+      <div class="deep-dive-grid">
+        <div class="deep-dive-card">
+          <span class="members-pill">Members Only</span>
+          <h4>The Pension Gap: What It Means for Women and How to Close It</h4>
+          <p>Why women retire with significantly less pension wealth — and the specific steps to start addressing that gap now.</p>
+          <a href="https://www.stackyourcash.co.uk/womens-investing-uk-month-july-2026" target="_blank">Read deep dive →</a>
+        </div>
+        <div class="deep-dive-card">
+          <span class="members-pill">Members Only</span>
+          <h4>Investing Through a Career Break: A Practical Playbook</h4>
+          <p>A step-by-step guide to protecting and continuing to build wealth during maternity leave, part-time work, or time out.</p>
+          <a href="https://www.stackyourcash.co.uk/salary-sacrifice-maternity-pay-uk-women" target="_blank">Read deep dive →</a>
+        </div>
+        <div class="deep-dive-card">
+          <span class="members-pill">Members Only</span>
+          <h4>Risk, Confidence and the Investing Mindset</h4>
+          <p>Research shows women tend to be more risk-averse in investing — and how to calibrate that to serve your long-term goals.</p>
+          <a href="https://www.stackyourcash.co.uk/divorce-pension-splitting-uk-women" target="_blank">Read deep dive →</a>
+        </div>
+        <div class="deep-dive-card">
+          <span class="members-pill">Members Only</span>
+          <h4>Building a Portfolio from Scratch: A Women's Perspective</h4>
+          <p>From first ISA to diversified portfolio — a practical, jargon-free walkthrough built around how women actually invest.</p>
+          <a href="https://www.stackyourcash.co.uk/building-wealth-on-one-income" target="_blank">Read deep dive →</a>
+        </div>
+      </div>
+
+
+      <hr class="section-divider" />
+
+      <!-- JARGON BUSTER -->
+      <h2 class="section-heading">Jargon Buster</h2>
+      <div class="body-text">
+        <p>New to investing or just want a quick reminder? Here are the key terms that come up most in investing conversations — explained in plain English.</p>
+      </div>
+      <div class="jargon-grid">
+        <div class="jargon-item">
+          <div class="jargon-term">ISA (Individual Savings Account)</div>
+          <div class="jargon-def">A tax-free wrapper for your savings or investments. Up to £20,000 per year — any growth or income inside is free from UK tax.</div>
+        </div>
+        <div class="jargon-item">
+          <div class="jargon-term">ETF (Exchange-Traded Fund)</div>
+          <div class="jargon-def">A fund that holds hundreds of companies in one go — giving instant diversification. Bought and sold like a share on the stock exchange.</div>
+        </div>
+        <div class="jargon-item">
+          <div class="jargon-term">Compound Growth</div>
+          <div class="jargon-def">Earning returns on your returns. A small regular investment, left to grow over decades, can become significantly larger than the total you put in.</div>
+        </div>
+        <div class="jargon-item">
+          <div class="jargon-term">Risk Tolerance</div>
+          <div class="jargon-def">How comfortable you are with your investments going down in value short-term. Higher risk can mean higher long-term returns — but requires patience.</div>
+        </div>
+        <div class="jargon-item">
+          <div class="jargon-term">Diversification</div>
+          <div class="jargon-def">Spreading your money across different investments so no single one can sink your whole portfolio. "Don't put all your eggs in one basket."</div>
+        </div>
+        <div class="jargon-item">
+          <div class="jargon-term">Pension (SIPP)</div>
+          <div class="jargon-def">A Self-Invested Personal Pension — lets you choose your own investments inside a pension wrapper with tax relief added by the government.</div>
+        </div>
+        <div class="jargon-item">
+          <div class="jargon-term">Pound-Cost Averaging</div>
+          <div class="jargon-def">Investing a fixed amount regularly regardless of price. Automatically buys more when prices are lower — takes the stress out of market timing.</div>
+        </div>
+        <div class="jargon-item">
+          <div class="jargon-term">OCF (Ongoing Charges Figure)</div>
+          <div class="jargon-def">The annual cost of owning a fund, expressed as a percentage. A world tracker ETF typically costs 0.1–0.25% per year — very low.</div>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- COMMUNITY PROMPT -->
+      <div class="community-block">
+        <h3>Share Your <span>Investing Journey</span></h3>
+        <p>Stack Your Cash members have access to our community space — a place to ask questions, share experience, and connect with other investors at every stage of the journey. Your experience and your questions are welcome here.</p>
+        <a href="https://www.stackyourcash.co.uk/community" target="_blank">Visit the Community ↗</a>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- DUAL CTA -->
+      <div class="join-cta">
+        <h3>Explore the Full <span>Members Library</span></h3>
+        <p>Head to your dashboard for the full 22-module learning programme, financial planning tools, AI Investment Clinic, and everything else in the members area.</p>
+        <div class="btn-row">
+          <a class="btn-primary" href="https://www.stackyourcash.co.uk/member-dashboard" target="_blank">Go to Member Dashboard ↗</a>
+          <a class="btn-secondary" href="https://www.stackyourcash.co.uk/learning-modules" target="_blank">Learning Programme ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <p><strong>Stack Your Cash</strong> &nbsp;·&nbsp; stackyourcash.co.uk &nbsp;·&nbsp; Learn · Save · Invest</p>
+  <p style="margin-top:8px;">This page is for educational purposes and does not constitute financial advice.</p>
+</footer>
+
+<script>
+function reportHeight() {
+  var h = Math.max(
+    document.body.scrollHeight,
+    document.body.offsetHeight,
+    document.documentElement.scrollHeight,
+    document.documentElement.offsetHeight
+  );
+  try { window.parent.postMessage({ type: 'iwh', value: h + 20 }, '*'); } catch(e) {}
+}
+document.addEventListener('DOMContentLoaded', reportHeight);
+window.addEventListener('load', reportHeight);
+window.addEventListener('resize', reportHeight);
+setTimeout(reportHeight, 200);
+setTimeout(reportHeight, 500);
+setTimeout(reportHeight, 1000);
+setTimeout(reportHeight, 2000);
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYC Commodities</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+* { box-sizing:border-box; margin:0; padding:0; }
+html,body { width:100%; font-family:'Source Sans 3',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:#fff; color:#1A2A3A; }
+.section-wrap { border:6px solid #AEC000; overflow:hidden; }
+.section-header { background:#FF6900; padding:14px 20px 12px; display:flex; flex-direction:column; align-items:center; gap:6px; }
+.region-tag { background:#AEC000; color:#002C4F; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; border-radius:4px; padding:3px 10px; }
+.header-titles { text-align:center; }
+.header-titles h2 { font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:700; color:#FFFFFF; margin-bottom:2px; letter-spacing:.01em; }
+.live-badge { display:flex; align-items:center; gap:5px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); border-radius:20px; padding:3px 10px; font-size:10px; font-weight:700; color:#FFFFFF; text-transform:uppercase; letter-spacing:.06em; }
+.live-dot { width:5px; height:5px; background:#FFFFFF; border-radius:50%; animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.indices-list { background:#fff; min-height:240px; }
+.index-row { display:flex; align-items:center; padding:0 16px; border-bottom:1px solid #F0F4F8; gap:8px; height:48px; min-height:48px; }
+.index-row:last-child { border-bottom:none; }
+.index-left { flex:1; min-width:0; }
+.index-name { font-size:13px; font-weight:700; color:#002C4F; display:block; }
+.index-label { font-size:10px; color:#8899AA; margin-top:1px; display:block; }
+.index-right { text-align:right; flex-shrink:0; min-width:80px; }
+.index-price { font-size:14px; font-weight:700; color:#1A2A3A; display:block; }
+.change-badge { display:inline-block; padding:2px 7px; border-radius:10px; font-size:10px; font-weight:700; margin-top:3px; }
+.up { background:#EEF5E6; color:#3B6D11; }
+.down { background:#FCEBEB; color:#A32D2D; }
+.flat { background:#F0F4F8; color:#6B7C8D; }
+.mini-spinner { display:inline-block; width:10px; height:10px; border:2px solid #E0E8F0; border-top-color:#FF6900; border-radius:50%; animation:spin .7s linear infinite; vertical-align:middle; }
+@keyframes spin{to{transform:rotate(360deg)}}
+.section-footer { background:#F4F3EE; border-top:1px solid #E0E8F0; padding:7px 14px; font-size:10px; color:#8899AA; display:flex; align-items:center; justify-content:space-between; }
+.section-footer strong { color:#002C4F; }
+</style>
+</head>
+<body>
+<div class="section-wrap">
+  <div class="section-header">
+    <div class="region-tag">Metals & Energy</div>
+    <div class="header-titles"><h2>Commodities</h2></div>
+    <div class="live-badge"><div class="live-dot"></div>Live</div>
+  </div>
+  <div class="indices-list" id="list">
+<div class="index-row" id="row-GC%3DF"><div class="index-left"><span class="index-name">Gold</span><span class="index-label">USD per troy oz</span></div><div class="index-right"><span class="mini-spinner"></span></div></div>
+<div class="index-row" id="row-SI%3DF"><div class="index-left"><span class="index-name">Silver</span><span class="index-label">USD per troy oz</span></div><div class="index-right"><span class="mini-spinner"></span></div></div>
+<div class="index-row" id="row-BZ%3DF"><div class="index-left"><span class="index-name">Brent Crude</span><span class="index-label">USD per barrel</span></div><div class="index-right"><span class="mini-spinner"></span></div></div>
+<div class="index-row" id="row-NG%3DF"><div class="index-left"><span class="index-name">Natural Gas</span><span class="index-label">USD per MMBtu</span></div><div class="index-right"><span class="mini-spinner"></span></div></div>
+  </div>
+  <div class="section-footer">
+    <span>Via <strong>Yahoo Finance</strong>. May be delayed 15 mins.</span>
+    <span id="updated">Loading...</span>
+  </div>
+</div>
+
+<script>
+var INDICES = [{"symbol":"GC%3DF","name":"Gold","label":"USD per troy oz"},{"symbol":"SI%3DF","name":"Silver","label":"USD per troy oz"},{"symbol":"BZ%3DF","name":"Brent Crude","label":"USD per barrel"},{"symbol":"NG%3DF","name":"Natural Gas","label":"USD per MMBtu"}];
+var PANEL_DELAY = 26000;
+
+function resizeParent() {
+  try { window.parent.postMessage({ type:"iwh", value: document.body.scrollHeight + 10 }, "*"); } catch(e) {}
+}
+
+function fmt(p) {
+  if (!p && p !== 0) return "—";
+  if (p >= 1000) return p.toLocaleString("en-GB", {maximumFractionDigits:0});
+  if (p >= 10) return p.toLocaleString("en-GB", {minimumFractionDigits:2, maximumFractionDigits:2});
+  return p.toLocaleString("en-GB", {minimumFractionDigits:4, maximumFractionDigits:4});
+}
+
+function updateRow(symbol, data) {
+  var row = document.getElementById("row-" + symbol);
+  if (!row) return;
+  var right = row.querySelector(".index-right");
+  if (!data) { right.innerHTML = "<span style=\"color:#AABCCC;font-size:12px;\">—</span>"; return; }
+  var chg = data.price - data.prev;
+  var pct = data.prev ? (chg/data.prev)*100 : 0;
+  var cls = chg > 0 ? "up" : chg < 0 ? "down" : "flat";
+  var arrow = chg > 0 ? "▲" : chg < 0 ? "▼" : "—";
+  right.innerHTML = "<span class=\"index-price\">" + fmt(data.price) + "</span>" +
+    "<span class=\"change-badge " + cls + "\">" + arrow + " " + Math.abs(pct).toFixed(2) + "%</span>";
+  resizeParent();
+}
+
+async function fetchIndex(symbol, retries) {
+  var encoded = encodeURIComponent(decodeURIComponent(symbol));
+  var bases = ["https://query1.finance.yahoo.com", "https://query2.finance.yahoo.com"];
+  for (var b = 0; b < bases.length; b++) {
+    try {
+      var res = await fetch(bases[b] + "/v8/finance/chart/" + encoded + "?interval=1d&range=1d", { headers: {"Accept":"application/json"} });
+      if (res.status === 429) {
+        if (retries > 0) { await new Promise(function(r){setTimeout(r,3000);}); return fetchIndex(symbol, retries-1); }
+        break;
+      }
+      if (!res.ok) continue;
+      var d = await res.json();
+      var meta = d && d.chart && d.chart.result && d.chart.result[0] && d.chart.result[0].meta;
+      if (meta && meta.regularMarketPrice) return { price: meta.regularMarketPrice, prev: meta.chartPreviousClose || meta.previousClose || meta.regularMarketPrice };
+    } catch(e) { continue; }
+  }
+  try {
+    var url = "https://query1.finance.yahoo.com/v8/finance/chart/" + encoded + "?interval=1d&range=1d";
+    var res2 = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url));
+    var outer = await res2.json();
+    var d2 = JSON.parse(outer.contents);
+    var meta2 = d2 && d2.chart && d2.chart.result && d2.chart.result[0] && d2.chart.result[0].meta;
+    if (meta2 && meta2.regularMarketPrice) return { price: meta2.regularMarketPrice, prev: meta2.chartPreviousClose || meta2.previousClose || meta2.regularMarketPrice };
+  } catch(e) {}
+  return null;
+}
+
+async function loadAll() {
+  for (var i = 0; i < INDICES.length; i++) {
+    var data = await fetchIndex(INDICES[i].symbol, 2);
+    updateRow(INDICES[i].symbol, data);
+    if (i < INDICES.length - 1) await new Promise(function(r){setTimeout(r,1000);});
+  }
+  var now = new Date();
+  document.getElementById("updated").textContent = "Updated " + now.getHours().toString().padStart(2,"0") + ":" + now.getMinutes().toString().padStart(2,"0");
+  resizeParent();
+}
+
+setTimeout(loadAll, 1500 + PANEL_DELAY);
+setInterval(loadAll, 5 * 60 * 1000);
+resizeParent();
+setTimeout(resizeParent, 800);
+</script>
+</body>
+</html>
