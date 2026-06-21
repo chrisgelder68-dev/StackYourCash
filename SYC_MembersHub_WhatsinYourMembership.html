@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYC — What's in Your Membership</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; font-family: 'Source Sans 3', sans-serif; background: #F4F3EE; }
+
+  .section-wrap {
+    padding: 0;
+    background: #F4F3EE;
+  }
+
+  .cards-outer {
+    padding: 28px 24px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 0;
+    background: #002C4F;
+    padding: 20px 24px 18px;
+    width: 100%;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    background: #FF6900;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    border-radius: 4px;
+    padding: 3px 12px;
+    margin-bottom: 12px;
+  }
+
+  .section-header h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 8px;
+    line-height: 1.25;
+  }
+
+  .section-header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  .card {
+    background: #FFFFFF;
+    border-radius: 10px;
+    padding: 20px 18px;
+    border-top: 3px solid #FF6900;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(0,44,79,0.07);
+    transition: all 0.2s ease;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,44,79,0.12);
+    border-top-color: #002C4F;
+  }
+
+  .card-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(255,105,0,0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #002C4F;
+    line-height: 1.3;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    color: #5A6070;
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .card-link {
+    font-size: 11px;
+    font-weight: 700;
+    color: #FF6900;
+    margin-top: 4px;
+  }
+
+  /* Stack Markets card */
+  .card.coming-soon {
+    border-top-color: #AEC000;
+    background: #F8F9F0;
+    cursor: default;
+  }
+
+  .card.coming-soon:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0,44,79,0.07);
+    border-top-color: #AEC000;
+  }
+
+  .coming-soon-badge {
+    display: inline-block;
+    background: #AEC000;
+    color: #002C4F;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    border-radius: 3px;
+    padding: 2px 7px;
+    margin-top: 2px;
+  }
+
+  /* Full width Stack Markets row */
+  .stack-markets-row {
+    margin-top: 14px;
+  }
+
+  .card.full-width {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+  }
+
+  .card.full-width .card-content {
+    flex: 1;
+  }
+
+  .card.full-width .card-title {
+    font-size: 15px;
+  }
+
+  .card.full-width .card-desc {
+    font-size: 12.5px;
+    margin-top: 4px;
+  }
+
+  @media(max-width: 800px) {
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media(max-width: 480px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .section-wrap { padding: 28px 16px 32px; }
+    .section-header h2 { font-size: 22px; }
+    .card.full-width { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="section-wrap">
+
+  <div class="section-header">
+    <div class="eyebrow">Members</div>
+    <h2>What's in Your Membership</h2>
+    <p>Everything included in your Stack Your Cash membership — explore the tools, resources and content built to help you invest with confidence.</p>
+  </div>
+
+  <div class="cards-outer">
+  <div class="cards-grid">
+
+    <!-- Members Hub — full width top -->
+    <div class="card full-width" style="border-top-color:#FF6900;background:#FFFFFF;cursor:default;">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+      </div>
+      <div class="card-content">
+        <div class="card-title">Members Hub</div>
+        <div class="card-desc">Your home base. Live market data including global indices, FX and commodities, a rolling economic calendar, an instant stock and ETF price lookup tool, and a curated feed of the latest SYC blogs and explainers — all in one place.</div>
+      </div>
+    </div>
+
+    <!-- Learning Programme -->
+    <div class="card" onclick="window.open('https://www.stackyourcash.co.uk/learning-modules','_blank')">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div class="card-title">Learning Programme</div>
+      <div class="card-desc">A structured 17-module investment education programme built for UK investors. Covers ISAs, pensions, ETFs, risk, diversification, platforms and more — all in plain English. Work through at your own pace.</div>
+      <div class="card-link">Explore modules →</div>
+    </div>
+
+    <!-- Blog & Explainers -->
+    <div class="card" onclick="window.open('https://www.stackyourcash.co.uk/resources','_blank')">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+        </svg>
+      </div>
+      <div class="card-title">Blog & Explainers</div>
+      <div class="card-desc">Free blogs covering key investing topics alongside members-only deep dive explainers that go further. New content published regularly across topics including ISAs, ETFs, pensions, dividends and more.</div>
+      <div class="card-link">Browse content →</div>
+    </div>
+
+    <!-- Toolkit Library -->
+    <div class="card" onclick="window.open('https://www.stackyourcash.co.uk/toolkit-library','_blank')">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2"/>
+          <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+          <path d="M12 12v4M10 14h4"/>
+        </svg>
+      </div>
+      <div class="card-title">Toolkit Library</div>
+      <div class="card-desc">12 downloadable Excel financial planning tools covering budgeting, ISA planning, pension projections, investment tracking and more. Each tool is pre-built, colour-coded and ready to use immediately.</div>
+      <div class="card-link">Download tools →</div>
+    </div>
+
+    <!-- AI Investment Clinic -->
+    <div class="card" onclick="window.open('https://www.stackyourcash.co.uk/ai-investment-clinic','_blank')">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/>
+        </svg>
+      </div>
+      <div class="card-title">AI Investment Clinic</div>
+      <div class="card-desc">An AI-powered tool that gives you a personalised assessment of your investment situation. Ask questions across a wide range of topics — from portfolio construction to tax efficiency — and get plain English guidance.</div>
+      <div class="card-link">Open clinic →</div>
+    </div>
+
+    <!-- Investment Readiness -->
+    <div class="card" onclick="window.open('https://www.stackyourcash.co.uk/investment-readiness','_blank')">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 11l3 3L22 4"/>
+          <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+        </svg>
+      </div>
+      <div class="card-title">Investment Readiness Check</div>
+      <div class="card-desc">12 scenario-based questionnaires covering everything from starting out to reviewing an existing portfolio. Answer 6–8 questions and receive a personalised assessment, with a downloadable PDF companion guide for each scenario.</div>
+      <div class="card-link">Take the check →</div>
+    </div>
+
+    <!-- Stacker's Diary -->
+    <div class="card" onclick="window.open('https://www.stackyourcash.co.uk/stacker-s-diary','_blank')">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 20V10M12 20V4M6 20v-6"/>
+        </svg>
+      </div>
+      <div class="card-title">Stacker's Diary</div>
+      <div class="card-desc">The founder's honest monthly investment journal — real portfolio decisions, real thinking and real lessons learned in plain English. Includes a full portfolio snapshot with holdings, weightings and monthly commentary. Updated every month.</div>
+      <div class="card-link">Read the diary →</div>
+    </div>
+
+    <!-- Women & Investing -->
+    <div class="card" onclick="window.open('https://www.stackyourcash.co.uk/women-investing','_blank')">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M12 12v8M9 17h6"/>
+        </svg>
+      </div>
+      <div class="card-title">Women & Investing</div>
+      <div class="card-desc">A dedicated section addressing the gender investment gap with practical, jargon-free content for women at every stage of their investing journey. Includes blogs, deep dive explainers, a jargon buster and community prompts.</div>
+      <div class="card-link">Explore section →</div>
+    </div>
+
+    <!-- Community -->
+    <div class="card" onclick="window.open('https://www.stackyourcash.co.uk/groups','_blank')">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+        </svg>
+      </div>
+      <div class="card-title">Community</div>
+      <div class="card-desc">Connect with other Stack Your Cash members, ask questions and share your investing journey. Groups and Q&A threads covering a range of topics — from first investments to portfolio reviews. Members only.</div>
+      <div class="card-link">Join the community →</div>
+    </div>
+
+    <!-- Stack Markets — full width -->
+    <div class="card full-width coming-soon">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#AEC000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div class="card-content">
+        <div class="card-title">Stack Markets — Virtual Investment Game</div>
+        <div class="card-desc">Start with £25,000 virtual cash and build a real portfolio using actual securities at real closing prices. Compete on the leaderboard, track your performance and use the AI Stack Advisor for coaching. Launching soon for all members.</div>
+        <div class="coming-soon-badge">Coming Soon</div>
+      </div>
+    </div>
+
+  </div>
+  </div>
+
+<script>
+function resizeParent() {
+  var h = Math.max(document.body.scrollHeight, document.body.offsetHeight,
+    document.documentElement.scrollHeight, document.documentElement.offsetHeight);
+  try { window.parent.postMessage({ type: 'iwh', value: h + 10 }, '*'); } catch(e) {}
+}
+document.addEventListener('DOMContentLoaded', resizeParent);
+window.addEventListener('load', resizeParent);
+window.addEventListener('resize', resizeParent);
+setTimeout(resizeParent, 300);
+setTimeout(resizeParent, 800);
+</script>
+
+</body>
+</html>
