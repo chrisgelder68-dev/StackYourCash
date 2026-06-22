@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/chris/Downloads/SYC_MarketSnapshot.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYC Market Snapshot</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+* { box-sizing:border-box; margin:0; padding:0; }
+html,body { width:100%; font-family:'Source Sans 3',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:#002C4F; }
+
+.panels-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media(max-width: 900px) { .panels-grid { grid-template-columns: 1fr; gap: 12px; padding: 12px; } }
+
+.section-wrap { border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,44,79,0.10); }
+.section-wrap.rates { border: 4px solid #002C4F; }
+.section-wrap.fx    { border: 4px solid #FF6900; }
+.section-wrap.comm  { border: 4px solid #AEC000; }
+
+.section-header { background:#FF6900; padding:14px 20px 12px; display:flex; flex-direction:column; align-items:center; gap:6px; }
+
+.region-tag { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; border-radius:4px; padding:3px 10px; }
+.region-tag.rates { background:#002C4F; color:#FFFFFF; }
+.region-tag.fx    { background:#FF6900; color:#FFFFFF; }
+.region-tag.comm  { background:#AEC000; color:#002C4F; }
+
+.header-titles h2 { font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:700; color:#FFFFFF; text-align:center; }
+
+.live-badge { display:flex; align-items:center; gap:5px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); border-radius:20px; padding:3px 10px; font-size:10px; font-weight:700; color:#FFFFFF; text-transform:uppercase; letter-spacing:.06em; }
+.live-dot { width:5px; height:5px; background:#FFFFFF; border-radius:50%; animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.indices-list { background:#fff; min-height:240px; }
+.index-row { display:flex; align-items:center; padding:0 16px; border-bottom:1px solid #F0F4F8; gap:8px; height:48px; min-height:48px; }
+.index-row:last-child { border-bottom:none; }
+.loading-row { display:flex; align-items:center; justify-content:center; gap:8px; height:48px; border-bottom:1px solid #F0F4F8; }
+.loading-row:last-child { border-bottom:none; }
+.spinner { width:11px; height:11px; border:2px solid #E0E8F0; border-top-color:#FF6900; border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text { font-size:11px; color:#8899AA; }
+
+.index-left { flex:1; min-width:0; }
+.index-name  { font-size:13px; font-weight:700; color:#002C4F; display:block; }
+.index-label { font-size:10px; color:#8899AA; margin-top:1px; display:block; }
+.index-right { text-align:right; flex-shrink:0; min-width:80px; }
+.index-price { font-size:14px; font-weight:700; color:#1A2A3A; display:block; }
+.change-badge { display:inline-block; padding:2px 7px; border-radius:10px; font-size:10px; font-weight:700; margin-top:3px; }
+.up   { background:#EEF5E6; color:#3B6D11; }
+.down { background:#FCEBEB; color:#A32D2D; }
+.flat { background:#F0F4F8; color:#6B7C8D; }
+
+.section-footer { background:#002C4F; border-top:1px solid rgba(255,255,255,0.12); padding:7px 14px; font-size:10px; color:rgba(255,255,255,0.55); display:flex; align-items:center; justify-content:space-between; }
+.section-footer strong { color:#ffffff; }
+</style>
+</head>
+<body>
+
+<div class="panels-grid">
+
+  <!-- INTEREST RATES (hardcoded) -->
+  <div class="section-wrap rates">
+    <div class="section-header">
+      <div class="region-tag rates">Key Benchmark Rates</div>
+      <div class="header-titles"><h2>Interest Rates</h2></div>
+      <div class="live-badge">Updated Periodically</div>
+    </div>
+    <div class="indices-list">
+      <div class="index-row">
+        <div class="index-left"><span class="index-name">BoE Base Rate</span><span class="index-label">Bank of England</span></div>
+        <div class="index-right"><span class="index-price">4.25%</span></div>
+      </div>
+      <div class="index-row">
+        <div class="index-left"><span class="index-name">US Fed Funds Rate</span><span class="index-label">Federal Reserve</span></div>
+        <div class="index-right"><span class="index-price">4.25–4.50%</span></div>
+      </div>
+      <div class="index-row">
+        <div class="index-left"><span class="index-name">ECB Deposit Rate</span><span class="index-label">European Central Bank</span></div>
+        <div class="index-right"><span class="index-price">2.25%</span></div>
+      </div>
+      <div class="index-row">
+        <div class="index-left"><span class="index-name">UK 10-Year Gilt</span><span class="index-label">Benchmark UK yield</span></div>
+        <div class="index-right"><span class="index-price">4.5%</span></div>
+      </div>
+      <div class="index-row">
+        <div class="index-left"><span class="index-name">US 10-Year Treasury</span><span class="index-label">Benchmark US yield</span></div>
+        <div class="index-right"><span class="index-price">4.4%</span></div>
+      </div>
+    </div>
+    <div class="section-footer">
+      <span>Rates updated periodically by the SYC team.</span>
+      <span>Last updated: June 2026</span>
+    </div>
+  </div>
+
+  <!-- FX RATES (live) -->
+  <div class="section-wrap fx">
+    <div class="section-header">
+      <div class="region-tag fx">Currency Pairs</div>
+      <div class="header-titles"><h2>FX Rates</h2></div>
+      <div class="live-badge"><div class="live-dot"></div>Live</div>
+    </div>
+    <div class="indices-list" id="list-fx">
+      <div class="index-row" id="row-gbpusd"><div class="index-left"><span class="index-name">GBP/USD</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-gbpeur"><div class="index-left"><span class="index-name">GBP/EUR</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-gbpjpy"><div class="index-left"><span class="index-name">GBP/JPY</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-eurusd"><div class="index-left"><span class="index-name">EUR/USD</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-usdjpy"><div class="index-left"><span class="index-name">USD/JPY</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+    </div>
+    <div class="section-footer">
+      <span>Via <strong>Yahoo Finance</strong>. May be delayed 15 mins.</span>
+      <span id="updated-fx">Updated 17:13</span>
+    </div>
+  </div>
+
+  <!-- COMMODITIES (live) -->
+  <div class="section-wrap comm">
+    <div class="section-header">
+      <div class="region-tag comm">Metals &amp; Energy</div>
+      <div class="header-titles"><h2>Commodities</h2></div>
+      <div class="live-badge"><div class="live-dot"></div>Live</div>
+    </div>
+    <div class="indices-list" id="list-comm">
+      <div class="index-row" id="row-gc"><div class="index-left"><span class="index-name">Gold</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-si"><div class="index-left"><span class="index-name">Silver</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-bz"><div class="index-left"><span class="index-name">Brent Crude</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-ng"><div class="index-left"><span class="index-name">Natural Gas</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+    </div>
+    <div class="section-footer">
+      <span>Via <strong>Yahoo Finance</strong>. May be delayed 15 mins.</span>
+      <span id="updated-comm">Updated 17:13</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var FX_TICKERS = [
+  {id:"gbpusd", symbol:"GBPUSD=X", name:"GBP/USD", label:"Pound to Dollar"},
+  {id:"gbpeur", symbol:"GBPEUR=X", name:"GBP/EUR", label:"Pound to Euro"},
+  {id:"gbpjpy", symbol:"GBPJPY=X", name:"GBP/JPY", label:"Pound to Yen"},
+  {id:"eurusd", symbol:"EURUSD=X", name:"EUR/USD", label:"Euro to Dollar"},
+  {id:"usdjpy", symbol:"USDJPY=X", name:"USD/JPY", label:"Dollar to Yen"}
+];
+
+var COMM_TICKERS = [
+  {id:"gc", symbol:"GC=F",  name:"Gold",       label:"USD per troy oz"},
+  {id:"si", symbol:"SI=F",  name:"Silver",      label:"USD per troy oz"},
+  {id:"bz", symbol:"BZ=F",  name:"Brent Crude", label:"USD per barrel"},
+  {id:"ng", symbol:"NG=F",  name:"Natural Gas", label:"USD per MMBtu"}
+];
+
+function resizeParent() {
+  var h = Math.max(document.body.scrollHeight, document.body.offsetHeight,
+    document.documentElement.scrollHeight, document.documentElement.offsetHeight);
+  try { window.parent.postMessage({type:"iwh", value: h + 20}, "*"); } catch(e) {}
+}
+
+function fmt(p) {
+  if (!p && p !== 0) return "—";
+  if (p >= 1000) return p.toLocaleString("en-GB", {maximumFractionDigits:0});
+  if (p >= 10)   return p.toLocaleString("en-GB", {minimumFractionDigits:2, maximumFractionDigits:2});
+  return p.toLocaleString("en-GB", {minimumFractionDigits:4, maximumFractionDigits:4});
+}
+
+function renderRow(id, quote) {
+  var row = document.getElementById("row-" + id);
+  if (!row) return;
+  var right = row.querySelector(".index-right");
+  if (!right) {
+    // row is still a loading-row, rebuild it
+    row.className = "index-row";
+    row.innerHTML = "<div class=\"index-left\"></div><div class=\"index-right\"></div>";
+    right = row.querySelector(".index-right");
+  }
+  if (!quote) {
+    row.className = "index-row";
+    row.innerHTML = "<div class=\"index-left\"><span class=\"index-name\">" + id.toUpperCase() + "</span><span class=\"index-label\" style=\"color:#AABCCC\">Unavailable</span></div><div class=\"index-right\"><span class=\"index-price\">—</span></div>";
+    return;
+  }
+  var price = quote.regularMarketPrice;
+  var prev  = quote.regularMarketPreviousClose || quote.chartPreviousClose || price;
+  var chg   = price - prev;
+  var pct   = prev ? (chg / prev) * 100 : 0;
+  var cls   = chg > 0 ? "up" : chg < 0 ? "down" : "flat";
+  var arrow = chg > 0 ? "▲" : chg < 0 ? "▼" : "—";
+  right.innerHTML = "<span class=\"index-price\">" + fmt(price) + "</span>" +
+    "<span class=\"change-badge " + cls + "\">" + arrow + " " + Math.abs(pct).toFixed(2) + "%</span>";
+  resizeParent();
+}
+
+function renderRowFull(ticker, quote) {
+  var row = document.getElementById("row-" + ticker.id);
+  if (!row) return;
+  if (!quote) {
+    row.className = "index-row";
+    row.innerHTML = "<div class=\"index-left\"><span class=\"index-name\">" + ticker.name + "</span><span class=\"index-label\" style=\"color:#AABCCC\">Unavailable</span></div><div class=\"index-right\"><span class=\"index-price\">—</span></div>";
+    return;
+  }
+  var price = quote.regularMarketPrice;
+  var prev  = quote.regularMarketPreviousClose || quote.chartPreviousClose || price;
+  var chg   = price - prev;
+  var pct   = prev ? (chg / prev) * 100 : 0;
+  var cls   = chg > 0 ? "up" : chg < 0 ? "down" : "flat";
+  var arrow = chg > 0 ? "▲" : chg < 0 ? "▼" : "—";
+  row.className = "index-row";
+  row.innerHTML =
+    "<div class=\"index-left\"><span class=\"index-name\">" + ticker.name + "</span><span class=\"index-label\">" + ticker.label + "</span></div>" +
+    "<div class=\"index-right\"><span class=\"index-price\">" + fmt(price) + "</span>" +
+    "<span class=\"change-badge " + cls + "\">" + arrow + " " + Math.abs(pct).toFixed(2) + "%</span></div>";
+  resizeParent();
+}
+
+// Batch fetch via v7 quote with proxy fallback chain
+async function fetchBatch(symbols) {
+  var joined  = symbols.join(",");
+  var encoded = encodeURIComponent(joined);
+  var baseUrl = "https://query1.finance.yahoo.com/v7/finance/quote?symbols=" + encoded + "&fields=regularMarketPrice,regularMarketPreviousClose,currency";
+
+  var attempts = [
+    baseUrl,
+    "https://corsproxy.io/?" + encodeURIComponent(baseUrl),
+    "https://query2.finance.yahoo.com/v7/finance/quote?symbols=" + encoded + "&fields=regularMarketPrice,regularMarketPreviousClose,currency"
+  ];
+
+  for (var i = 0; i < attempts.length; i++) {
+    try {
+      var res = await fetch(attempts[i], {headers:{"Accept":"application/json"}});
+      if (!res.ok) continue;
+      var d = await res.json();
+      var results = d && d.quoteResponse && d.quoteResponse.result;
+      if (results && results.length > 0) return results;
+    } catch(e) { continue; }
+  }
+
+  // allorigins fallback
+  try {
+    var proxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(baseUrl);
+    var r = await fetch(proxy);
+    if (r.ok) {
+      var outer = await r.json();
+      var d2 = JSON.parse(outer.contents);
+      var res2 = d2 && d2.quoteResponse && d2.quoteResponse.result;
+      if (res2 && res2.length > 0) return res2;
+    }
+  } catch(e) {}
+
+  return null;
+}
+
+// Single-symbol fallback via v8/chart
+async function fetchSingle(symbol) {
+  var encoded = encodeURIComponent(symbol);
+  var urls = [
+    "https://query1.finance.yahoo.com/v8/finance/chart/" + encoded + "?interval=1d&range=2d",
+    "https://corsproxy.io/?" + encodeURIComponent("https://query1.finance.yahoo.com/v8/finance/chart/" + encoded + "?interval=1d&range=2d"),
+    "https://query2.finance.yahoo.com/v8/finance/chart/" + encoded + "?interval=1d&range=2d"
+  ];
+  for (var i = 0; i < urls.length; i++) {
+    try {
+      var res = await fetch(urls[i], {headers:{"Accept":"application/json"}});
+      if (!res.ok) continue;
+      var d = await res.json();
+      var meta = d && d.chart && d.chart.result && d.chart.result[0] && d.chart.result[0].meta;
+      if (meta && meta.regularMarketPrice) {
+        return {
+          regularMarketPrice: meta.regularMarketPrice,
+          regularMarketPreviousClose: meta.chartPreviousClose || meta.previousClose || meta.regularMarketPrice,
+          currency: meta.currency || ""
+        };
+      }
+    } catch(e) { continue; }
+  }
+  return null;
+}
+
+function timestampNow() {
+  var now = new Date();
+  return "Updated " + now.getHours().toString().padStart(2,"0") + ":" + now.getMinutes().toString().padStart(2,"0");
+}
+
+async function loadGroup(tickers, updatedId) {
+  var symbols = tickers.map(function(t){ return t.symbol; });
+  var results = await fetchBatch(symbols);
+
+  if (results && results.length > 0) {
+    var bySymbol = {};
+    results.forEach(function(q){ bySymbol[q.symbol] = q; });
+    tickers.forEach(function(t){ renderRowFull(t, bySymbol[t.symbol] || null); });
+  } else {
+    // Individual fallback
+    for (var i = 0; i < tickers.length; i++) {
+      var q = await fetchSingle(tickers[i].symbol);
+      renderRowFull(tickers[i], q);
+      if (i < tickers.length - 1) await new Promise(function(r){ setTimeout(r, 500); });
+    }
+  }
+  document.getElementById(updatedId).textContent = timestampNow();
+  resizeParent();
+}
+
+// Load FX then Commodities — staggered by 2s only
+setTimeout(function(){ loadGroup(FX_TICKERS,   "updated-fx"); },   500);
+setTimeout(function(){ loadGroup(COMM_TICKERS,  "updated-comm"); }, 2500);
+
+// Refresh every 5 minutes
+setInterval(function(){ loadGroup(FX_TICKERS,   "updated-fx"); },   5*60*1000);
+setInterval(function(){ loadGroup(COMM_TICKERS,  "updated-comm"); }, 5*60*1000 + 2000);
+
+resizeParent();
+setTimeout(resizeParent, 1000);
+setTimeout(resizeParent, 3000);
+</script>
+
+
+</body></html>

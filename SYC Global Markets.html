@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)file:///C:/Users/chris/Downloads/SYC_GlobalMarkets.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYC Global Markets</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+* { box-sizing:border-box; margin:0; padding:0; }
+html,body { width:100%; font-family:'Source Sans 3',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:#002C4F; }
+
+.panels-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media(max-width: 900px) { .panels-grid { grid-template-columns: 1fr; gap: 12px; padding: 12px; } }
+
+.section-wrap { border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,44,79,0.10); }
+.section-wrap.uk   { border: 4px solid #002C4F; }
+.section-wrap.am   { border: 4px solid #FFC800; }
+.section-wrap.ap   { border: 4px solid #57A400; }
+
+.section-header { background:#FF6900; padding:14px 20px 12px; display:flex; flex-direction:column; align-items:center; gap:6px; }
+
+.region-tag { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; border-radius:4px; padding:3px 10px; }
+.region-tag.uk { background:#002C4F; color:#FFFFFF; }
+.region-tag.am { background:#FFC800; color:#002C4F; }
+.region-tag.ap { background:#57A400; color:#FFFFFF; }
+
+.header-titles h2 { font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:700; color:#FFFFFF; text-align:center; letter-spacing:.01em; }
+
+.live-badge { display:flex; align-items:center; gap:5px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); border-radius:20px; padding:3px 10px; font-size:10px; font-weight:700; color:#FFFFFF; text-transform:uppercase; letter-spacing:.06em; }
+.live-dot { width:5px; height:5px; background:#FFFFFF; border-radius:50%; animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.indices-list { background:#fff; }
+.index-row { display:flex; align-items:center; padding:10px 14px; border-bottom:1px solid #F0F4F8; gap:8px; }
+.index-row:last-child { border-bottom:none; }
+.loading-row { display:flex; align-items:center; justify-content:center; gap:8px; padding:11px 14px; border-bottom:1px solid #F0F4F8; }
+.loading-row:last-child { border-bottom:none; }
+.spinner { width:11px; height:11px; border:2px solid #E0E8F0; border-top-color:#FF6900; border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text { font-size:11px; color:#8899AA; }
+
+.index-left { flex:1; min-width:0; }
+.index-name { font-size:13px; font-weight:700; color:#002C4F; display:block; }
+.index-label { font-size:10px; color:#8899AA; margin-top:1px; display:block; }
+.index-right { text-align:right; flex-shrink:0; }
+.index-price { font-size:13px; font-weight:700; color:#1A2A3A; display:block; }
+.index-currency { font-size:9px; color:#AABCCC; margin-left:2px; }
+.change-badge { display:inline-block; padding:2px 6px; border-radius:10px; font-size:10px; font-weight:700; margin-top:3px; }
+.up { background:#EEF5E6; color:#3B6D11; }
+.down { background:#FCEBEB; color:#A32D2D; }
+.flat { background:#F0F4F8; color:#6B7C8D; }
+
+.section-footer { background:#002C4F; border-top:1px solid rgba(255,255,255,0.12); padding:7px 14px; font-size:10px; color:rgba(255,255,255,0.55); display:flex; align-items:center; justify-content:space-between; }
+.section-footer strong { color:#ffffff; }
+</style>
+</head>
+<body>
+
+<div class="panels-grid">
+
+  <!-- UK & EUROPE -->
+  <div class="section-wrap uk">
+    <div class="section-header">
+      <div class="region-tag uk">UK &amp; European Markets</div>
+      <div class="header-titles"><h2>UK &amp; Europe</h2></div>
+      <div class="live-badge"><div class="live-dot"></div>Live</div>
+    </div>
+    <div class="indices-list" id="list-uk">
+      <div class="index-row" id="row-ukx"><div class="index-left"><span class="index-name">FTSE 100</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-mcx"><div class="index-left"><span class="index-name">FTSE 250</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-dax"><div class="index-left"><span class="index-name">DAX</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-cac"><div class="index-left"><span class="index-name">CAC 40</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-aex"><div class="index-left"><span class="index-name">AEX</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-ibex"><div class="index-left"><span class="index-name">IBEX 35</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+    </div>
+    <div class="section-footer">
+      <span>Via <strong>Yahoo Finance</strong>. May be delayed 15 mins.</span>
+      <span id="updated-uk">Updated 17:13</span>
+    </div>
+  </div>
+
+  <!-- THE AMERICAS -->
+  <div class="section-wrap am">
+    <div class="section-header">
+      <div class="region-tag am">North &amp; South America</div>
+      <div class="header-titles"><h2>The Americas</h2></div>
+      <div class="live-badge"><div class="live-dot"></div>Live</div>
+    </div>
+    <div class="indices-list" id="list-am">
+      <div class="index-row" id="row-spx"><div class="index-left"><span class="index-name">S&amp;P 500</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-ndx"><div class="index-left"><span class="index-name">NASDAQ</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-dji"><div class="index-left"><span class="index-name">Dow Jones</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-tsx"><div class="index-left"><span class="index-name">S&amp;P/TSX</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-bvsp"><div class="index-left"><span class="index-name">Bovespa</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-merv"><div class="index-left"><span class="index-name">Merval</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+    </div>
+    <div class="section-footer">
+      <span>Via <strong>Yahoo Finance</strong>. May be delayed 15 mins.</span>
+      <span id="updated-am">Updated 17:13</span>
+    </div>
+  </div>
+
+  <!-- ASIA PACIFIC -->
+  <div class="section-wrap ap">
+    <div class="section-header">
+      <div class="region-tag ap">Asian &amp; Pacific Markets</div>
+      <div class="header-titles"><h2>Asia Pacific</h2></div>
+      <div class="live-badge"><div class="live-dot"></div>Live</div>
+    </div>
+    <div class="indices-list" id="list-ap">
+      <div class="index-row" id="row-n225"><div class="index-left"><span class="index-name">Nikkei 225</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-hsi"><div class="index-left"><span class="index-name">Hang Seng</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-axjo"><div class="index-left"><span class="index-name">ASX 200</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="index-row" id="row-ssec"><div class="index-left"><span class="index-name">Shanghai</span><span class="index-label" style="color:#AABCCC">Unavailable</span></div><div class="index-right"><span class="index-price">—</span></div></div>
+      <div class="loading-row" id="row-bsesn"><div class="spinner"></div><span class="loading-text">Loading Sensex…</span></div>
+      <div class="loading-row" id="row-ks11"><div class="spinner"></div><span class="loading-text">Loading KOSPI…</span></div>
+    </div>
+    <div class="section-footer">
+      <span>Via <strong>Yahoo Finance</strong>. May be delayed 15 mins.</span>
+      <span id="updated-ap">Loading…</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var PANELS = {
+  uk: {
+    tickers: [
+      {id:"ukx",  symbol:"^FTSE",   name:"FTSE 100",  label:"London"},
+      {id:"mcx",  symbol:"^FMC",    name:"FTSE 250",  label:"London"},
+      {id:"dax",  symbol:"^GDAXI",  name:"DAX",       label:"Frankfurt"},
+      {id:"cac",  symbol:"^FCHI",   name:"CAC 40",    label:"Paris"},
+      {id:"aex",  symbol:"^AEX",    name:"AEX",       label:"Amsterdam"},
+      {id:"ibex", symbol:"^IBEX",   name:"IBEX 35",   label:"Madrid"}
+    ],
+    updatedId: "updated-uk"
+  },
+  am: {
+    tickers: [
+      {id:"spx",  symbol:"^GSPC",   name:"S&P 500",   label:"New York"},
+      {id:"ndx",  symbol:"^IXIC",   name:"NASDAQ",    label:"New York"},
+      {id:"dji",  symbol:"^DJI",    name:"Dow Jones", label:"New York"},
+      {id:"tsx",  symbol:"^GSPTSE", name:"S&P/TSX",   label:"Toronto"},
+      {id:"bvsp", symbol:"^BVSP",   name:"Bovespa",   label:"São Paulo"},
+      {id:"merv", symbol:"^MERV",   name:"Merval",    label:"Buenos Aires"}
+    ],
+    updatedId: "updated-am"
+  },
+  ap: {
+    tickers: [
+      {id:"n225",  symbol:"^N225",  name:"Nikkei 225", label:"Tokyo"},
+      {id:"hsi",   symbol:"^HSI",   name:"Hang Seng",  label:"Hong Kong"},
+      {id:"axjo",  symbol:"^AXJO",  name:"ASX 200",    label:"Sydney"},
+      {id:"ssec",  symbol:"^SSEC",  name:"Shanghai",   label:"Shanghai"},
+      {id:"bsesn", symbol:"^BSESN", name:"Sensex",     label:"Mumbai"},
+      {id:"ks11",  symbol:"^KS11",  name:"KOSPI",      label:"Seoul"}
+    ],
+    updatedId: "updated-ap"
+  }
+};
+
+function resizeParent() {
+  var h = Math.max(document.body.scrollHeight, document.body.offsetHeight,
+    document.documentElement.scrollHeight, document.documentElement.offsetHeight);
+  try { window.parent.postMessage({type:"iwh", value: h + 20}, "*"); } catch(e) {}
+}
+
+function fmtPrice(p) {
+  if (!p && p !== 0) return "—";
+  if (p >= 10000) return p.toLocaleString("en-GB", {maximumFractionDigits:0});
+  if (p >= 100)   return p.toLocaleString("en-GB", {minimumFractionDigits:1, maximumFractionDigits:1});
+  return p.toLocaleString("en-GB", {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function renderRow(ticker, quote) {
+  var row = document.getElementById("row-" + ticker.id);
+  if (!row) return;
+  if (!quote) {
+    row.className = "index-row";
+    row.innerHTML = "<div class=\"index-left\"><span class=\"index-name\">" + ticker.name + "</span><span class=\"index-label\" style=\"color:#AABCCC\">Unavailable</span></div><div class=\"index-right\"><span class=\"index-price\">—</span></div>";
+    return;
+  }
+  var price = quote.regularMarketPrice;
+  var prev  = quote.regularMarketPreviousClose || quote.chartPreviousClose || price;
+  var chg   = price - prev;
+  var pct   = prev ? (chg / prev) * 100 : 0;
+  var cls   = chg > 0 ? "up" : chg < 0 ? "down" : "flat";
+  var arrow = chg > 0 ? "▲" : chg < 0 ? "▼" : "—";
+  var cur   = quote.currency || "";
+  row.className = "index-row";
+  row.innerHTML =
+    "<div class=\"index-left\"><span class=\"index-name\">" + ticker.name + "</span><span class=\"index-label\">" + ticker.label + "</span></div>" +
+    "<div class=\"index-right\"><span class=\"index-price\">" + fmtPrice(price) + "<span class=\"index-currency\">" + cur + "</span></span>" +
+    "<span class=\"change-badge " + cls + "\">" + arrow + " " + Math.abs(pct).toFixed(2) + "%</span></div>";
+  resizeParent();
+}
+
+// Batch fetch all symbols for a panel in one request via v7/finance/quote
+async function fetchBatch(symbols) {
+  var joined = symbols.join(",");
+  var encoded = encodeURIComponent(joined);
+
+  // Try 1: direct Yahoo v7 quote (sometimes works without CORS issues)
+  var directUrl = "https://query1.finance.yahoo.com/v7/finance/quote?symbols=" + encoded + "&fields=regularMarketPrice,regularMarketPreviousClose,currency";
+  try {
+    var res = await fetch(directUrl, {headers:{"Accept":"application/json"}});
+    if (res.ok) {
+      var d = await res.json();
+      var results = d && d.quoteResponse && d.quoteResponse.result;
+      if (results && results.length > 0) return results;
+    }
+  } catch(e) {}
+
+  // Try 2: corsproxy.io wrapping Yahoo v7
+  try {
+    var proxy1 = "https://corsproxy.io/?" + encodeURIComponent(directUrl);
+    var r1 = await fetch(proxy1, {headers:{"Accept":"application/json"}});
+    if (r1.ok) {
+      var d1 = await r1.json();
+      var res1 = d1 && d1.quoteResponse && d1.quoteResponse.result;
+      if (res1 && res1.length > 0) return res1;
+    }
+  } catch(e) {}
+
+  // Try 3: allorigins wrapping Yahoo v7
+  try {
+    var proxy2 = "https://api.allorigins.win/get?url=" + encodeURIComponent(directUrl);
+    var r2 = await fetch(proxy2);
+    if (r2.ok) {
+      var outer = await r2.json();
+      var d2 = JSON.parse(outer.contents);
+      var res2 = d2 && d2.quoteResponse && d2.quoteResponse.result;
+      if (res2 && res2.length > 0) return res2;
+    }
+  } catch(e) {}
+
+  // Try 4: fall back to individual v8/chart fetches (old method, one by one)
+  return null;
+}
+
+// Single-symbol fallback via v8/chart
+async function fetchSingle(symbol) {
+  var encoded = encodeURIComponent(symbol);
+  var urls = [
+    "https://query1.finance.yahoo.com/v8/finance/chart/" + encoded + "?interval=1d&range=2d",
+    "https://query2.finance.yahoo.com/v8/finance/chart/" + encoded + "?interval=1d&range=2d",
+    "https://corsproxy.io/?" + encodeURIComponent("https://query1.finance.yahoo.com/v8/finance/chart/" + encoded + "?interval=1d&range=2d")
+  ];
+  for (var i = 0; i < urls.length; i++) {
+    try {
+      var res = await fetch(urls[i], {headers:{"Accept":"application/json"}});
+      if (!res.ok) continue;
+      var d = await res.json();
+      var meta = d && d.chart && d.chart.result && d.chart.result[0] && d.chart.result[0].meta;
+      if (meta && meta.regularMarketPrice) {
+        return {
+          regularMarketPrice: meta.regularMarketPrice,
+          regularMarketPreviousClose: meta.chartPreviousClose || meta.previousClose || meta.regularMarketPrice,
+          currency: meta.currency || ""
+        };
+      }
+    } catch(e) { continue; }
+  }
+  return null;
+}
+
+function timestampNow() {
+  var now = new Date();
+  return now.getHours().toString().padStart(2,"0") + ":" + now.getMinutes().toString().padStart(2,"0");
+}
+
+async function loadPanel(panelKey) {
+  var panel = PANELS[panelKey];
+  var symbols = panel.tickers.map(function(t){ return t.symbol; });
+
+  // Attempt batch first
+  var results = await fetchBatch(symbols);
+
+  if (results && results.length > 0) {
+    // Map results by symbol
+    var bySymbol = {};
+    results.forEach(function(q){ bySymbol[q.symbol] = q; });
+    panel.tickers.forEach(function(t){
+      renderRow(t, bySymbol[t.symbol] || null);
+    });
+  } else {
+    // Fallback: fetch individually with small delay between each
+    for (var i = 0; i < panel.tickers.length; i++) {
+      var quote = await fetchSingle(panel.tickers[i].symbol);
+      renderRow(panel.tickers[i], quote);
+      if (i < panel.tickers.length - 1) await new Promise(function(r){ setTimeout(r, 600); });
+    }
+  }
+
+  document.getElementById(panel.updatedId).textContent = "Updated " + timestampNow();
+  resizeParent();
+}
+
+// Load all three panels — staggered by 2s only (batch is fast)
+setTimeout(function(){ loadPanel("uk"); }, 500);
+setTimeout(function(){ loadPanel("am"); }, 2500);
+setTimeout(function(){ loadPanel("ap"); }, 4500);
+
+// Refresh every 5 minutes
+setInterval(function(){ loadPanel("uk"); }, 5*60*1000);
+setInterval(function(){ loadPanel("am"); }, 5*60*1000 + 2000);
+setInterval(function(){ loadPanel("ap"); }, 5*60*1000 + 4000);
+
+resizeParent();
+setTimeout(resizeParent, 1000);
+setTimeout(resizeParent, 3000);
+</script>
+
+
+</body></html>
