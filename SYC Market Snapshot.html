@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0058)file:///C:/Users/chris/Downloads/SYC_MarketSnapshot_1.html -->
+<!-- saved from url=(0058)file:///C:/Users/chris/Downloads/SYC_MarketSnapshot_2.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -189,7 +189,7 @@ function renderRow(ticker, quote) {
 
 async function fetchQuotes(tickers, updatedId) {
   var symbols = tickers.map(function(t){ return t.symbol; });
-  var url = "https://" + RAPIDAPI_HOST + "/market/v2/get-quotes?region=US&symbols=" + encodeURIComponent(symbols.join(","));
+  var url = "https://" + RAPIDAPI_HOST + "/market/get-quotes?region=US&symbols=" + encodeURIComponent(symbols.join(","));
   try {
     var res = await fetch(url, {
       method: "GET",

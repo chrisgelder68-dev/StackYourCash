@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0057)file:///C:/Users/chris/Downloads/SYC_GlobalMarkets_1.html -->
+<!-- saved from url=(0057)file:///C:/Users/chris/Downloads/SYC_GlobalMarkets_2.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,7 +75,7 @@ html,body { width:100%; font-family:'Source Sans 3',-apple-system,BlinkMacSystem
     </div>
     <div class="section-footer">
       <span>Via <strong>Yahoo Finance</strong>. May be delayed 15 mins.</span>
-      <span id="updated-uk">Updated 17:33</span>
+      <span id="updated-uk">Updated 17:41</span>
     </div>
   </div>
 
@@ -95,7 +95,7 @@ html,body { width:100%; font-family:'Source Sans 3',-apple-system,BlinkMacSystem
     </div>
     <div class="section-footer">
       <span>Via <strong>Yahoo Finance</strong>. May be delayed 15 mins.</span>
-      <span id="updated-am">Updated 17:33</span>
+      <span id="updated-am">Updated 17:41</span>
     </div>
   </div>
 
@@ -115,7 +115,7 @@ html,body { width:100%; font-family:'Source Sans 3',-apple-system,BlinkMacSystem
     </div>
     <div class="section-footer">
       <span>Via <strong>Yahoo Finance</strong>. May be delayed 15 mins.</span>
-      <span id="updated-ap">Updated 17:33</span>
+      <span id="updated-ap">Updated 17:41</span>
     </div>
   </div>
 
@@ -197,7 +197,7 @@ function renderRow(ticker, quote) {
 }
 
 async function fetchQuotes(symbols) {
-  var url = "https://" + RAPIDAPI_HOST + "/market/v2/get-quotes?region=US&symbols=" + encodeURIComponent(symbols.join(","));
+  var url = "https://" + RAPIDAPI_HOST + "/market/get-quotes?region=US&symbols=" + encodeURIComponent(symbols.join(","));
   try {
     var res = await fetch(url, {
       method: "GET",
