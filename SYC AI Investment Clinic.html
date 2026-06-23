@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0064)file:///C:/Users/chris/Downloads/SYC_AI_Investment_Clinic_4.html -->
+<!-- saved from url=(0064)file:///C:/Users/chris/Downloads/SYC_AI_Investment_Clinic_5.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -486,6 +486,7 @@
     <div class="ai-result-content" id="result-content"></div>
 
     <div class="result-actions">
+      <button class="result-action-btn secondary" onclick="downloadAssessment()">↓ Save my assessment as PDF</button>
       <a class="result-action-btn" href="file:///C:/investment-readiness">Take the Readiness Questionnaire</a>
       <a class="result-action-btn secondary" href="https://www.stackyourcash.co.uk/toolkit-library" target="_blank" rel="noopener">Visit the Toolkit Library</a>
     </div>
@@ -500,12 +501,50 @@
 <script>
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  resizeParent();
+  var el = document.getElementById(id);
+  el.classList.add('active');
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  setTimeout(function() {
+    var wrapper = document.querySelector('.wrapper');
+    if (wrapper) wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    try { window.parent.postMessage({ type: 'iwh', value: document.body.scrollHeight + 20 }, '*'); } catch(e) {}
+  }, 50);
 }
 
 function resizeParent() {
   try { window.parent.postMessage({ type:'iwh', value: document.body.scrollHeight + 20 }, '*'); } catch(e) {}
+}
+
+function downloadAssessment() {
+  var resultEl = document.getElementById('result-content');
+  if (!resultEl) return;
+  var dateStr = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8">' +
+    '<title>SYC Portfolio Review</title>' +
+    '<style>' +
+    'body { font-family: Arial, sans-serif; max-width: 680px; margin: 40px auto; padding: 0 24px; color: #1A2A3A; }' +
+    'h1 { font-size: 22px; color: #002C4F; margin-bottom: 4px; }' +
+    '.subtitle { font-size: 13px; color: #6B7C8D; margin-bottom: 28px; border-bottom: 2px solid #FF6900; padding-bottom: 14px; }' +
+    'h3 { font-size: 14px; color: #FF6900; margin: 18px 0 6px; text-transform: uppercase; letter-spacing: 0.05em; }' +
+    'p { font-size: 14px; line-height: 1.7; margin-bottom: 10px; }' +
+    'ul { padding-left: 20px; margin-bottom: 10px; }' +
+    'li { font-size: 14px; line-height: 1.7; margin-bottom: 4px; }' +
+    '.footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #E8EEF3; font-size: 11px; color: #8899AA; line-height: 1.6; }' +
+    '.print-btn { background: #FF6900; color: white; border: none; padding: 10px 24px; font-size: 14px; border-radius: 6px; cursor: pointer; margin-bottom: 24px; }' +
+    '@media print { .print-btn { display: none; } body { margin: 20px; } }' +
+    '</style></head><body>' +
+    '<button class="print-btn" onclick="window.print()">Print / Save as PDF</button>' +
+    '<h1>Portfolio Review</h1>' +
+    '<div class="subtitle">Generated ' + dateStr + ' &nbsp;&bull;&nbsp; stackyourcash.co.uk</div>' +
+    '<div>' + (resultEl.innerHTML || '') + '</div>' +
+    '<div class="footer">This review is for educational purposes only and does not constitute regulated financial advice. ' +
+    'All investing involves risk and the value of investments can fall as well as rise. ' +
+    'Past performance is not a reliable indicator of future results. &copy; Stack Your Cash ' + new Date().getFullYear() + '</div>' +
+    '</body></html>';
+  var w = window.open('', '_blank');
+  if (w) { w.document.write(html); w.document.close(); }
 }
 
 // ── HOLDINGS TABLE ──

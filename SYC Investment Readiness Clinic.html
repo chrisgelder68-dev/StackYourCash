@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0068)file:///C:/Users/chris/Downloads/SYC_Investment_Questionnaire_6.html -->
+<!-- saved from url=(0068)file:///C:/Users/chris/Downloads/SYC_Investment_Questionnaire_7.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -434,7 +434,7 @@
   <div class="screen" id="screen-result">
     <div id="result-content"></div>
     <div class="result-actions">
-      <a class="btn-primary" id="downloadGuideBtn" href="file:///C:/Users/chris/Downloads/SYC_Investment_Questionnaire_6.html#" target="_blank" rel="noopener">↓ Download companion guide (PDF)</a>
+      <a class="btn-primary" id="downloadGuideBtn" href="file:///C:/Users/chris/Downloads/SYC_Investment_Questionnaire_7.html#" target="_blank" rel="noopener">↓ Download companion guide (PDF)</a>
       <button class="btn-secondary" id="downloadAssessmentBtn" onclick="downloadAssessment()">↓ Save my assessment as PDF</button>
       <button class="btn-secondary" onclick="showScreen(&#39;screen-menu&#39;); resetAll();">← Try another scenario</button>
     </div>
@@ -570,14 +570,15 @@ let answers = [];
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  try { window.parent.postMessage({ type: 'scrollTop', value: 0 }, '*'); } catch(e) {}
-  try { window.parent.postMessage({ type: 'iwh', value: document.body.scrollHeight + 40 }, '*'); } catch(e) {}
+  var el = document.getElementById(id);
+  el.classList.add('active');
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
   setTimeout(function() {
-    window.scrollTo(0, 0);
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+    var wrapper = document.querySelector('.wrapper');
+    if (wrapper) wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    try { window.parent.postMessage({ type: 'iwh', value: document.body.scrollHeight + 40 }, '*'); } catch(e) {}
   }, 50);
 }
 
