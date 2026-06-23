@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0064)file:///C:/Users/chris/Downloads/SYC_AI_Investment_Clinic_3.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="en">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SYC AI Investment Clinic</title>
-<link href="./SYC AI Investment Clinic_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy: #002C4F;
@@ -301,60 +301,9 @@
         <div class="form-hint">List what you hold and roughly what % of your portfolio each makes up. Doesn't need to be exact. <strong>Limit to 20 holdings maximum.</strong></div>
         <div class="holdings-list" id="holdingsBody">
           <!-- cards added by JS -->
-        <div class="holding-card">
-    <span class="holding-number">#1</span>
-    <button class="remove-row" onclick="removeHoldingRow(this)">×</button>
-    <div class="field-name">
-      <span class="field-label">Holding name</span>
-      <input type="text" placeholder="e.g. VWRL (Vanguard FTSE All-World)" value="" class="holding-name">
-    </div>
-    <div class="holding-row2">
-      <div>
-        <span class="field-label">Type</span>
-        <input type="text" placeholder="ETF / Share / Cash / Bond" value="" class="holding-type">
-      </div>
-      <div class="pct-field">
-        <span class="field-label">% of portfolio</span>
-        <input type="number" placeholder="%" min="0" max="100" value="" class="holding-pct" oninput="updatePctTotal()">
-      </div>
-    </div>
-  </div><div class="holding-card">
-    <span class="holding-number">#2</span>
-    <button class="remove-row" onclick="removeHoldingRow(this)">×</button>
-    <div class="field-name">
-      <span class="field-label">Holding name</span>
-      <input type="text" placeholder="e.g. VWRL (Vanguard FTSE All-World)" value="" class="holding-name">
-    </div>
-    <div class="holding-row2">
-      <div>
-        <span class="field-label">Type</span>
-        <input type="text" placeholder="ETF / Share / Cash / Bond" value="" class="holding-type">
-      </div>
-      <div class="pct-field">
-        <span class="field-label">% of portfolio</span>
-        <input type="number" placeholder="%" min="0" max="100" value="" class="holding-pct" oninput="updatePctTotal()">
-      </div>
-    </div>
-  </div><div class="holding-card">
-    <span class="holding-number">#3</span>
-    <button class="remove-row" onclick="removeHoldingRow(this)">×</button>
-    <div class="field-name">
-      <span class="field-label">Holding name</span>
-      <input type="text" placeholder="e.g. VWRL (Vanguard FTSE All-World)" value="" class="holding-name">
-    </div>
-    <div class="holding-row2">
-      <div>
-        <span class="field-label">Type</span>
-        <input type="text" placeholder="ETF / Share / Cash / Bond" value="" class="holding-type">
-      </div>
-      <div class="pct-field">
-        <span class="field-label">% of portfolio</span>
-        <input type="number" placeholder="%" min="0" max="100" value="" class="holding-pct" oninput="updatePctTotal()">
-      </div>
-    </div>
-  </div></div>
+        </div>
         <button class="add-row-btn" onclick="addHoldingRow()">+ Add another holding</button>
-        <div class="pct-total " id="pctTotal">Total: 0%</div>
+        <div class="pct-total" id="pctTotal">Total: 0%</div>
       </div>
     </div>
 
@@ -478,7 +427,7 @@
   <div class="screen" id="screen-result">
     <div class="result-header">
       <h2>Your Portfolio Review</h2>
-      <button class="result-back-btn" onclick="showScreen(&#39;screen-form&#39;)">← Edit &amp; re-run</button>
+      <button class="result-back-btn" onclick="showScreen('screen-form')">← Edit &amp; re-run</button>
     </div>
     <div class="result-intro-note">
       Below is your personalised educational review, generated based on what you told us. It's designed to help you understand your portfolio better — it is <strong>not financial advice</strong> and doesn't take into account your full financial circumstances.
@@ -486,7 +435,7 @@
     <div class="ai-result-content" id="result-content"></div>
 
     <div class="result-actions">
-      <a class="result-action-btn" href="file:///C:/investment-readiness">Take the Readiness Questionnaire</a>
+      <a class="result-action-btn" href="/investment-readiness">Take the Readiness Questionnaire</a>
       <a class="result-action-btn secondary" href="https://www.stackyourcash.co.uk/toolkit-library">Visit the Toolkit Library</a>
     </div>
 
@@ -702,5 +651,5 @@ function renderResult(text, isError = false) {
 resizeParent();
 setTimeout(resizeParent, 500);
 </script>
-
-</body></html>
+</body>
+</html>
