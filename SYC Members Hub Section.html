@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)file:///C:/Users/chris/Downloads/SYC_MembersHubBanner.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYC Members Hub Section</title>
+<link href="./SYC Members Hub Section_files/css2" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    overflow-x: hidden;
+    background: transparent;
+    -webkit-overflow-scrolling: auto;
+  }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #333333;
+    line-height: 1.6;
+    background: transparent;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+  }
+
+  .fg-demi {
+    font-family: 'Franklin Gothic Demi', 'Franklin Gothic Medium',
+                 'ITC Franklin Gothic', Arial Narrow, Arial, sans-serif;
+    font-weight: normal;
+  }
+
+  .section-divider {
+    display: none;
+  }
+
+  h5.section-label {
+    display: block;
+    font-family: 'Franklin Gothic Demi', 'Franklin Gothic Medium',
+                 'ITC Franklin Gothic', Arial Narrow, Arial, sans-serif;
+    font-weight: normal;
+    font-size: 24px;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #57A400;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 768px) {
+    h5.section-label {
+      font-size: 24px;
+      font-weight: normal;
+    }
+    .hub-heading {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .hub-bullets {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .hub-heading {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #333333;
+    line-height: 1.4;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+
+  /* Preview card — replaces the ebook cover */
+  .hub-preview-card {
+    display: block;
+    margin: 0 auto 28px auto;
+    width: 100%;
+    max-width: 100%;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  /* Navy header bar of the card */
+  .hub-card-header {
+    background: #002C4F;
+    padding: 16px 20px 14px;
+    text-align: center;
+  }
+  .hub-card-header-label {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #FF6900;
+    margin-bottom: 4px;
+  }
+  .hub-card-header-title {
+    font-family: 'Franklin Gothic Demi', 'Franklin Gothic Medium',
+                 'ITC Franklin Gothic', Arial Narrow, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+    color: #ffffff;
+    line-height: 1.2;
+  }
+
+  /* Feature grid inside card */
+  .hub-card-body {
+    padding: 16px 20px;
+  }
+
+  .hub-feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .hub-feature-item {
+    background: #f7f7f7;
+    border-left: 3px solid #FF6900;
+    padding: 9px 10px;
+    border-radius: 2px;
+  }
+  .hub-feature-item:nth-child(3),
+  .hub-feature-item:nth-child(4) {
+    border-left-color: #002C4F;
+  }
+
+  .hub-feature-name {
+    font-family: 'Franklin Gothic Demi', 'Franklin Gothic Medium',
+                 'ITC Franklin Gothic', Arial Narrow, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: normal;
+    color: #002C4F;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .hub-feature-desc {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    color: #666666;
+    line-height: 1.4;
+  }
+
+  .hub-card-divider {
+    border: none;
+    border-top: 1px solid #eeeeee;
+    margin: 0 0 12px 0;
+  }
+
+  .hub-whats-inside-label {
+    font-family: 'Franklin Gothic Demi', 'Franklin Gothic Medium',
+                 'ITC Franklin Gothic', Arial Narrow, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: normal;
+    color: #FF6900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .hub-bullets {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 16px;
+    list-style: none;
+    margin-bottom: 4px;
+  }
+  .hub-bullets li {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    color: #444444;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .hub-bullets li::before {
+    content: '•';
+    color: #FF6900;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  .hub-card-footer {
+    background: #002C4F;
+    padding: 8px 20px;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.04em;
+  }
+
+  /* CTAs */
+  .hub-cta-wrap {
+    text-align: center;
+    padding-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hub-cta-primary {
+    display: inline-block;
+    background: #FF6900;
+    color: #ffffff;
+    font-family: 'Franklin Gothic Demi', 'Franklin Gothic Medium',
+                 'ITC Franklin Gothic', Arial Narrow, Arial, sans-serif;
+    font-weight: normal;
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    padding: 12px 32px;
+    border-radius: 2px;
+    transition: background 0.15s ease;
+  }
+  .hub-cta-primary:hover {
+    background: #e05a00;
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .hub-cta-secondary {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px;
+    color: #888888;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .hub-cta-secondary:hover {
+    color: #555555;
+    text-decoration: underline;
+  }
+
+  .hub-section {
+    width: 100%;
+    padding: 0 8px 40px 20px;
+    margin-left: 0;
+  }
+
+  h5.section-label,
+  .hub-heading {
+    padding-left: 0;
+    margin-left: 0;
+  }
+</style>
+</head>
+<body>
+
+<section class="hub-section">
+
+  <div class="section-divider"></div>
+
+  <h5 class="section-label">Explore the Stack Your Cash Members Hub</h5>
+
+  <p class="hub-heading">
+    Everything you need to invest with confidence — your AI Investment Clinic, live market data, deep-dive explainers, and 12 planning tools, all in one place. Here’s a preview of what’s waiting inside.
+  </p>
+
+  <!-- Preview card replacing the ebook cover -->
+  <div class="hub-preview-card">
+
+    <div class="hub-card-header">
+      <p class="hub-card-header-label">Members Hub — stackyourcash.co.uk</p>
+      <p class="hub-card-header-title">Your Investing Toolkit,<br>All in One Place</p>
+    </div>
+
+    <div class="hub-card-body">
+
+      <div class="hub-feature-grid">
+        <div class="hub-feature-item">
+          <span class="hub-feature-name">AI Investment Clinic</span>
+          <span class="hub-feature-desc">Ask any investing question, get plain-English answers</span>
+        </div>
+        <div class="hub-feature-item">
+          <span class="hub-feature-name">Market Snapshot</span>
+          <span class="hub-feature-desc">Live rates, FX, commodities &amp; global indices</span>
+        </div>
+        <div class="hub-feature-item">
+          <span class="hub-feature-name">Deep-Dive Explainers</span>
+          <span class="hub-feature-desc">Members-only investment education modules</span>
+        </div>
+        <div class="hub-feature-item">
+          <span class="hub-feature-name">Planning Tools</span>
+          <span class="hub-feature-desc">12 financial planning spreadsheets &amp; calculators</span>
+        </div>
+        <div class="hub-feature-item">
+          <span class="hub-feature-name">Women &amp; Investing</span>
+          <span class="hub-feature-desc">Dedicated content &amp; resources for women investors</span>
+        </div>
+        <div class="hub-feature-item">
+          <span class="hub-feature-name">Stacker’s Diary</span>
+          <span class="hub-feature-desc">A real portfolio diary — decisions, trades &amp; thinking</span>
+        </div>
+      </div>
+
+      <hr class="hub-card-divider">
+
+      <p class="hub-whats-inside-label">What’s Inside</p>
+
+      <ul class="hub-bullets">
+        <li>AI Investment Clinic</li>
+        <li>Investment Readiness Quiz</li>
+        <li>Live Market Snapshot</li>
+        <li>Learning Modules</li>
+        <li>12 Planning Tools</li>
+        <li>PDF Companion Handouts</li>
+        <li>Women &amp; Investing</li>
+        <li>Stacker’s Diary</li>
+        <li>Ebooks &amp; Resources</li>
+        <li>Membership — £15/year</li>
+      </ul>
+
+    </div>
+
+    <div class="hub-card-footer">
+      Published by Stack Your Cash &nbsp;•&nbsp; stackyourcash.co.uk
+    </div>
+
+  </div>
+
+  <div class="hub-cta-wrap">
+    <a href="https://bit.ly/4eVf9Qa" class="hub-cta-primary" onclick="window.open(&#39;https://bit.ly/4eVf9Qa&#39;,&#39;_blank&#39;);return false;">
+      Join Now — £15/year
+    </a>
+    <a href="https://www.stackyourcash.co.uk/member-dashboard" class="hub-cta-secondary" onclick="window.open(&#39;https://www.stackyourcash.co.uk/member-dashboard&#39;,&#39;_blank&#39;);return false;">
+      Already a member? Log in →
+    </a>
+  </div>
+
+</section>
+
+<script>
+  function sendHeight() {
+    var h = document.documentElement.offsetHeight;
+    window.parent.postMessage({ type: 'iwh', value: h }, '*');
+  }
+  sendHeight();
+  document.addEventListener('DOMContentLoaded', sendHeight);
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', sendHeight);
+  [200, 500, 1000, 2000].forEach(function(ms) {
+    setTimeout(sendHeight, ms);
+  });
+  if (window.ResizeObserver) {
+    new ResizeObserver(sendHeight).observe(document.documentElement);
+  }
+</script>
+
+
+
+</body></html>
