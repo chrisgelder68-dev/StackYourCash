@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- saved from url=(0062)file:///C:/Users/chris/Downloads/SYC_Research_Watchlist_8.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- saved from url=(0062)file:///C:/Users/chris/Downloads/SYC_Research_Watchlist_9.html -->
+<html lang="en" style="height: auto;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SYC_Research_Watchlist</title>
@@ -100,14 +100,9 @@
   .spinner-sm { width:12px; height:12px; border:2px solid #E0E8F0; border-top-color:#FF6900; border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0; }
   .wl-empty { padding:24px; text-align:center; font-size:13px; color:#8899AA; }
 
-  /* Watchlist scrollable container */
+  /* Watchlist scrollable container - removed, let iwh handle height */
   .wl-scroll-container {
-    overflow-y: auto;
-    max-height: 600px;
-    -webkit-overflow-scrolling: touch;
-  }
-  @media(max-width:580px){
-    .wl-scroll-container { max-height: 800px; }
+    overflow-y: visible;
   }
 
   .ticker-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; padding:14px 20px; }
@@ -139,7 +134,7 @@
   }
 </style>
 </head>
-<body>
+<body style="height: auto;">
 
 <div class="syc-accent-bar"></div>
 
@@ -317,20 +312,21 @@ function loadWatchlist(callback) {
 
 // ── RESIZE ──
 function resizeParent() {
-  var h = Math.max(
-    document.body.scrollHeight,
-    document.body.offsetHeight,
-    document.documentElement.scrollHeight,
-    document.documentElement.offsetHeight,
-    document.documentElement.clientHeight
-  );
-  var msg1 = { type:"iwh", value: h + 40 };
-  var msg2 = { type:"height", value: h + 40 };
-  var msg3 = { height: h + 40 };
-  try { window.parent.postMessage(msg1, "*"); } catch(e) {}
-  try { window.parent.postMessage(msg2, "*"); } catch(e) {}
-  try { window.parent.postMessage(msg3, "*"); } catch(e) {}
-  try { window.parent.postMessage(JSON.stringify(msg1), "*"); } catch(e) {}
+  // Force layout recalculation
+  document.body.style.height = 'auto';
+  document.documentElement.style.height = 'auto';
+  
+  var h = document.body.getBoundingClientRect().height ||
+    Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight
+    );
+  
+  // Send to Wix in all known formats
+  try { window.parent.postMessage({ type:"iwh", value: Math.ceil(h) + 10 }, "*"); } catch(e) {}
+  try { window.parent.postMessage({ type:"height", value: Math.ceil(h) + 10 }, "*"); } catch(e) {}
 }
 
 function toDisplay(ticker) {
