@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0062)file:///C:/Users/chris/Downloads/SYC_Research_Watchlist_7.html -->
+<!-- saved from url=(0062)file:///C:/Users/chris/Downloads/SYC_Research_Watchlist_8.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -99,6 +99,17 @@
   .wl-loading { display:flex; align-items:center; gap:6px; padding:16px 24px; }
   .spinner-sm { width:12px; height:12px; border:2px solid #E0E8F0; border-top-color:#FF6900; border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0; }
   .wl-empty { padding:24px; text-align:center; font-size:13px; color:#8899AA; }
+
+  /* Watchlist scrollable container */
+  .wl-scroll-container {
+    overflow-y: auto;
+    max-height: 600px;
+    -webkit-overflow-scrolling: touch;
+  }
+  @media(max-width:580px){
+    .wl-scroll-container { max-height: 800px; }
+  }
+
   .ticker-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; padding:14px 20px; }
   @media(max-width:900px){ .ticker-grid { grid-template-columns:repeat(3,1fr); } }
   @media(max-width:580px){ .ticker-grid { grid-template-columns:1fr; padding:10px 16px; } }
@@ -225,7 +236,9 @@
     </div>
     <div class="live-badge"><div class="live-dot"></div>Live</div>
   </div>
-  <div id="wlContent"><div class="wl-empty">Your watchlist is empty — search for a ticker above and click "Add to Watchlist".</div></div>
+  <div class="wl-scroll-container">
+    <div id="wlContent"><div class="wl-empty">Your watchlist is empty — search for a ticker above and click "Add to Watchlist".</div></div>
+  </div>
   <div class="wl-footer">
     <span class="wl-note">Prices via <strong>Yahoo Finance</strong> &amp; <strong>RapidAPI</strong>. May be delayed 15 mins. Educational use only.</span>
     <div class="wl-actions">
