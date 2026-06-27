@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Watchlist.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stack Markets — My Watchlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="./Stack Markets — My Watchlist_files/css2" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #002C4F;
+    --orange: #FF6900;
+    --green: #57A400;
+    --yellow: #FFC800;
+    --olive: #AEC000;
+    --cream: #F4F3EE;
+    --navy-light: #003d6e;
+    --navy-dark: #001d35;
+    --card-empty: #1a3a52;
+    --card-filled: #003a60;
+    --text-muted: rgba(255,255,255,0.55);
+    --border: rgba(255,255,255,0.1);
+  }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--navy);
+    color: #fff;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  /* ── Section Header ── */
+  .section-header {
+    background: var(--navy-dark);
+    border-bottom: 3px solid var(--orange);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title .icon {
+    width: 32px;
+    height: 32px;
+    background: var(--orange);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .slot-counter {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.08);
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .slot-counter span {
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  /* ── Refresh Bar ── */
+  .refresh-bar {
+    background: rgba(0,0,0,0.2);
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .refresh-bar .last-updated { display: flex; align-items: center; gap: 6px; }
+
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .refresh-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    cursor: pointer;
+    font-family: 'Source Sans 3', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .refresh-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: var(--navy-dark);
+    border-left: 4px solid var(--green);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-family: 'Source Sans 3', sans-serif;
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: all 0.3s;
+    max-width: 280px;
+    pointer-events: none;
+  }
+
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.error { border-left-color: var(--orange); }
+
+  /* ── Grid ── */
+  .watchlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+    padding: 14px 16px;
+  }
+
+  /* ── Cards ── */
+  .wl-card {
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    min-height: 130px;
+    position: relative;
+    transition: transform 0.15s, border-color 0.15s;
+    overflow: hidden;
+  }
+
+  /* Empty slot */
+  .wl-card.empty {
+    background: var(--card-empty);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    border-style: dashed;
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  .wl-card.empty .slot-num {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    position: absolute;
+    top: 8px;
+    left: 10px;
+  }
+
+  .wl-card.empty .add-hint {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.25);
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .wl-card.empty .plus-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: rgba(255,255,255,0.2);
+    margin-bottom: 6px;
+  }
+
+  /* Filled slot */
+  .wl-card.filled {
+    background: var(--card-filled);
+  }
+
+  .wl-card.filled:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.25);
+  }
+
+  .card-top {
+    padding: 10px 12px 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .ticker-block {}
+
+  .ticker-symbol {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: #fff;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+  }
+
+  .ticker-name {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .remove-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.2);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0 2px;
+    line-height: 1;
+    transition: color 0.2s;
+    flex-shrink: 0;
+  }
+
+  .remove-btn:hover { color: #ff4444; }
+
+  .card-price {
+    padding: 8px 12px 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .price-value {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .price-value.loading { color: var(--text-muted); font-size: 0.85rem; }
+
+  .change-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+
+  .change-badge.up { background: rgba(87,164,0,0.2); color: #7ed321; }
+  .change-badge.down { background: rgba(255,80,80,0.15); color: #ff6b6b; }
+  .change-badge.flat { background: rgba(255,255,255,0.08); color: var(--text-muted); }
+
+  .card-actions {
+    padding: 6px 12px 10px;
+    display: flex;
+    gap: 6px;
+  }
+
+  .btn-trade {
+    flex: 1;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: 'Source Sans 3', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-trade:hover { background: #e05d00; }
+
+  .btn-research {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.7);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-size: 0.75rem;
+    font-family: 'Source Sans 3', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-research:hover { background: rgba(255,255,255,0.14); color: #fff; }
+
+  .card-slot-num {
+    position: absolute;
+    bottom: 6px;
+    right: 10px;
+    font-size: 0.58rem;
+    color: rgba(255,255,255,0.12);
+    letter-spacing: 0.5px;
+  }
+
+  /* Added flash */
+  .wl-card.flash {
+    animation: cardFlash 0.5s ease;
+  }
+
+  @keyframes cardFlash {
+    0% { border-color: var(--green); background: rgba(87,164,0,0.15); }
+    100% { border-color: var(--border); background: var(--card-filled); }
+  }
+
+  /* ── Footer ── */
+  .section-footer {
+    padding: 10px 20px 16px;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-align: center;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="section-header">
+  <div class="section-title">
+    <div class="icon">👁</div>
+    My Watchlist
+  </div>
+  <div class="slot-counter">
+    <span id="filledCount">0</span> / 15 slots used
+  </div>
+</div>
+
+<div class="refresh-bar">
+  <div class="last-updated">
+    <div class="live-dot"></div>
+    <span id="lastUpdatedText">Last updated: 7:58</span>
+  </div>
+  <button class="refresh-btn" onclick="refreshPrices()">↻ Refresh Prices</button>
+</div>
+
+<div class="watchlist-grid" id="watchlistGrid"><div class="wl-card empty" id="card-0"><span class="slot-num">SLOT 1</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div><div class="wl-card empty" id="card-1"><span class="slot-num">SLOT 2</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div><div class="wl-card empty" id="card-2"><span class="slot-num">SLOT 3</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div><div class="wl-card empty" id="card-3"><span class="slot-num">SLOT 4</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div><div class="wl-card empty" id="card-4"><span class="slot-num">SLOT 5</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div><div class="wl-card empty" id="card-5"><span class="slot-num">SLOT 6</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div><div class="wl-card empty" id="card-6"><span class="slot-num">SLOT 7</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div><div class="wl-card empty" id="card-7"><span class="slot-num">SLOT 8</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div><div class="wl-card empty" id="card-8"><span class="slot-num">SLOT 9</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div><div class="wl-card empty" id="card-9"><span class="slot-num">SLOT 10</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div><div class="wl-card empty" id="card-10"><span class="slot-num">SLOT 11</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div><div class="wl-card empty" id="card-11"><span class="slot-num">SLOT 12</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div><div class="wl-card empty" id="card-12"><span class="slot-num">SLOT 13</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div><div class="wl-card empty" id="card-13"><span class="slot-num">SLOT 14</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div><div class="wl-card empty" id="card-14"><span class="slot-num">SLOT 15</span><div class="plus-icon">+</div><div class="add-hint">Use Quick Research<br>above to add</div></div></div>
+
+<div class="section-footer">
+  Prices are delayed. For real-time prices use the Quick Research tool above. Watchlist is saved to your browser.
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  var RAPIDAPI_KEY = 'c4baa0ad16msh0baa45bbc9602cap16c04ajsn1cca1445e088';
+  var RAPIDAPI_HOST = 'yahoo-finance-real-time1.p.rapidapi.com';
+  var MAX_SLOTS = 15;
+  var DB_NAME = 'SYCMarketsDB';
+  var DB_VERSION = 1;
+  var STORE_NAME = 'watchlist';
+  var db = null;
+
+  // ── IndexedDB ──
+  function openDB(callback) {
+    var req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = function(e) {
+      var d = e.target.result;
+      if (!d.objectStoreNames.contains(STORE_NAME)) {
+        d.createObjectStore(STORE_NAME, { keyPath: 'slot' });
+      }
+    };
+    req.onsuccess = function(e) { db = e.target.result; callback(); };
+    req.onerror = function() { console.warn('IndexedDB failed, using localStorage'); callback(); };
+  }
+
+  function getWatchlist(callback) {
+    if (db) {
+      var tx = db.transaction(STORE_NAME, 'readonly');
+      var store = tx.objectStore(STORE_NAME);
+      var req = store.getAll();
+      req.onsuccess = function(e) {
+        var rows = e.target.result;
+        var list = [];
+        for (var i = 0; i < MAX_SLOTS; i++) { list.push(null); }
+        for (var j = 0; j < rows.length; j++) {
+          if (rows[j].slot >= 0 && rows[j].slot < MAX_SLOTS) {
+            list[rows[j].slot] = rows[j];
+          }
+        }
+        callback(list);
+      };
+      req.onerror = function() { callback(lsGetWatchlist()); };
+    } else {
+      callback(lsGetWatchlist());
+    }
+  }
+
+  function saveSlot(slot, data, callback) {
+    var record = { slot: slot, ticker: data.ticker, name: data.name };
+    if (db) {
+      var tx = db.transaction(STORE_NAME, 'readwrite');
+      var store = tx.objectStore(STORE_NAME);
+      store.put(record);
+      tx.oncomplete = function() { if (callback) callback(); };
+      tx.onerror = function() { lsSaveSlot(slot, record); if (callback) callback(); };
+    } else {
+      lsSaveSlot(slot, record);
+      if (callback) callback();
+    }
+  }
+
+  function clearSlot(slot, callback) {
+    if (db) {
+      var tx = db.transaction(STORE_NAME, 'readwrite');
+      var store = tx.objectStore(STORE_NAME);
+      store.delete(slot);
+      tx.oncomplete = function() { if (callback) callback(); };
+      tx.onerror = function() { lsClearSlot(slot); if (callback) callback(); };
+    } else {
+      lsClearSlot(slot);
+      if (callback) callback();
+    }
+  }
+
+  // localStorage fallback
+  function lsKey() { return 'syc_watchlist'; }
+  function lsGetWatchlist() {
+    var list = [];
+    for (var i = 0; i < MAX_SLOTS; i++) { list.push(null); }
+    try {
+      var raw = localStorage.getItem(lsKey());
+      if (raw) {
+        var saved = JSON.parse(raw);
+        for (var j = 0; j < saved.length && j < MAX_SLOTS; j++) {
+          list[j] = saved[j];
+        }
+      }
+    } catch(e) {}
+    return list;
+  }
+  function lsSaveSlot(slot, record) {
+    try {
+      var list = lsGetWatchlist();
+      list[slot] = record;
+      localStorage.setItem(lsKey(), JSON.stringify(list));
+    } catch(e) {}
+  }
+  function lsClearSlot(slot) {
+    try {
+      var list = lsGetWatchlist();
+      list[slot] = null;
+      localStorage.setItem(lsKey(), JSON.stringify(list));
+    } catch(e) {}
+  }
+
+  // ── Price fetching ──
+  function fetchPrice(ticker, callback) {
+    var url = 'https://yahoo-finance-real-time1.p.rapidapi.com/market/get-quotes?symbols=' + encodeURIComponent(ticker) + '&region=US&lang=en-US';
+    fetch(url, {
+      method: 'GET',
+      headers: { 'x-rapidapi-key': RAPIDAPI_KEY, 'x-rapidapi-host': RAPIDAPI_HOST }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var result = null;
+      try {
+        var quotes = data.quoteResponse && data.quoteResponse.result;
+        if (quotes && quotes.length > 0) {
+          var q = quotes[0];
+          result = {
+            price: q.regularMarketPrice != null ? q.regularMarketPrice : null,
+            change: q.regularMarketChangePercent != null ? q.regularMarketChangePercent : null,
+            currency: q.currency || 'USD',
+            name: q.shortName || q.longName || ticker
+          };
+        }
+      } catch(e) {}
+      callback(result);
+    })
+    .catch(function() { callback(null); });
+  }
+
+  // ── Render ──
+  var watchlistData = [];
+
+  function formatPrice(price, currency) {
+    if (price == null) return '—';
+    var sym = currency === 'GBp' ? 'p' : (currency === 'GBP' ? '\u00a3' : '$');
+    var val = currency === 'GBp' ? price : price;
+    return sym + val.toFixed(2);
+  }
+
+  function renderGrid(list) {
+    watchlistData = list;
+    var grid = document.getElementById('watchlistGrid');
+    grid.innerHTML = '';
+    var filled = 0;
+    for (var i = 0; i < MAX_SLOTS; i++) {
+      var item = list[i];
+      var card = document.createElement('div');
+      card.className = 'wl-card ' + (item ? 'filled' : 'empty');
+      card.id = 'card-' + i;
+      if (item) {
+        filled++;
+        card.innerHTML =
+          '<div class="card-top">' +
+            '<div class="ticker-block">' +
+              '<div class="ticker-symbol">' + escHtml(item.ticker) + '</div>' +
+              '<div class="ticker-name">' + escHtml(item.name || '') + '</div>' +
+            '</div>' +
+            '<button class="remove-btn" onclick="removeSlot(' + i + ')" title="Remove">&#10005;</button>' +
+          '</div>' +
+          '<div class="card-price" id="price-' + i + '">' +
+            '<span class="price-value loading">Loading\u2026</span>' +
+          '</div>' +
+          '<div class="card-actions">' +
+            '<button class="btn-trade" onclick="sendTrade(\'' + escHtml(item.ticker) + '\')">Trade This</button>' +
+            '<button class="btn-research" onclick="sendResearch(\'' + escHtml(item.ticker) + '\')">Research</button>' +
+          '</div>' +
+          '<span class="card-slot-num">SLOT ' + (i + 1) + '</span>';
+      } else {
+        card.innerHTML =
+          '<span class="slot-num">SLOT ' + (i + 1) + '</span>' +
+          '<div class="plus-icon">+</div>' +
+          '<div class="add-hint">Use Quick Research<br>above to add</div>';
+      }
+      grid.appendChild(card);
+    }
+    document.getElementById('filledCount').textContent = filled;
+    // Fetch prices for filled slots
+    fetchAllPrices(list);
+    sendHeight();
+  }
+
+  function fetchAllPrices(list) {
+    var now = new Date();
+    var timeStr = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+    document.getElementById('lastUpdatedText').textContent = 'Last updated: ' + timeStr;
+    for (var i = 0; i < MAX_SLOTS; i++) {
+      if (!list[i]) continue;
+      (function(idx, item) {
+        fetchPrice(item.ticker, function(result) {
+          var el = document.getElementById('price-' + idx);
+          if (!el) return;
+          if (result) {
+            var chgClass = result.change > 0.05 ? 'up' : (result.change < -0.05 ? 'down' : 'flat');
+            var chgSign = result.change >= 0 ? '+' : '';
+            var chgStr = result.change != null ? (chgSign + result.change.toFixed(2) + '%') : '—';
+            el.innerHTML =
+              '<span class="price-value">' + formatPrice(result.price, result.currency) + '</span>' +
+              '<span class="change-badge ' + chgClass + '">' + chgStr + '</span>';
+            // Update stored name if we got a better one
+            if (result.name && result.name !== item.ticker && result.name !== item.name) {
+              item.name = result.name;
+              var nameEl = document.querySelector('#card-' + idx + ' .ticker-name');
+              if (nameEl) nameEl.textContent = result.name;
+            }
+          } else {
+            el.innerHTML = '<span class="price-value loading">Unavailable</span>';
+          }
+        });
+      })(i, list[i]);
+    }
+  }
+
+  // ── Actions ──
+  function removeSlot(idx) {
+    clearSlot(idx, function() {
+      watchlistData[idx] = null;
+      renderGrid(watchlistData);
+      showToast('Removed from watchlist', false);
+    });
+  }
+
+  function sendTrade(ticker) {
+    window.parent.postMessage({ type: 'syc_add_trade', ticker: ticker }, '*');
+    showToast('Opening trade for ' + ticker + '\u2026', false);
+  }
+
+  function sendResearch(ticker) {
+    window.parent.postMessage({ type: 'syc_research_ticker', ticker: ticker }, '*');
+  }
+
+  // ── Add from Research postMessage ──
+  window.addEventListener('message', function(e) {
+    if (!e.data || typeof e.data !== 'object') return;
+
+    if (e.data.type === 'syc_add_watchlist') {
+      var ticker = (e.data.ticker || '').toUpperCase().trim();
+      var name = e.data.name || ticker;
+      if (!ticker) return;
+      addToWatchlist(ticker, name);
+    }
+
+    if (e.data.type === 'syc_trader_name') {
+      // Trader name available — could display if needed
+    }
+  });
+
+  function addToWatchlist(ticker, name) {
+    // Check if already present
+    for (var i = 0; i < MAX_SLOTS; i++) {
+      if (watchlistData[i] && watchlistData[i].ticker === ticker) {
+        showToast(ticker + ' is already on your watchlist', true);
+        return;
+      }
+    }
+    // Find first empty slot
+    var emptySlot = -1;
+    for (var j = 0; j < MAX_SLOTS; j++) {
+      if (!watchlistData[j]) { emptySlot = j; break; }
+    }
+    if (emptySlot === -1) {
+      showToast('Watchlist full — remove a ticker to add more', true);
+      return;
+    }
+    var record = { ticker: ticker, name: name };
+    saveSlot(emptySlot, record, function() {
+      watchlistData[emptySlot] = { slot: emptySlot, ticker: ticker, name: name };
+      renderGrid(watchlistData);
+      // Flash the new card
+      setTimeout(function() {
+        var card = document.getElementById('card-' + emptySlot);
+        if (card) {
+          card.classList.add('flash');
+          setTimeout(function() { card.classList.remove('flash'); }, 600);
+        }
+      }, 50);
+      showToast(ticker + ' added to watchlist!', false);
+    });
+  }
+
+  function refreshPrices() {
+    fetchAllPrices(watchlistData);
+    showToast('Refreshing prices\u2026', false);
+  }
+
+  // ── Toast ──
+  var toastTimer = null;
+  function showToast(msg, isError) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (isError ? ' error' : '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.className = 'toast'; }, 3000);
+  }
+
+  // ── Height reporting ──
+  function sendHeight() {
+    setTimeout(function() {
+      var h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, 300);
+      window.parent.postMessage({ type: 'iwh', value: h + 20 }, '*');
+    }, 200);
+  }
+  [500, 1000, 2000].forEach(function(t) {
+    setTimeout(sendHeight, t);
+  });
+
+  // ── Helpers ──
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  // ── Init ──
+  openDB(function() {
+    getWatchlist(function(list) {
+      renderGrid(list);
+    });
+  });
+</script>
+
+
+</body></html>
