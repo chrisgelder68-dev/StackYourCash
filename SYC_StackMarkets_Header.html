@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Header.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYC_StackMarkets_Header</title>
+<link href="./SYC_StackMarkets_Header_files/css2" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  html, body { height:auto; overflow:visible; overflow-x:hidden; background:transparent; }
+  body { font-family:'Source Sans 3',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:transparent; }
+
+  .syc-accent-bar { height:4px; background:linear-gradient(to right,#002C4F,#FF6900,#57A400); }
+
+  .section-header {
+    background:#002C4F; padding:24px 24px 20px;
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    border-bottom:3px solid #FF6900;
+  }
+  .members-pill {
+    background:#FF6900; color:#fff;
+    font-size:10px; font-weight:700; text-transform:uppercase;
+    letter-spacing:.08em; border-radius:4px; padding:3px 10px;
+  }
+  .header-titles { text-align:center; }
+  .header-titles h2 {
+    font-family:'Playfair Display',Georgia,serif;
+    font-size:36px; font-weight:700; color:#fff;
+    margin-bottom:6px; letter-spacing:.01em;
+  }
+  .header-titles h2 span { color:#FF6900; }
+  .header-titles p { font-size:13px; color:#AABCCC; font-weight:300; max-width:560px; line-height:1.6; }
+
+  /* STATS BAR */
+  .stats-bar {
+    background:#001E38; border-bottom:1px solid rgba(255,255,255,0.08);
+    padding:12px 24px;
+    display:flex; align-items:center; justify-content:center;
+    gap:32px; flex-wrap:wrap;
+  }
+  .stat-item { text-align:center; }
+  .stat-value {
+    font-family:'Playfair Display',Georgia,serif;
+    font-size:22px; font-weight:700; color:#FF6900;
+    display:block; line-height:1;
+  }
+  .stat-label { font-size:11px; color:#AABCCC; margin-top:3px; display:block; }
+  .stat-divider { width:1px; height:32px; background:rgba(255,255,255,0.1); }
+  @media(max-width:480px){ .stat-divider { display:none; } .stats-bar { gap:16px; } }
+
+  /* TRADING NAME SECTION */
+  .trader-section {
+    background:#fff; padding:16px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px; flex-wrap:wrap;
+    border-bottom:2px solid #F0F4F8;
+  }
+  .trader-left { display:flex; align-items:center; gap:12px; }
+  .trader-icon {
+    width:40px; height:40px; background:#002C4F; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; flex-shrink:0;
+  }
+  .trader-label { font-size:11px; color:#8899AA; text-transform:uppercase; letter-spacing:.06em; margin-bottom:2px; }
+  .trader-name {
+    font-family:'Playfair Display',Georgia,serif;
+    font-size:18px; font-weight:700; color:#002C4F;
+  }
+  .trader-btn {
+    font-size:12px; font-weight:700; color:#FF6900;
+    background:none; border:1px solid rgba(255,105,0,0.3);
+    border-radius:4px; padding:4px 10px; cursor:pointer;
+    font-family:inherit; transition:all .15s;
+  }
+  .trader-btn:hover { background:#FF6900; color:#fff; border-color:#FF6900; }
+
+  /* SETUP MODAL OVERLAY */
+  .modal-overlay {
+    display:none; position:fixed; top:0; left:0; right:0; bottom:0;
+    background:rgba(0,44,79,0.85); z-index:1000;
+    align-items:center; justify-content:center; padding:20px;
+  }
+  .modal-overlay.active { display:flex; }
+  .modal-box {
+    background:#fff; border-radius:12px; padding:32px 28px;
+    max-width:420px; width:100%; text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  }
+  .modal-icon { font-size:40px; margin-bottom:12px; }
+  .modal-title {
+    font-family:'Playfair Display',Georgia,serif;
+    font-size:24px; font-weight:700; color:#002C4F;
+    margin-bottom:8px;
+  }
+  .modal-text { font-size:14px; color:#666; line-height:1.6; margin-bottom:20px; }
+  .modal-input {
+    width:100%; border:2px solid #D0DCE8; border-radius:8px;
+    padding:12px 16px; font-size:16px; font-weight:700;
+    font-family:'Playfair Display',Georgia,serif;
+    color:#002C4F; outline:none; text-align:center;
+    transition:border-color .15s; margin-bottom:8px;
+  }
+  .modal-input:focus { border-color:#FF6900; }
+  .modal-hint { font-size:11px; color:#AABCCC; margin-bottom:20px; }
+  .modal-btn {
+    width:100%; background:#FF6900; color:#fff; border:none;
+    border-radius:8px; padding:14px; font-size:15px; font-weight:700;
+    font-family:inherit; cursor:pointer; transition:background .15s;
+  }
+  .modal-btn:hover { background:#e05a00; }
+  .modal-btn:disabled { background:#AABCCC; cursor:not-allowed; }
+</style>
+</head>
+<body>
+
+<div class="syc-accent-bar"></div>
+
+<div class="section-header">
+  <div class="members-pill">Members</div>
+  <div class="header-titles">
+    <h2>Stack Markets — <span>Virtual Investing Game</span></h2>
+    <p>Start with £25,000 of virtual cash and build a real portfolio using actual securities at live closing prices. Research, trade, and compete on the member leaderboard.</p>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-value">£25,000</span>
+    <span class="stat-label">Virtual Starting Cash</span>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <span class="stat-value">20</span>
+    <span class="stat-label">Max Portfolio Holdings</span>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <span class="stat-value">15</span>
+    <span class="stat-label">Watchlist Slots</span>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <span class="stat-value">Real</span>
+    <span class="stat-label">Closing Prices</span>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <span class="stat-value">AI</span>
+    <span class="stat-label">Stack Advisor</span>
+  </div>
+</div>
+
+<div class="trader-section" id="traderSection">
+  <div class="trader-left">
+    <div class="trader-icon">📈</div>
+    <div>
+      <div class="trader-label">Your Trading Name</div>
+      <div class="trader-name" id="traderNameDisplay">Setting up...</div>
+    </div>
+  </div>
+  <button class="trader-btn" onclick="showNameModal(true)" style="display: none;">Change name</button>
+</div>
+
+<!-- TRADING NAME MODAL -->
+<div class="modal-overlay active" id="nameModal">
+  <div class="modal-box">
+    <div class="modal-icon">📈</div>
+    <div class="modal-title">Choose Your Trading Name</div>
+    <div class="modal-text">This is the name that will appear on the Stack Markets leaderboard. Choose something memorable — you can only change it once.</div>
+    <input type="text" class="modal-input" id="nameInput" placeholder="e.g. The Bull, Stack King, Dividend Dave..." maxlength="20" autocomplete="off">
+    <div class="modal-hint">Maximum 20 characters. No special characters.</div>
+    <button class="modal-btn" id="nameSubmitBtn" onclick="saveTradingName()" disabled="">
+      Let's Trade →
+    </button>
+  </div>
+</div>
+
+<script>
+var STORAGE_KEY = "syc_sm_trader_name";
+
+function resizeParent() {
+  var h = Math.max(document.body.scrollHeight, document.body.offsetHeight,
+    document.documentElement.scrollHeight, document.documentElement.offsetHeight);
+  try { window.parent.postMessage({ type:'iwh', value: h + 20 }, '*'); } catch(e) {}
+}
+
+function getTradingName() {
+  try {
+    var req = indexedDB.open("SYCStackMarkets", 1);
+    req.onupgradeneeded = function(e) {
+      e.target.result.createObjectStore("data", { keyPath:"id" });
+    };
+    req.onsuccess = function(e) {
+      var tx = e.target.result.transaction("data","readonly");
+      var get = tx.objectStore("data").get(STORAGE_KEY);
+      get.onsuccess = function(e2) {
+        if (e2.target.result && e2.target.result.value) {
+          setTraderName(e2.target.result.value);
+        } else {
+          showNameModal(false);
+        }
+      };
+      get.onerror = function() { showNameModal(false); };
+    };
+    req.onerror = function() {
+      // Fallback to localStorage
+      var name = localStorage.getItem(STORAGE_KEY);
+      if (name) { setTraderName(name); } else { showNameModal(false); }
+    };
+  } catch(e) {
+    var name = localStorage.getItem(STORAGE_KEY);
+    if (name) { setTraderName(name); } else { showNameModal(false); }
+  }
+}
+
+function saveTradingName() {
+  var input = document.getElementById("nameInput");
+  var name = input.value.trim().replace(/[^a-zA-Z0-9 _\-]/g,"");
+  if (!name) return;
+
+  // Save to IndexedDB
+  try {
+    var req = indexedDB.open("SYCStackMarkets", 1);
+    req.onupgradeneeded = function(e) {
+      e.target.result.createObjectStore("data", { keyPath:"id" });
+    };
+    req.onsuccess = function(e) {
+      var tx = e.target.result.transaction("data","readwrite");
+      tx.objectStore("data").put({ id: STORAGE_KEY, value: name });
+    };
+  } catch(e) {}
+
+  // Also save to localStorage as fallback
+  try { localStorage.setItem(STORAGE_KEY, name); } catch(e) {}
+
+  // Broadcast trading name to other sections on the page
+  try { window.parent.postMessage({ type:'syc_trader_name', value: name }, '*'); } catch(e) {}
+
+  setTraderName(name);
+  document.getElementById("nameModal").classList.remove("active");
+}
+
+function setTraderName(name) {
+  document.getElementById("traderNameDisplay").textContent = name;
+  // Broadcast to sibling embeds
+  try { window.parent.postMessage({ type:'syc_trader_name', value: name }, '*'); } catch(e) {}
+}
+
+function showNameModal(isChange) {
+  var modal = document.getElementById("nameModal");
+  modal.classList.add("active");
+  var input = document.getElementById("nameInput");
+  if (!isChange) {
+    // First time — hide change button
+    document.querySelector(".trader-btn").style.display = "none";
+  }
+  input.value = "";
+  input.focus();
+  resizeParent();
+}
+
+// Enable button only when name is entered
+document.getElementById("nameInput").addEventListener("input", function() {
+  var val = this.value.trim();
+  document.getElementById("nameSubmitBtn").disabled = val.length < 2;
+});
+
+document.getElementById("nameInput").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") saveTradingName();
+});
+
+// Init
+getTradingName();
+resizeParent();
+[200,500,1000].forEach(function(ms){ setTimeout(resizeParent, ms); });
+</script>
+
+
+
+</body></html>
