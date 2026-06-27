@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0063)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Research.html -->
+<!-- saved from url=(0065)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Research_1.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -230,7 +230,6 @@
 <script>
 var RAPIDAPI_KEY  = "c4baa0ad16msh0baa45bbc9602cap16c04ajsn1cca1445e088";
 var RAPIDAPI_HOST = "yahoo-finance-real-time1.p.rapidapi.com";
-var STORAGE_KEY   = "syc_watchlist_v4";
 
 var KNOWN_US = ["AAPL","MSFT","GOOGL","GOOG","AMZN","META","NVDA","TSLA","SPY","QQQ",
   "VOO","VTI","IVV","GLD","SLV","TLT","BND","VEA","VWO","ARKK","BRK.B","JPM",
@@ -238,35 +237,22 @@ var KNOWN_US = ["AAPL","MSFT","GOOGL","GOOG","AMZN","META","NVDA","TSLA","SPY","
   "AMD","CRM","PYPL","ADBE","CSCO","PFE","MRK","ABBV","LLY","TMO","ABT"];
 
 var currentDisplayTicker = null;
-var currentPrice = 0;
 var currentTicker = null;
+var currentPrice = 0;
 
-// ── RESIZE ──
 function resizeParent() {
-  try { window.parent.postMessage({ type: 'iwh', value: document.body.scrollHeight + 40 }, '*'); } catch(e) {}
-}
-
-if (window.MutationObserver) {
-  new MutationObserver(function() {
-    resizeParent();
-    setTimeout(resizeParent, 100);
-    setTimeout(resizeParent, 500);
-  }).observe(document.body, { childList: true, subtree: true, attributes: false });
+  try { window.parent.postMessage({ type:"iwh", value: document.body.scrollHeight + 40 }, "*"); } catch(e) {}
 }
 
 function toDisplay(ticker) {
   return ticker.replace(/\.(L|AS|PA|DE|MI|SW)$/, "");
 }
 
-// ── DATA FETCHING ──
 async function rapidFetch(symbol) {
-  var region = (symbol.endsWith(".L") || symbol.endsWith(".l")) ? "GB" : "US";
+  var region = symbol.endsWith(".L") ? "GB" : "US";
   var url = "https://" + RAPIDAPI_HOST + "/market/get-quotes?region=" + region + "&symbols=" + encodeURIComponent(symbol);
   try {
-    var res = await fetch(url, {
-      method: "GET",
-      headers: { "x-rapidapi-key": RAPIDAPI_KEY, "x-rapidapi-host": RAPIDAPI_HOST }
-    });
+    var res = await fetch(url, { method:"GET", headers:{ "x-rapidapi-key":RAPIDAPI_KEY, "x-rapidapi-host":RAPIDAPI_HOST } });
     if (!res.ok) return null;
     var d = await res.json();
     var results = d && d.quoteResponse && d.quoteResponse.result;
@@ -283,7 +269,7 @@ async function yahooFetch(symbol) {
   ];
   for (var i = 0; i < urls.length; i++) {
     try {
-      var res = await fetch(urls[i], { headers: { "Accept": "application/json" } });
+      var res = await fetch(urls[i], { headers:{"Accept":"application/json"} });
       if (!res.ok) continue;
       var d = await res.json();
       var meta = d && d.chart && d.chart.result && d.chart.result[0] && d.chart.result[0].meta;
@@ -310,116 +296,78 @@ async function yahooFetch(symbol) {
 }
 
 async function fetchQuote(symbol) {
-  // Handle ISINs (GB00..., IE00... etc) — not supported by ticker APIs
-  if (/^[A-Z]{2}[A-Z0-9]{10}$/.test(symbol)) {
-    return { quote: null, symbol: symbol, isISIN: true };
-  }
-
-  // Handle tickers ending in a dot like AV. (Aviva)
+  if (/^[A-Z]{2}[A-Z0-9]{10}$/.test(symbol)) return { quote:null, symbol:symbol, isISIN:true };
   var endsWithDot = symbol.endsWith(".");
-  var base = symbol
-    .replace(/\.$/, "")
-    .replace(/\.(L|AS|PA|DE|MI|SW)$/, "");
-
+  var base = symbol.replace(/\.$/, "").replace(/\.(L|AS|PA|DE|MI|SW)$/, "");
   var hasSuffix = !endsWithDot && symbol.includes(".");
+  var attempts = endsWithDot ? [base+".L", base] : hasSuffix ? [symbol, base] : KNOWN_US.includes(symbol) ? [symbol] : [symbol, symbol+".L"];
   var quote = null;
-
-  // Build list of symbols to try in order
-  var attempts = [];
-
-  if (endsWithDot) {
-    // e.g. AV. — try AV.L, AV
-    attempts = [base + ".L", base];
-  } else if (hasSuffix) {
-    // e.g. VOD.L — try as-is, then bare, then with US region
-    attempts = [symbol, base];
-  } else if (KNOWN_US.includes(symbol)) {
-    // Known US ticker — only try bare
-    attempts = [symbol];
-  } else {
-    // Unknown — try bare, then .L
-    attempts = [symbol, symbol + ".L"];
-  }
-
-  // Try RapidAPI for each attempt
   for (var i = 0; i < attempts.length; i++) {
     quote = await rapidFetch(attempts[i]);
     if (quote) { symbol = attempts[i]; break; }
   }
-
-  // Fallback to Yahoo Finance
   if (!quote) {
     for (var j = 0; j < attempts.length; j++) {
       quote = await yahooFetch(attempts[j]);
       if (quote) { symbol = attempts[j]; break; }
     }
   }
-
-  return { quote: quote, symbol: symbol };
+  return { quote:quote, symbol:symbol };
 }
 
-// ── FORMAT ──
 function fmt(n) {
-  if (!n && n !== 0) return "—";
-  if (n >= 1e12) return (n/1e12).toFixed(2) + "T";
-  if (n >= 1e9)  return (n/1e9).toFixed(2) + "B";
-  if (n >= 1e6)  return (n/1e6).toFixed(2) + "M";
-  if (n >= 10000) return n.toLocaleString("en-GB", {maximumFractionDigits:0});
-  if (n >= 100)   return n.toLocaleString("en-GB", {minimumFractionDigits:1, maximumFractionDigits:1});
-  return n.toLocaleString("en-GB", {minimumFractionDigits:2, maximumFractionDigits:2});
+  if (!n && n !== 0) return "\u2014";
+  if (n >= 1e12) return (n/1e12).toFixed(2)+"T";
+  if (n >= 1e9)  return (n/1e9).toFixed(2)+"B";
+  if (n >= 1e6)  return (n/1e6).toFixed(2)+"M";
+  if (n >= 10000) return n.toLocaleString("en-GB",{maximumFractionDigits:0});
+  if (n >= 100)   return n.toLocaleString("en-GB",{minimumFractionDigits:1,maximumFractionDigits:1});
+  return n.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 function fmtVol(n) {
-  if (!n) return "—";
-  if (n >= 1e9) return (n/1e9).toFixed(1) + "B";
-  if (n >= 1e6) return (n/1e6).toFixed(1) + "M";
-  if (n >= 1e3) return (n/1e3).toFixed(0) + "K";
+  if (!n) return "\u2014";
+  if (n >= 1e9) return (n/1e9).toFixed(1)+"B";
+  if (n >= 1e6) return (n/1e6).toFixed(1)+"M";
+  if (n >= 1e3) return (n/1e3).toFixed(0)+"K";
   return n.toLocaleString("en-GB");
 }
-function pct(val, lo, hi) {
-  if (!lo || !hi || hi === lo) return 50;
-  return Math.min(100, Math.max(0, ((val - lo) / (hi - lo)) * 100));
+function pct(val,lo,hi) {
+  if (!lo||!hi||hi===lo) return 50;
+  return Math.min(100,Math.max(0,((val-lo)/(hi-lo))*100));
 }
 function timeNow() {
   var now = new Date();
-  return now.getHours().toString().padStart(2,"0") + ":" + now.getMinutes().toString().padStart(2,"0");
+  return now.getHours().toString().padStart(2,"0")+":"+now.getMinutes().toString().padStart(2,"0");
 }
 
-// ── SEARCH ──
 async function doSearch() {
   var input = document.getElementById("searchInput");
   var btn   = document.getElementById("searchBtn");
-  var raw   = input.value.trim().toUpperCase().replace(/[^A-Z0-9.^]/g, "");
+  var raw   = input.value.trim().toUpperCase().replace(/[^A-Z0-9.^]/g,"");
   if (!raw) return;
-
   document.getElementById("mainContent").style.display = "none";
   document.getElementById("resultCard").classList.remove("visible");
   document.getElementById("errorBar").classList.remove("visible");
   document.getElementById("loadingState").classList.add("visible");
-  document.getElementById("loadingText").textContent = "Looking up " + raw + "...";
+  document.getElementById("loadingText").textContent = "Looking up "+raw+"...";
   btn.disabled = true;
-
   var result = await fetchQuote(raw);
   document.getElementById("loadingState").classList.remove("visible");
   btn.disabled = false;
-
   if (result.isISIN) {
     document.getElementById("mainContent").style.display = "block";
     var err = document.getElementById("errorBar");
-    err.textContent = "\"" + raw + "\" looks like an ISIN — this tool uses ticker symbols. Find the ticker for this security on your broker platform or on Yahoo Finance, then search for that instead (e.g. VWRL, AZN, LLOY).";
+    err.textContent = "\""+raw+"\" looks like an ISIN \u2014 use the ticker symbol instead (e.g. VWRL, AZN, LLOY).";
     err.classList.add("visible");
-    resizeParent();
-    return;
+    resizeParent(); return;
   }
-
   if (!result.quote) {
     document.getElementById("mainContent").style.display = "block";
     var err2 = document.getElementById("errorBar");
-    err2.textContent = "Could not find \"" + raw + "\". Check the ticker and try again. UK stocks may need .L added (e.g. VOD.L). Tickers like AV. (Aviva) should be entered as AV.";
+    err2.textContent = "Could not find \""+raw+"\". Check the ticker and try again. For UK stocks try adding .L (e.g. VOD.L).";
     err2.classList.add("visible");
-    resizeParent();
-    return;
+    resizeParent(); return;
   }
-
   currentTicker = result.symbol;
   currentDisplayTicker = raw;
   populateResult(result.quote, raw);
@@ -439,12 +387,12 @@ function populateResult(q, displayTicker) {
   var name   = q.longName || q.shortName || displayTicker;
   var exch   = q.fullExchangeName || q.exchangeName || "";
   var chg    = price - prev;
-  var chgPct = prev ? (chg / prev) * 100 : 0;
+  var chgPct = prev ? (chg/prev)*100 : 0;
   var cls    = chg > 0 ? "up" : chg < 0 ? "down" : "flat";
-  var arrow  = chg > 0 ? "▲" : chg < 0 ? "▼" : "—";
+  var arrow  = chg > 0 ? "\u25b2" : chg < 0 ? "\u25bc" : "\u2014";
 
   document.getElementById("rCompany").textContent    = name;
-  document.getElementById("rMeta").textContent       = exch + (cur ? " · " + cur : "");
+  document.getElementById("rMeta").textContent       = exch + (cur ? " \u00b7 "+cur : "");
   document.getElementById("rTickerPill").textContent = displayTicker;
   document.getElementById("rPrice").textContent      = fmt(price);
   document.getElementById("rCurrency").textContent   = cur;
@@ -455,36 +403,31 @@ function populateResult(q, displayTicker) {
   document.getElementById("r52High").textContent     = fmt(wkHi);
   document.getElementById("r52Low").textContent      = fmt(wkLo);
   document.getElementById("rVolume").textContent     = fmtVol(vol);
-  document.getElementById("rMarketCap").textContent  = mktCap ? fmt(mktCap) + " " + cur : "—";
+  document.getElementById("rMarketCap").textContent  = mktCap ? fmt(mktCap)+" "+cur : "\u2014";
 
   var pill = document.getElementById("rChangePill");
-  pill.textContent = arrow + " " + Math.abs(chgPct).toFixed(2) + "% (" + (chg >= 0 ? "+" : "") + fmt(Math.abs(chg)) + " " + cur + ")";
-  pill.className = "change-pill " + cls;
+  pill.textContent = arrow+" "+Math.abs(chgPct).toFixed(2)+"% ("+(chg>=0?"+":"")+fmt(Math.abs(chg))+" "+cur+")";
+  pill.className = "change-pill "+cls;
 
-  var dp = pct(price, dayLo, dayHi);
-  document.getElementById("rDayFill").style.width   = dp + "%";
-  document.getElementById("rDayMarker").style.left  = dp + "%";
+  var dp = pct(price,dayLo,dayHi);
+  document.getElementById("rDayFill").style.width   = dp+"%";
+  document.getElementById("rDayMarker").style.left  = dp+"%";
   document.getElementById("rDayLo").textContent     = fmt(dayLo);
   document.getElementById("rDayHi").textContent     = fmt(dayHi);
-  document.getElementById("rDaySpan").textContent   = fmt(dayLo) + " – " + fmt(dayHi);
+  document.getElementById("rDaySpan").textContent   = fmt(dayLo)+" \u2013 "+fmt(dayHi);
 
-  var wp = pct(price, wkLo, wkHi);
-  document.getElementById("r52Fill").style.width    = wp + "%";
-  document.getElementById("r52Marker").style.left   = wp + "%";
+  var wp = pct(price,wkLo,wkHi);
+  document.getElementById("r52Fill").style.width    = wp+"%";
+  document.getElementById("r52Marker").style.left   = wp+"%";
   document.getElementById("r52Lo").textContent      = fmt(wkLo);
   document.getElementById("r52Hi").textContent      = fmt(wkHi);
-  document.getElementById("r52Span").textContent    = fmt(wkLo) + " – " + fmt(wkHi);
+  document.getElementById("r52Span").textContent    = fmt(wkLo)+" \u2013 "+fmt(wkHi);
 
-  document.getElementById("rUpdated").textContent = "Updated " + timeNow();
+  document.getElementById("rUpdated").textContent = "Updated "+timeNow();
 
-  var inWl = watchlist.indexOf(currentDisplayTicker) !== -1;
-  var addBtn = document.getElementById("addBtn");
-  addBtn.textContent = inWl ? "✓ In Watchlist" : "+ Add to Watchlist";
-  addBtn.style.background = inWl ? "#57A400" : "";
-
+  currentPrice = price;
   document.getElementById("mainContent").style.display = "none";
   document.getElementById("resultCard").classList.add("visible");
-  currentPrice = price;
   resizeParent();
 }
 
@@ -503,65 +446,29 @@ function quickSearch(ticker) {
   doSearch();
 }
 
-// ── WATCHLIST ──
 function addToWatchlist() {
   if (!currentDisplayTicker) return;
-  var addBtn = document.getElementById("addBtn");
-  if (watchlist.indexOf(currentDisplayTicker) !== -1) {
-    addBtn.textContent = "✓ Already in Watchlist";
-    setTimeout(function() { addBtn.textContent = "✓ In Watchlist"; }, 1500);
-    return;
-  }
-  if (watchlist.length >= 20) {
-    addBtn.textContent = "Watchlist full (20 max)";
-    setTimeout(function() { addBtn.textContent = "+ Add to Watchlist"; }, 2000);
-    return;
-  }
-  watchlist.push(currentDisplayTicker);
-  saveWatchlist();
-  addBtn.textContent = "✓ Added!";
-  addBtn.style.background = "#57A400";
-  setTimeout(function() { addBtn.textContent = "✓ In Watchlist"; }, 1500);
-  priceCache[currentDisplayTicker] = null;
-  renderWatchlist();
-  fetchWatchlistPrice(currentDisplayTicker).then(function() {
-    resizeParent();
-    setTimeout(resizeParent, 300);
-    setTimeout(resizeParent, 800);
-    setTimeout(resizeParent, 1500);
-  });
+  var btn = document.getElementById("addWatchlistBtn");
+  try { window.parent.postMessage({ type:"syc_add_watchlist", ticker:currentDisplayTicker }, "*"); } catch(e) {}
+  btn.textContent = "\u2713 Sent to Watchlist";
+  btn.style.background = "#57A400";
+  setTimeout(function() { btn.textContent = "+ Add to Watchlist"; btn.style.background = ""; }, 2000);
 }
 
-
-
-
-
-
-
-
-
-
+function addToTrade() {
+  if (!currentDisplayTicker) return;
+  var btn = document.getElementById("addTradeBtn");
+  try { window.parent.postMessage({ type:"syc_add_trade", ticker:currentDisplayTicker, price:currentPrice }, "*"); } catch(e) {}
+  btn.textContent = "\u2713 Sent to Trade";
+  setTimeout(function() { btn.textContent = "+ Trade This"; }, 2000);
+}
 
 document.getElementById("searchInput").addEventListener("keydown", function(e) {
   if (e.key === "Enter") doSearch();
 });
 
-
-// Load watchlist on init using IndexedDB
-
-  }
-});
-
 resizeParent();
-setTimeout(resizeParent, 200);
-setTimeout(resizeParent, 500);
-setTimeout(resizeParent, 800);
-setTimeout(resizeParent, 1500);
-setTimeout(resizeParent, 2500);
-if (window.ResizeObserver) {
-  new ResizeObserver(resizeParent).observe(document.body);
-}
+[200,500,1000,2000].forEach(function(ms){ setTimeout(resizeParent,ms); });
 </script>
-
 
 </body></html>
