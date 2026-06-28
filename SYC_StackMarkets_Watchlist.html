@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0067)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Watchlist_11.html -->
+<!-- saved from url=(0067)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Watchlist_12.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -296,19 +296,7 @@
 
   .btn-trade:hover { background: #e05d00; }
 
-  .btn-research {
-    background: rgba(255,255,255,0.08);
-    color: rgba(255,255,255,0.7);
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    padding: 5px 8px;
-    font-size: 0.75rem;
-    font-family: 'Source Sans 3', sans-serif;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
 
-  .btn-research:hover { background: rgba(255,255,255,0.14); color: #fff; }
 
   .card-slot-num {
     position: absolute;
@@ -364,7 +352,7 @@
 <div class="refresh-bar">
   <div class="last-updated">
     <div class="live-dot"></div>
-    <span id="lastUpdatedText">Last updated: 12:25</span>
+    <span id="lastUpdatedText">Last updated: 12:36</span>
   </div>
   <button class="refresh-btn" onclick="refreshPrices()">↻ Refresh Prices</button>
 </div>
@@ -543,7 +531,7 @@
           '</div>' +
           '<div class="card-actions">' +
             '<button class="btn-trade" onclick="sendTrade(\'' + escHtml(item.ticker) + '\')">Trade This</button>' +
-            '<button class="btn-research" onclick="sendResearch(\'' + escHtml(item.ticker) + '\')">Research</button>' +
+
           '</div>' +
           '<span class="card-slot-num">SLOT ' + (i + 1) + '</span>';
       } else {
@@ -605,9 +593,7 @@
     showToast('Opening trade for ' + ticker + '\u2026', false);
   }
 
-  function sendResearch(ticker) {
-    window.parent.postMessage({ type: 'syc_research_ticker', ticker: ticker }, '*');
-  }
+
 
   // ── Add from Research postMessage ──
   window.addEventListener('message', function(e) {
