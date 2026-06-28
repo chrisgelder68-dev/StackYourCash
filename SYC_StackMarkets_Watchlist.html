@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Watchlist_5.html -->
+<!-- saved from url=(0066)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Watchlist_7.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -376,7 +376,7 @@
 <div class="refresh-bar">
   <div class="last-updated">
     <div class="live-dot"></div>
-    <span id="lastUpdatedText">Last updated: 8:23</span>
+    <span id="lastUpdatedText">Last updated: 11:29</span>
   </div>
   <button class="refresh-btn" onclick="refreshPrices()">↻ Refresh Prices</button>
 </div>
@@ -624,14 +624,14 @@
     if (!e.data || typeof e.data !== 'object') return;
 
     // Accept direct postMessage OR relayed message from parent
-  if (e.data.type === 'syc_add_watchlist') {
+  if (e.data && e.data.type === 'syc_add_watchlist') {
       var ticker = (e.data.ticker || '').toUpperCase().trim();
       var name = e.data.name || ticker;
       if (!ticker) return;
       addToWatchlist(ticker, name);
     }
 
-    if (e.data.type === 'syc_trader_name') {
+    if (e.data && e.data.type === 'syc_trader_name') {
       // Trader name available — could display if needed
     }
   });
@@ -704,6 +704,17 @@
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
   }
+
+  // ── BroadcastChannel listener (same-origin iframe communication) ──
+  try {
+    var bc = new BroadcastChannel("syc_stack_markets");
+    bc.onmessage = function(e) {
+      if (!e.data || typeof e.data !== "object") return;
+      if (e.data.type === "syc_add_watchlist") {
+        addToWatchlist((e.data.ticker || "").toUpperCase().trim(), e.data.name || e.data.ticker);
+      }
+    };
+  } catch(e) { console.warn("BroadcastChannel not supported:", e); }
 
   // ── Init ──
   openDB(function() {
