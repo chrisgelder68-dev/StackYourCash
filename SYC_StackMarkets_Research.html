@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0093)file:///C:/Users/chris/OneDrive/Documents/GitHub/StackYourCash/SYC_StackMarkets_Research.html -->
+<!-- saved from url=(0065)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Research_2.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -239,6 +239,7 @@ var KNOWN_US = ["AAPL","MSFT","GOOGL","GOOG","AMZN","META","NVDA","TSLA","SPY","
 var currentDisplayTicker = null;
 var currentTicker = null;
 var currentPrice = 0;
+var currentName = null;
 
 function resizeParent() {
   try { window.parent.postMessage({ type:"iwh", value: document.body.scrollHeight + 40 }, "*"); } catch(e) {}
@@ -385,6 +386,7 @@ function populateResult(q, displayTicker) {
   var mktCap = q.marketCap || 0;
   var cur    = q.currency || "";
   var name   = q.longName || q.shortName || displayTicker;
+  currentName = name;
   var exch   = q.fullExchangeName || q.exchangeName || "";
   var chg    = price - prev;
   var chgPct = prev ? (chg/prev)*100 : 0;
@@ -449,7 +451,7 @@ function quickSearch(ticker) {
 function addToWatchlist() {
   if (!currentDisplayTicker) return;
   var btn = document.getElementById("addWatchlistBtn");
-  try { window.parent.postMessage({ type:"syc_add_watchlist", ticker:currentDisplayTicker }, "*"); } catch(e) {}
+  try { window.parent.postMessage({ type:"syc_add_watchlist", ticker:currentDisplayTicker, name:currentName || currentDisplayTicker }, "*"); } catch(e) {}
   btn.textContent = "\u2713 Sent to Watchlist";
   btn.style.background = "#57A400";
   setTimeout(function() { btn.textContent = "+ Add to Watchlist"; btn.style.background = ""; }, 2000);

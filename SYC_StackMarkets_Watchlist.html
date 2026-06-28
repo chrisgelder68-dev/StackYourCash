@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Watchlist_3.html -->
+<!-- saved from url=(0066)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Watchlist_5.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,10 +19,10 @@
     --cream: #F4F3EE;
     --navy-light: #003d6e;
     --navy-dark: #001d35;
-    --card-empty: #1a3a52;
-    --card-filled: #003a60;
+    --card-empty: #0d5a8a;
+    --card-filled: #0f6aaa;
     --text-muted: rgba(255,255,255,0.55);
-    --border: rgba(255,255,255,0.1);
+    --border: rgba(255,255,255,0.3);
   }
 
   body {
@@ -376,7 +376,7 @@
 <div class="refresh-bar">
   <div class="last-updated">
     <div class="live-dot"></div>
-    <span id="lastUpdatedText">Last updated: 18:45</span>
+    <span id="lastUpdatedText">Last updated: 8:23</span>
   </div>
   <button class="refresh-btn" onclick="refreshPrices()">↻ Refresh Prices</button>
 </div>
@@ -623,7 +623,8 @@
   window.addEventListener('message', function(e) {
     if (!e.data || typeof e.data !== 'object') return;
 
-    if (e.data.type === 'syc_add_watchlist') {
+    // Accept direct postMessage OR relayed message from parent
+  if (e.data.type === 'syc_add_watchlist') {
       var ticker = (e.data.ticker || '').toUpperCase().trim();
       var name = e.data.name || ticker;
       if (!ticker) return;
