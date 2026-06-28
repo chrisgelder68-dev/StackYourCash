@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Watchlist_7.html -->
+<!-- saved from url=(0066)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Watchlist_8.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -376,7 +376,7 @@
 <div class="refresh-bar">
   <div class="last-updated">
     <div class="live-dot"></div>
-    <span id="lastUpdatedText">Last updated: 11:29</span>
+    <span id="lastUpdatedText">Last updated: 11:37</span>
   </div>
   <button class="refresh-btn" onclick="refreshPrices()">↻ Refresh Prices</button>
 </div>
@@ -523,9 +523,12 @@
 
   function formatPrice(price, currency) {
     if (price == null) return '—';
-    var sym = currency === 'GBp' ? 'p' : (currency === 'GBP' ? '\u00a3' : '$');
-    var val = currency === 'GBp' ? price : price;
-    return sym + val.toFixed(2);
+    if (currency === 'GBp') {
+      // Convert pence to pounds for display
+      return '\u00a3' + (price / 100).toFixed(2) + ' <span style="font-size:0.65rem;opacity:0.6;">(p)</span>';
+    }
+    var sym = currency === 'GBP' ? '\u00a3' : '$';
+    return sym + price.toFixed(2);
   }
 
   function renderGrid(list) {
