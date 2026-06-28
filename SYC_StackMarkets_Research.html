@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0065)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Research_3.html -->
+<!-- saved from url=(0065)file:///C:/Users/chris/Downloads/SYC_StackMarkets_Research_5.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -454,7 +454,7 @@ function addToWatchlist() {
   try {
     var msg = { type:"syc_add_watchlist", ticker:currentDisplayTicker, name:currentName || currentDisplayTicker };
     window.parent.postMessage(msg, "*");
-    try { var bc = new BroadcastChannel("syc_stack_markets"); bc.postMessage(msg); bc.close(); } catch(e2) {}
+    try { var bc = new BroadcastChannel("syc_stack_markets"); bc.postMessage(msg); bc.close(); } catch(bcErr) {}
   } catch(e) {}
   btn.textContent = "\u2713 Sent to Watchlist";
   btn.style.background = "#57A400";
@@ -467,7 +467,7 @@ function addToTrade() {
   try {
     var msg2 = { type:"syc_add_trade", ticker:currentDisplayTicker, price:currentPrice };
     window.parent.postMessage(msg2, "*");
-    try { var bc2 = new BroadcastChannel("syc_stack_markets"); bc2.postMessage(msg2); bc2.close(); } catch(e2) {}
+    try { var bc2 = new BroadcastChannel("syc_stack_markets"); bc2.postMessage(msg2); bc2.close(); } catch(bcErr) {}
   } catch(e) {}
   btn.textContent = "\u2713 Sent to Trade";
   setTimeout(function() { btn.textContent = "+ Trade This"; }, 2000);
